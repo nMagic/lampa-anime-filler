@@ -23,7 +23,7 @@ jobs:
           curl --fail --silent --show-error --location --max-time 30 "$base/a.js" --output /tmp/installer.js
           grep -q 'Lampa' /tmp/installer.js
           curl --fail --silent --show-error --location --max-time 30 "$base/lampa-anime-filler.js" --output /tmp/plugin.js
-          grep -q 'marking-only prototype 0.2.0' /tmp/plugin.js
+          grep -Eq 'marking-only prototype 0\\.2\\.[0-9]+' /tmp/plugin.js
           dest="$(curl --fail --silent --show-error --location --max-time 30 -w '%{url_effective}' 'https://is.gd/lampaaf' -o /tmp/short.js)"
           [[ "$dest" == "$base/a.js" ]]
           cmp -s /tmp/short.js /tmp/installer.js
