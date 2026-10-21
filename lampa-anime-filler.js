@@ -393,7 +393,7 @@
       element.textContent = lines.join('\n');
       Lampa.Modal.open({
         title: 'Anime Filler — диагностика',
-        html: element, size: 'medium', scroll: true,
+        html: (window.jQuery || window.$)(element), size: 'medium', mask: true,
         onBack: function () { Lampa.Modal.close(); Lampa.Controller.toggle('settings_component'); }
       });
     } else if (Lampa.Noty) Lampa.Noty.show(lines.join(' | '));
