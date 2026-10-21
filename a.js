@@ -1,4 +1,5 @@
-/* Lampa Anime Filler: stable installer. Marking only (v0.2.0). */
+/* Lampa. Anime Filler: stable installer, marking-only v0.2.0. */
+/* Lampa. Extension checker expects this API marker in downloaded JS. */
 (function () {
   'use strict';
   if (window.lampa_anime_filler_loaded || document.getElementById('laf-install-loader')) return;
