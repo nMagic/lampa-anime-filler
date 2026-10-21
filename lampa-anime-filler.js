@@ -1,5 +1,5 @@
 /*
- * Lampa Anime Filler — marking-only prototype 0.2.2
+ * Lampa Anime Filler — marking-only prototype 0.3.0
  * Source code is independently written; no Lampa code copied.
  * Metadata backends: optional user-provided AFL JSON, fallback CC BY 4.0 SkipTheFiller dataset.
  * Phase 1: labels only; no playback/playlist modification.
@@ -14,12 +14,14 @@
   var DATASET_URL = 'https://raw.githubusercontent.com/animecannonhunter-hash/anime-filler-list-data/main/anime.json';
   var PREFIX = 'laf_';
   var CACHE_TTL = 24 * 60 * 60 * 1000;
-  var state = { movie: null, slug: '', guide: null, loadId: 0, dataset: null, datasetPromise: null };
+  var state = { movie: null, slug: '', guide: null, loadId: 0, dataset: null, datasetPromise: null,
+    diagnostics: { phase: 'ожидаем карточку аниме', error: '', fullEvents: 0, templateHits: 0,
+      rows: 0, matched: 0, parsed: 0, sampleTitle: '', sampleTemplate: '' } };
   var timer = null;
   var observer = null;
-  var ROW_SELECTORS = '.online, .online-prestige__episode, .online-prestige__item, ' +
+  var ROW_SELECTORS = '.online, .online-prestige, .online-prestige__episode, .online-prestige__item, ' +
     '.torrent-file, .torrent-file__item, .full-episode, .files__item';
-  var LABEL_SELECTORS = '.online__title, .online-prestige__title, .torrent-file__title, ' +
+  var LABEL_SELECTORS = '.online__title, .online-prestige__title, .online-prestige__episode-number, .torrent-file__title, ' +
     '.torrent-file__name, .full-episode__name, .full-episode__title, .files__name';
 
   // Verified TMDB TV identities: localized and original names may have no Latin characters.
@@ -124,7 +126,7 @@
     if (!Object.keys(map).length) return null;
     return { slug: input.slug || '', title: input.title || '', episodes: map,
       // Season offsets are OPTIONAL and must be explicitly sourced/verified.
-      seasonOffsets: input.seasonOffsets || null,
+      seasonOffsets: input.seasonOffsets || (clean(input.slug) === 'one-piece' ? {'1': 0} : null),
       source: input.source || source || 'Пользовательские данные' };
   }
   function fetchJSON(url) {
@@ -168,11 +170,13 @@
     clearAllTags();
     state.movie = movie;
     state.guide = null;
+    state.diagnostics.phase = 'загружаем каталог';
+    state.diagnostics.error = '';
     state.slug = candidateSlugs(movie)[0] || '';
     if (!state.slug) return;
 
     var cached = readCache(state.slug);
-    if (cached) { state.guide = cached; scheduleScan(); updateCard(); return; }
+    if (cached) { state.guide = cached; state.diagnostics.phase = 'данные из кеша'; scheduleScan(); updateCard(); return; }
 
     var base = String(getSetting('source_url', '') || '').trim().replace(/\/+$/, '');
     // A user-provided HTTPS JSON endpoint, e.g. https://host.example/filler/naruto.json
@@ -186,12 +190,19 @@
       return fetchOpenDataset().then(function (catalog) { return findGuide(catalog, movie); });
     }).then(function (guide) {
       if (requestId !== state.loadId) return;
-      if (!guide) { log('No guide found for', state.slug); updateCard(); return; }
+      if (!guide) { state.diagnostics.phase = 'аниме не найдено в каталоге';
+        log('No guide found for', state.slug); updateCard(); return; }
       state.guide = guide;
+      state.diagnostics.phase = 'данные загружены';
       writeCache(state.slug, guide);
       updateCard();
       scheduleScan();
-    }).catch(function (e) { if (requestId === state.loadId) log('Load failed:', e); });
+    }).catch(function (e) { if (requestId === state.loadId) {
+      state.diagnostics.phase = 'ошибка загрузки каталога';
+      state.diagnostics.error = String(e && e.message || e);
+      log('Load failed:', e);
+      updateCard();
+    } });
   }
   function parseEpisode(title, seasonOffsets) {
     var s = String(title || '').trim();
@@ -210,13 +221,15 @@
     if (hasSeason && (season === null || !Object.prototype.hasOwnProperty.call(offsets, String(season)))) return null;
 
     var m = /\bS\d{1,2}[ ._/-]*E(\d{1,4})\b/i.exec(s);
-    if (!m) m = /(?:^|\s|[\[(])(?:серия|серии|эпизод|episode|ep\.?)[\s:#.\-]*(\d{1,4})(?!\d)/i.exec(s);
+    if (!m) m = /(?:^|\s|[\[(])(?:серия|серии|эпизод|episode|ep\.?)[\s:#.\-№]*(\d{1,4})(?!\d)/i.exec(s);
+    if (!m) m = /(?:^|[^\d])(\d{1,4})\s*(?:-?(?:я|ая|й))?\s*(?:серия|эпизод|episode)(?![a-zа-я])/i.exec(s);
     if (!m) m = /\bE(\d{2,4})(?!\d)/i.exec(s);
     if (!m) {
       // Common anime filenames "Title - 026 [1080p].mkv" / "Title [026].mkv".
       m = /(?:\s-\s|\[)(\d{2,4})(?=\s*(?:\]|\[|\(|\.|$))/i.exec(s);
       if (m && /^(?:480|720|1080|2160|264|265)$/.test(m[1])) return null;
     }
+    if (!m && /^\d{1,4}$/.test(s)) m = [s,s];
     if (!m) return null;
     var episode = Number(m[1]);
     if (!Number.isInteger(episode) || episode < 1) return null;
@@ -226,7 +239,8 @@
     if (!guide || !item) return null;
     if (item.absolute_episode != null && /^\d+$/.test(String(item.absolute_episode))) return Number(item.absolute_episode);
     // Structured season+episode requires verified offsets. Do not guess from TMDB seasons.
-    if (item.season != null && item.episode != null) {
+    if (item.episode != null && /^\d{1,4}$/.test(String(item.episode))) {
+      if (item.season == null || item.season === '') return Number(item.episode);
       var offsets = guide.seasonOffsets;
       var key = String(item.season);
       if (!offsets || !Object.prototype.hasOwnProperty.call(offsets, key)) return null;
@@ -291,17 +305,34 @@
     return raw.length <= 140 ? raw : '';
   }
   function scan() {
+    var nodes = document.querySelectorAll(ROW_SELECTORS);
+    var diag = state.diagnostics;
     if (!state.guide || !getSetting('mark', true)) {
       clearAllTags();
       return;
     }
-    var nodes = document.querySelectorAll(ROW_SELECTORS);
+    var rows = 0, parsed = 0, matched = 0, sampleTitle = '';
     for (var i = 0; i < nodes.length && i < 1000; i++) {
       var node = nodes[i];
       if (node.closest('.laf-summary')) continue;
-      var found = classify(rowTitle(node), state.guide);
-      if (found) statusTag(node, found);
+      rows++;
+      var label = rowTitle(node);
+      if (!sampleTitle && label) sampleTitle = label.slice(0, 90);
+      var metadataEpisode = node.getAttribute('data-laf-episode');
+      var metadataSeason = node.getAttribute('data-laf-season');
+      var absolute = node.getAttribute('data-laf-absolute');
+      var item = metadataEpisode ? { episode: metadataEpisode,
+        season: metadataSeason !== null ? metadataSeason : null } :
+        absolute ? { absolute_episode: absolute } : label;
+      var n = typeof item === 'string' ? parseEpisode(item, state.guide.seasonOffsets) : indexFor(item, state.guide);
+      if (n) parsed++;
+      var found = n && state.guide.episodes[n] ? { number: n, type: state.guide.episodes[n] } : null;
+      if (found) { matched++; statusTag(node, found); }
       else clearTag(node);
+    }
+    if (rows) {
+      diag.rows = rows; diag.parsed = parsed; diag.matched = matched;
+      diag.sampleTitle = sampleTitle;
     }
   }
   function scheduleScan() {
@@ -337,6 +368,60 @@
       + '.laf-filler{box-shadow:inset 3px 0 0 #e74c3c;}';
     document.head.appendChild(css);
   }
+  function showDiagnostics() {
+    var diag = state.diagnostics;
+    var example = diag.sampleTitle || 'не захвачено';
+    var lines = [
+      'Версия: 0.3.0',
+      'Карточка: ' + (state.movie ? (state.movie.name || state.movie.title || state.movie.original_name || 'без названия') + ' (TMDB ' + state.movie.id + ')' : 'не открывалась'),
+      'Каталог: ' + (state.slug || 'не выбран'),
+      'Состояние: ' + diag.phase,
+      'Серий в каталоге: ' + (state.guide ? Object.keys(state.guide.episodes).length : 0),
+      'Источник: ' + (state.guide ? state.guide.source : 'нет'),
+      'Открытий карточки: ' + diag.fullEvents,
+      'Шаблонов серий: ' + diag.templateHits,
+      'Последний шаблон: ' + (diag.sampleTemplate || 'нет'),
+      'Строк на последнем экране: ' + diag.rows,
+      'Номеров распознано: ' + diag.parsed,
+      'Меток проставлено: ' + diag.matched,
+      'Пример названия: ' + example,
+      'Ошибка: ' + (diag.error || 'нет')
+    ];
+    if (Lampa.Modal && typeof Lampa.Modal.open === 'function') {
+      var element = document.createElement('div');
+      element.style.cssText = 'white-space:pre-wrap;font-size:1.15em;line-height:1.5;padding:1em;';
+      element.textContent = lines.join('\n');
+      Lampa.Modal.open({
+        title: 'Anime Filler — диагностика',
+        html: element, size: 'medium', scroll: true,
+        onBack: function () { Lampa.Modal.close(); Lampa.Controller.toggle('settings_component'); }
+      });
+    } else if (Lampa.Noty) Lampa.Noty.show(lines.join(' | '));
+  }
+
+  function installTemplateHook() {
+    if (!Lampa.Template || typeof Lampa.Template.get !== 'function') return;
+    if (Lampa.Template.get.lafWrapped) return;
+    var originalGet = Lampa.Template.get;
+    var watched = { online_mod: true, online: true, lampac_prestige_full: true };
+    function wrappedGet(templateName, payload) {
+      var element = originalGet.apply(this, arguments);
+      if (!watched[templateName] || !payload || typeof payload !== 'object') return element;
+      if (payload.episode == null && payload.absolute_episode == null) return element;
+      var node = element && (element.jquery ? element[0] : element);
+      if (!node || typeof node.setAttribute !== 'function') return element;
+      if (payload.episode != null) node.setAttribute('data-laf-episode', String(payload.episode));
+      if (payload.season != null) node.setAttribute('data-laf-season', String(payload.season));
+      if (payload.absolute_episode != null) node.setAttribute('data-laf-absolute', String(payload.absolute_episode));
+      state.diagnostics.templateHits++;
+      state.diagnostics.sampleTemplate = templateName + ' S' + (payload.season == null ? '?' : payload.season) + ' E' + (payload.episode || '?');
+      scheduleScan();
+      return element;
+    }
+    wrappedGet.lafWrapped = true;
+    Lampa.Template.get = wrappedGet;
+  }
+
   function settings() {
     Lampa.SettingsApi.addComponent({ component: 'lampa_anime_filler', name: 'Anime Filler',
       icon: '<svg viewBox="0 0 48 48" width="48" height="48" xmlns="http://www.w3.org/2000/svg"><rect width="42" height="30" x="3" y="9" rx="4" fill="none" stroke="currentColor" stroke-width="3"/><path d="M16 15v18m16-18v18M8 24h32" stroke="currentColor" stroke-width="2"/></svg>' });
@@ -346,14 +431,20 @@
       field: { name: 'Каталог AnimeFillerList JSON (HTTPS)', description: 'Путь к вашим файлам slug.json; иначе открытый набор SkipTheFiller (45 аниме)' } });
     Lampa.SettingsApi.addParam({ component: 'lampa_anime_filler', param: { name: PREFIX + 'mappings_json', type: 'input', values: 'string', default: '', placeholder: '{"12345":"one-piece"}' },
       field: { name: 'Привязки TMDB ID к названию (JSON)', description: 'Для несовпадающих названий: {"12345":"one-piece"}' } });
+    Lampa.SettingsApi.addParam({ component: 'lampa_anime_filler',
+      param: { name: PREFIX + 'diagnostics', type: 'button' },
+      field: { name: 'Показать диагностику', description: 'Загрузка каталога и распознавание серий в Online_Mod / BWA' },
+      onChange: showDiagnostics });
   }
   function init() {
     addStyle();
     settings();
+    installTemplateHook();
     Lampa.Listener.follow('full', function (evt) {
       if (evt.type !== 'complite') return;
       var movie = evt.data && evt.data.movie;
       if (!movie || !movie.id) return;
+      state.diagnostics.fullEvents++;
       addSummary(evt);
       loadFor(movie);
     });
@@ -368,10 +459,10 @@
     Lampa.Listener.follow('activity', scheduleScan);
     observer = new MutationObserver(scheduleScan);
     if (document.body) observer.observe(document.body, { childList: true, subtree: true });
-    log('Loaded 0.2.2, marking only');
+    log('Loaded 0.3.0, marking only');
   }
   window.LampaAnimeFiller = { parseEpisode: parseEpisode, normalizeGuide: normalizeGuide,
-    findGuide: findGuide, classify: classify, scan: scan, state: state, version: '0.2.2' };
+    findGuide: findGuide, classify: classify, scan: scan, state: state, version: '0.3.0' };
   if (window.appready) init();
   else Lampa.Listener.follow('app', function (evt) { if (evt.type === 'ready') init(); });
 })();
