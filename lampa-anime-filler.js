@@ -1,5 +1,5 @@
 /*
- * Lampa Anime Filler — marking-only prototype 0.2.1
+ * Lampa Anime Filler — marking-only prototype 0.2.2
  * Source code is independently written; no Lampa code copied.
  * Metadata backends: optional user-provided AFL JSON, fallback CC BY 4.0 SkipTheFiller dataset.
  * Phase 1: labels only; no playback/playlist modification.
@@ -21,6 +21,10 @@
     '.torrent-file, .torrent-file__item, .full-episode, .files__item';
   var LABEL_SELECTORS = '.online__title, .online-prestige__title, .torrent-file__title, ' +
     '.torrent-file__name, .full-episode__name, .full-episode__title, .files__name';
+
+  // Verified TMDB TV identities: localized and original names may have no Latin characters.
+  // Never apply this ID-based mapping to unrelated shows or movies.
+  var KNOWN_TMDB_TV = { '37854': 'one-piece' };
 
   var LEGENDS = {
     filler: ['Филлер', '#e74c3c', 'Ф'],
@@ -50,6 +54,19 @@
     return [movie.original_name, movie.original_title, movie.name, movie.title]
       .map(clean).filter(Boolean);
   }
+  function candidateSlugs(movie) {
+    if (!movie) return [];
+    var map = mappings();
+    var id = String(movie.id || '');
+    var manual = map && map[id] ? clean(map[id]) : '';
+    var verified = KNOWN_TMDB_TV[id] || '';
+    var resolved = [];
+    if (manual) resolved.push(manual);
+    if (verified) resolved.push(verified);
+    return resolved.concat(titles(movie)).filter(function (s, i, arr) {
+      return arr.indexOf(s) === i;
+    });
+  }
   function mappings() {
     var stored = getSetting('mappings', {});
     var input = getSetting('mappings_json', '');
@@ -63,9 +80,7 @@
   }
   function findGuide(catalog, movie) {
     if (!Array.isArray(catalog) || !movie) return null;
-    var map = mappings();
-    var mapped = map && map[String(movie.id)];
-    var candidate = mapped ? [clean(mapped)] : titles(movie);
+    var candidate = candidateSlugs(movie);
     var ALIAS = {
       'naruto-shippuuden': 'naruto-shippuden',
       'naruto-shippuden': 'naruto-shippuden',
@@ -153,7 +168,7 @@
     clearAllTags();
     state.movie = movie;
     state.guide = null;
-    state.slug = userMapping(movie) || titles(movie)[0] || '';
+    state.slug = candidateSlugs(movie)[0] || '';
     if (!state.slug) return;
 
     var cached = readCache(state.slug);
@@ -353,10 +368,10 @@
     Lampa.Listener.follow('activity', scheduleScan);
     observer = new MutationObserver(scheduleScan);
     if (document.body) observer.observe(document.body, { childList: true, subtree: true });
-    log('Loaded 0.2.1, marking only');
+    log('Loaded 0.2.2, marking only');
   }
   window.LampaAnimeFiller = { parseEpisode: parseEpisode, normalizeGuide: normalizeGuide,
-    findGuide: findGuide, classify: classify, scan: scan, state: state, version: '0.2.1' };
+    findGuide: findGuide, classify: classify, scan: scan, state: state, version: '0.2.2' };
   if (window.appready) init();
   else Lampa.Listener.follow('app', function (evt) { if (evt.type === 'ready') init(); });
 })();
