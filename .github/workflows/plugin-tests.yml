@@ -1,0 +1,22 @@
+name: Plugin smoke tests
+
+on:
+  push:
+    paths:
+      - 'lampa-anime-filler.js'
+      - 'tests/**'
+      - '.github/workflows/plugin-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check JavaScript syntax
+        run: node --check lampa-anime-filler.js && node --check a.js
+      - name: Verify Settings compatibility
+        run: node tests/settings-smoke.cjs
