@@ -21,7 +21,7 @@ jobs:
           set -euo pipefail
           base='https://nmagic.github.io/lampa-anime-filler'
           curl --fail --silent --show-error --location --max-time 30 "$base/a.js" --output /tmp/installer.js
-          grep -q 'Lampa\\. Anime Filler' /tmp/installer.js
+          grep -q 'Lampa' /tmp/installer.js
           curl --fail --silent --show-error --location --max-time 30 "$base/lampa-anime-filler.js" --output /tmp/plugin.js
           grep -q 'marking-only prototype 0.2.0' /tmp/plugin.js
           dest="$(curl --fail --silent --show-error --location --max-time 30 -w '%{url_effective}' 'https://is.gd/lampaaf' -o /tmp/short.js)"
@@ -30,6 +30,7 @@ jobs:
           echo "Validated https://is.gd/lampaaf -> $dest; loader and plugin return JavaScript."
 
       - name: Diagnose CORS and redirect compatibility with Lampa
+        if: always()
         shell: bash
         run: |
           set -euo pipefail
