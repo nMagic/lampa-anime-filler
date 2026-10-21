@@ -12,7 +12,7 @@ const document = {
   body: null,
   createElement() { return { textContent: '', className: '', appendChild() {} }; },
   querySelectorAll(selector) {
-    if (selector !== '.laf-badge') rowQueries++;
+    if (selector !== '.laf-badge' && selector !== '.laf-filler') rowQueries++;
     return [];
   },
   querySelector() { return null; }
