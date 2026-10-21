@@ -1,5 +1,5 @@
 /*
- * Lampa Anime Filler — marking-only prototype 0.2.0
+ * Lampa Anime Filler — marking-only prototype 0.2.1
  * Source code is independently written; no Lampa code copied.
  * Metadata backends: optional user-provided AFL JSON, fallback CC BY 4.0 SkipTheFiller dataset.
  * Phase 1: labels only; no playback/playlist modification.
@@ -36,6 +36,7 @@
   function getSetting(name, fallback) {
     try {
       var value = Lampa.Storage.get(PREFIX + name, fallback);
+      if (typeof fallback === 'boolean' && (value === 'true' || value === 'false')) return value === 'true';
       return value === undefined ? fallback : value;
     } catch (_) { return fallback; }
   }
@@ -326,9 +327,9 @@
       icon: '<svg viewBox="0 0 48 48" width="48" height="48" xmlns="http://www.w3.org/2000/svg"><rect width="42" height="30" x="3" y="9" rx="4" fill="none" stroke="currentColor" stroke-width="3"/><path d="M16 15v18m16-18v18M8 24h32" stroke="currentColor" stroke-width="2"/></svg>' });
     Lampa.SettingsApi.addParam({ component: 'lampa_anime_filler', param: { name: PREFIX + 'mark', type: 'trigger', default: true },
       field: { name: 'Помечать серии', description: 'М — манга-канон, А — аниме-канон, С — смешанная, Ф — филлер' } });
-    Lampa.SettingsApi.addParam({ component: 'lampa_anime_filler', param: { name: PREFIX + 'source_url', type: 'input', default: '', placeholder: 'https://host.example/filler' },
+    Lampa.SettingsApi.addParam({ component: 'lampa_anime_filler', param: { name: PREFIX + 'source_url', type: 'input', values: 'string', default: '', placeholder: 'https://host.example/filler' },
       field: { name: 'Каталог AnimeFillerList JSON (HTTPS)', description: 'Путь к вашим файлам slug.json; иначе открытый набор SkipTheFiller (45 аниме)' } });
-    Lampa.SettingsApi.addParam({ component: 'lampa_anime_filler', param: { name: PREFIX + 'mappings_json', type: 'input', default: '', placeholder: '{"12345":"one-piece"}' },
+    Lampa.SettingsApi.addParam({ component: 'lampa_anime_filler', param: { name: PREFIX + 'mappings_json', type: 'input', values: 'string', default: '', placeholder: '{"12345":"one-piece"}' },
       field: { name: 'Привязки TMDB ID к названию (JSON)', description: 'Для несовпадающих названий: {"12345":"one-piece"}' } });
   }
   function init() {
@@ -352,10 +353,10 @@
     Lampa.Listener.follow('activity', scheduleScan);
     observer = new MutationObserver(scheduleScan);
     if (document.body) observer.observe(document.body, { childList: true, subtree: true });
-    log('Loaded 0.2.0, marking only');
+    log('Loaded 0.2.1, marking only');
   }
   window.LampaAnimeFiller = { parseEpisode: parseEpisode, normalizeGuide: normalizeGuide,
-    findGuide: findGuide, classify: classify, scan: scan, state: state, version: '0.2.0' };
+    findGuide: findGuide, classify: classify, scan: scan, state: state, version: '0.2.1' };
   if (window.appready) init();
   else Lampa.Listener.follow('app', function (evt) { if (evt.type === 'ready') init(); });
 })();
