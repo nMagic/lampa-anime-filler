@@ -13,7 +13,7 @@ const storage = new Map([['laf_mark', 'false']]);
 const document = {
   head: { appendChild() {} },
   body: null,
-  createElement() { return { textContent: '', className: '', appendChild() {} }; },
+  createElement() { return { textContent: '', className: '', style: {}, appendChild() {} }; },
   querySelectorAll(selector) {
     if (selector !== '.laf-badge' && selector !== '.laf-filler') rowQueries++;
     return [];
