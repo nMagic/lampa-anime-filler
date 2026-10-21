@@ -6,6 +6,7 @@ const source = fs.readFileSync('lampa-anime-filler.js', 'utf8');
 const params = [];
 const components = [];
 let rowQueries = 0;
+const listeners = Object.create(null);
 const storage = new Map([['laf_mark', 'false']]);
 const document = {
   head: { appendChild() {} },
@@ -26,7 +27,7 @@ const context = {
       addComponent(data) { components.push(data); },
       addParam(data) { params.push(data); }
     },
-    Listener: { follow() {} },
+    Listener: { follow(event, fn) { (listeners[event] ||= []).push(fn); } },
     Storage: {
       get(name, fallback) { return storage.has(name) ? storage.get(name) : fallback; },
       set(name, value) { storage.set(name, value); }
@@ -35,11 +36,16 @@ const context = {
   console,
   setTimeout() { return 1; },
   clearTimeout() {},
-  Promise
+  Promise,
+  fetch() {
+    return Promise.resolve({ok: true, json() {
+      return Promise.resolve([{slug: 'one-piece', title:'One Piece', episodes:[{number:196, type:'Filler'},{number:207,type:'Canon'}]}]);
+    }});
+  }
 };
 
 vm.runInNewContext(source, context);
-assert.equal(context.window.LampaAnimeFiller.version, '0.2.1');
+assert.equal(context.window.LampaAnimeFiller.version, '0.2.2');
 assert.equal(components.length, 1);
 assert.equal(params.length, 3);
 
@@ -60,3 +66,16 @@ context.window.LampaAnimeFiller.scan();
 assert.equal(rowQueries, 0, 'disabled marking must not inspect episode rows');
 
 console.log('Settings smoke test passed (input registration + trigger storage).');
+
+const full = listeners.full && listeners.full[0];
+assert.equal(typeof full, 'function', 'full screen handler must be registered');
+full({type: 'complite', data: {movie: {id: 37854, name: 'Ван-Пис', original_name: 'ワンピース'}}, object: {}});
+assert.equal(context.window.LampaAnimeFiller.state.slug, 'one-piece',
+  'TMDB 37854 must resolve to one-piece regardless of localized title');
+assert.equal(context.window.LampaAnimeFiller.state.movie.id, 37854);
+Promise.resolve().then(() => Promise.resolve()).then(() => {
+  const guide = context.window.LampaAnimeFiller.state.guide;
+  assert.ok(guide && guide.episodes[196] === 'filler',
+    'One Piece guide must load via fallback dataset');
+  console.log('One Piece localized-title lookup test passed.');
+}).catch(err => {console.error(err); process.exitCode = 1;});
