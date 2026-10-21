@@ -305,12 +305,12 @@
     return raw.length <= 140 ? raw : '';
   }
   function scan() {
-    var nodes = document.querySelectorAll(ROW_SELECTORS);
-    var diag = state.diagnostics;
     if (!state.guide || !getSetting('mark', true)) {
       clearAllTags();
       return;
     }
+    var nodes = document.querySelectorAll(ROW_SELECTORS);
+    var diag = state.diagnostics;
     var rows = 0, parsed = 0, matched = 0, sampleTitle = '';
     for (var i = 0; i < nodes.length && i < 1000; i++) {
       var node = nodes[i];
