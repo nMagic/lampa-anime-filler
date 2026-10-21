@@ -20,3 +20,16 @@ jobs:
         run: node --check lampa-anime-filler.js && node --check a.js
       - name: Verify Settings compatibility
         run: node tests/settings-smoke.cjs
+
+      - name: Check public fallback dataset and CORS
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location --max-time 45 \
+            -H 'Origin: http://lampa.mx' \
+            --dump-header /tmp/dataset-headers \
+            'https://raw.githubusercontent.com/animecannonhunter-hash/anime-filler-list-data/main/anime.json' \
+            --output /tmp/anime.json
+          jq -e 'type == "array" and (any(.[]; .slug == "one-piece" and (.episodes | length > 1000)))' /tmp/anime.json > /dev/null
+          grep -qi '^access-control-allow-origin: ' /tmp/dataset-headers
+          echo 'One Piece dataset and cross-origin response are available.'
