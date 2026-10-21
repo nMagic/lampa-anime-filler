@@ -73,7 +73,7 @@ full({type: 'complite', data: {movie: {id: 37854, name: 'Ван-Пис', origina
 assert.equal(context.window.LampaAnimeFiller.state.slug, 'one-piece',
   'TMDB 37854 must resolve to one-piece regardless of localized title');
 assert.equal(context.window.LampaAnimeFiller.state.movie.id, 37854);
-Promise.resolve().then(() => Promise.resolve()).then(() => {
+new Promise(resolve => setImmediate(resolve)).then(() => {
   const guide = context.window.LampaAnimeFiller.state.guide;
   assert.ok(guide && guide.episodes[196] === 'filler',
     'One Piece guide must load via fallback dataset');
