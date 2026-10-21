@@ -5,6 +5,8 @@ const vm = require('node:vm');
 const source = fs.readFileSync('lampa-anime-filler.js', 'utf8');
 const params = [];
 const components = [];
+let modalInfo = null;
+const templatedElements = [];
 let rowQueries = 0;
 const listeners = Object.create(null);
 const storage = new Map([['laf_mark', 'false']]);
@@ -19,7 +21,10 @@ const document = {
   querySelector() { return null; }
 };
 const context = {
-  window: { appready: true },
+  window: { appready: true, $: node => ({
+    find() { return []; },
+    node
+  }) },
   document,
   MutationObserver: function () { this.observe = function () {}; },
   Lampa: {
@@ -28,6 +33,21 @@ const context = {
       addParam(data) { params.push(data); }
     },
     Listener: { follow(event, fn) { (listeners[event] ||= []).push(fn); } },
+    Template: { get(name) {
+      const attributes = new Map();
+      const element = {
+        nodeType: 1,
+        setAttribute(key, value) { attributes.set(key, value); },
+        getAttribute(key) { return attributes.get(key) || null; }
+      };
+      templatedElements.push({name, element});
+      return { jquery:'1.0', 0:element };
+    } },
+    Modal: { open(opts) {
+      modalInfo = opts;
+      assert.equal(typeof opts.html.find, 'function', 'Lampa Modal requires a jQuery-like value');
+    }, close() {} },
+    Controller: { toggle() {} },
     Storage: {
       get(name, fallback) { return storage.has(name) ? storage.get(name) : fallback; },
       set(name, value) { storage.set(name, value); }
@@ -39,15 +59,17 @@ const context = {
   Promise,
   fetch() {
     return Promise.resolve({ok: true, json() {
-      return Promise.resolve([{slug: 'one-piece', title:'One Piece', episodes:[{number:196, type:'Filler'},{number:207,type:'Canon'}]}]);
+      return Promise.resolve([{slug: 'one-piece', title:'One Piece', episodes:[{number:55, type:'Filler'},{number:196, type:'Filler'},{number:207,type:'Canon'}]}]);
     }});
   }
 };
 
 vm.runInNewContext(source, context);
-assert.equal(context.window.LampaAnimeFiller.version, '0.2.2');
+assert.equal(context.window.LampaAnimeFiller.version, '0.3.0');
 assert.equal(components.length, 1);
-assert.equal(params.length, 3);
+assert.equal(params.length, 4);
+const debug = params.find(p => p.param.name === 'laf_diagnostics');
+assert.ok(debug && typeof debug.onChange === 'function');
 
 // Lampa's SettingsApi delegates input to Params.select(name, param.values, default).
 // Params.update() then accesses values[name][key] unless values[name] is a string.
@@ -77,5 +99,16 @@ new Promise(resolve => setImmediate(resolve)).then(() => {
   const guide = context.window.LampaAnimeFiller.state.guide;
   assert.ok(guide && guide.episodes[196] === 'filler',
     'One Piece guide must load via fallback dataset');
-  console.log('One Piece localized-title lookup test passed.');
+  assert.equal(context.window.LampaAnimeFiller.classify({season:1,episode:55}, guide).type, 'filler');
+  assert.equal(context.window.LampaAnimeFiller.classify({season:2,episode:1}, guide), null,
+    'Do not guess offsets for unsupported seasons');
+  assert.equal(context.window.LampaAnimeFiller.parseEpisode('55 серия'), 55);
+  const returned = context.Lampa.Template.get('online_mod', {episode:55,season:1});
+  assert.equal(returned[0].getAttribute('data-laf-episode'), '55');
+  assert.equal(returned[0].getAttribute('data-laf-season'), '1');
+  const bwa = context.Lampa.Template.get('lampac_prestige_full', {episode:55,season:1});
+  assert.equal(bwa[0].getAttribute('data-laf-episode'), '55');
+  debug.onChange();
+  assert.ok(modalInfo && modalInfo.title.includes('диагностика'));
+  console.log('One Piece localized-title, Online_Mod/BWA template hooks and diagnostics passed.');
 }).catch(err => {console.error(err); process.exitCode = 1;});
