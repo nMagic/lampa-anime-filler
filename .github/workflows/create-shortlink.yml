@@ -1,0 +1,37 @@
+name: Create Lampa installer short link
+
+on:
+  push:
+    paths:
+      - '.github/workflows/create-shortlink.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  shorten:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create memorable short link
+        shell: bash
+        run: |
+          set -euo pipefail
+          target='https://nmagic.github.io/lampa-anime-filler/a.js'
+          for alias in lampaaf nmafl26; do
+            response="$(curl -fsS --max-time 20 --get \
+              --data-urlencode 'format=simple' \
+              --data-urlencode "url=$target" \
+              --data-urlencode "shorturl=$alias" \
+              'https://is.gd/create.php' || true)"
+            echo "Attempted alias: $alias"
+            if [[ "$response" == https://is.gd/* ]]; then
+              echo "SHORT_URL=$response"
+              echo "### Lampa installer" >> "$GITHUB_STEP_SUMMARY"
+              echo "$response" >> "$GITHUB_STEP_SUMMARY"
+              exit 0
+            fi
+            echo "Service response: $response"
+          done
+          echo 'Could not create a custom short URL.'
+          exit 1
