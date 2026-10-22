@@ -17,7 +17,11 @@ const source = {
 };
 
 function build(catalog = fixture, identities = {
-  naruto: { ids: { tmdbTv: 46260, mal: 20 }, aliases: ['Наруто'], seasonOffsets: { 1: 0 } }
+  naruto: { ids: { tmdbTv: 46260, mal: 20 }, aliases: ['Наруто'], sourceMappings: {
+    online_mod: { system: 'tmdb', seasons: {
+      1: [{ episodeStart: 1, episodeEnd: 3, absoluteStart: 1 }]
+    } }
+  } }
 }) {
   return buildBundle(catalog, {
     source,
@@ -36,7 +40,9 @@ test('builds deterministic manifest, index and per-title shards', () => {
   assert.equal(first.index.titles[1].id, 'fixture:naruto-shippuden');
   assert.equal(first.shards[0].identity.ids.tmdbTv, 46260);
   assert.deepEqual(first.shards[0].identity.aliases, ['Наруто']);
-  assert.deepEqual(first.shards[0].numbering.seasonOffsets, { 1: 0 });
+  assert.deepEqual(first.shards[0].numbering.sourceMappings.online_mod.seasons[1], [
+    { episodeStart: 1, episodeEnd: 3, absoluteStart: 1 }
+  ]);
 });
 
 test('checksums cover the exact serialized shard and index bytes', () => {
@@ -64,7 +70,7 @@ test('preserves manga-canon and anime-canon classifications', () => {
       { number: 3, type: 'Mixed Canon/Filler' }
     ]
   };
-  const shard = build([title]).shards[0];
+  const shard = build([title], {}).shards[0];
   assert.equal(shard.episodes[1], 'manga_canon');
   assert.equal(shard.episodes[2], 'anime_canon');
   assert.equal(shard.episodes[3], 'mixed');
@@ -88,4 +94,18 @@ test('rejects non-series-safe input instead of guessing', () => {
   assert.throws(() => build([{ ...base, totalEpisodes: 2 }]), /totalEpisodes=2 but 3 episodes/);
   assert.throws(() => build([{ ...base, url: 'http://example.test/naruto' }]), /only HTTPS URLs/);
   assert.throws(() => build(fixture, { naruto: { seasonOffsets: { 1: -1 } } }), /offset/);
+  assert.throws(() => build(fixture, { missing: { ids: { tmdbTv: 1 } } }), /unknown slug/);
+  assert.throws(() => build(fixture, { naruto: { sourceMappings: {
+    online_mod: { system: 'tmdb', seasons: {
+      1: [{ episodeStart: 1, episodeEnd: 4, absoluteStart: 1 }]
+    } }
+  } } }), /maps past catalog episode/);
+  assert.throws(() => build(fixture, { naruto: { sourceMappings: {
+    online_mod: { system: 'tmdb', seasons: {
+      1: [
+        { episodeStart: 1, episodeEnd: 2, absoluteStart: 1 },
+        { episodeStart: 2, episodeEnd: 3, absoluteStart: 2 }
+      ]
+    } }
+  } } }), /ranges overlap/);
 });

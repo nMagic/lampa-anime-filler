@@ -76,6 +76,54 @@ function normalizeSeasonOffsets(value, context) {
   return Object.fromEntries(Object.entries(result).sort(([a], [b]) => Number(a) - Number(b)));
 }
 
+function normalizeSourceMappings(value, episodeCount, context) {
+  if (value === undefined) return undefined;
+  invariant(isPlainObject(value), `${context}: sourceMappings must be an object`);
+  const result = {};
+  for (const [adapter, mapping] of Object.entries(value).sort(([a], [b]) => compareText(a, b))) {
+    invariant(/^[a-z][a-z0-9_]*$/.test(adapter), `${context}: invalid source adapter ${adapter}`);
+    invariant(isPlainObject(mapping), `${context}: ${adapter} mapping must be an object`);
+    invariant(mapping.system === 'tmdb', `${context}: ${adapter} mapping system must be tmdb`);
+    invariant(isPlainObject(mapping.seasons), `${context}: ${adapter} seasons must be an object`);
+    const seasons = {};
+    for (const [season, inputRanges] of Object.entries(mapping.seasons).sort(([a], [b]) => Number(a) - Number(b))) {
+      invariant(/^[1-9][0-9]*$/.test(season), `${context}: ${adapter} has invalid season ${season}`);
+      invariant(Array.isArray(inputRanges) && inputRanges.length,
+        `${context}: ${adapter} season ${season} must contain ranges`);
+      const ranges = inputRanges.map((range, index) => {
+        const rangeContext = `${context}: ${adapter} season ${season} range ${index + 1}`;
+        invariant(isPlainObject(range), `${rangeContext} must be an object`);
+        const keys = Object.keys(range).sort();
+        invariant(keys.join(',') === 'absoluteStart,episodeEnd,episodeStart',
+          `${rangeContext} has unsupported fields`);
+        invariant(Number.isSafeInteger(range.episodeStart) && range.episodeStart > 0,
+          `${rangeContext} episodeStart must be a positive safe integer`);
+        invariant(Number.isSafeInteger(range.episodeEnd) && range.episodeEnd >= range.episodeStart,
+          `${rangeContext} episodeEnd must be at least episodeStart`);
+        invariant(Number.isSafeInteger(range.absoluteStart) && range.absoluteStart > 0,
+          `${rangeContext} absoluteStart must be a positive safe integer`);
+        const absoluteEnd = range.absoluteStart + range.episodeEnd - range.episodeStart;
+        invariant(absoluteEnd <= episodeCount,
+          `${rangeContext} maps past catalog episode ${episodeCount}`);
+        return {
+          episodeStart: range.episodeStart,
+          episodeEnd: range.episodeEnd,
+          absoluteStart: range.absoluteStart
+        };
+      }).sort((a, b) => a.episodeStart - b.episodeStart);
+      for (let index = 1; index < ranges.length; index += 1) {
+        invariant(ranges[index - 1].episodeEnd < ranges[index].episodeStart,
+          `${context}: ${adapter} season ${season} ranges overlap`);
+      }
+      seasons[season] = ranges;
+    }
+    invariant(Object.keys(seasons).length, `${context}: ${adapter} seasons must not be empty`);
+    result[adapter] = { system: 'tmdb', seasons };
+  }
+  invariant(Object.keys(result).length, `${context}: sourceMappings must not be empty`);
+  return result;
+}
+
 function normalizeHttpsUrl(value, context) {
   let url;
   try { url = new URL(String(value || '')); }
@@ -117,6 +165,7 @@ function normalizeShow(show, source, identity = {}) {
   const ids = normalizeIds(identity.ids, context);
   const aliases = normalizeAliases(identity.aliases, title, context);
   const seasonOffsets = normalizeSeasonOffsets(identity.seasonOffsets, context);
+  const sourceMappings = normalizeSourceMappings(identity.sourceMappings, numbers.length, context);
 
   const numbering = {
     scope: 'regular',
@@ -124,6 +173,7 @@ function normalizeShow(show, source, identity = {}) {
     startsAt: 1
   };
   if (seasonOffsets) numbering.seasonOffsets = seasonOffsets;
+  if (sourceMappings) numbering.sourceMappings = sourceMappings;
 
   return {
     schemaVersion: SCHEMA_VERSION,
@@ -158,15 +208,28 @@ export function buildBundle(catalog, options) {
   invariant(isPlainObject(options), 'build options are required');
   invariant(isPlainObject(options.source), 'source metadata is required');
 
-  const source = {
-    id: String(options.source.id || '').trim(),
-    name: String(options.source.name || '').trim(),
-    url: normalizeHttpsUrl(options.source.url, 'source.url'),
-    revision: String(options.source.revision || '').trim(),
-    license: String(options.source.license || '').trim(),
-    attribution: String(options.source.attribution || '').trim()
-  };
-  for (const [key, value] of Object.entries(source)) invariant(value, `source.${key} is required`);
+  function normalizeSource(value, label) {
+    invariant(isPlainObject(value), `${label} metadata is required`);
+    const normalized = {
+      id: String(value.id || '').trim(),
+      name: String(value.name || '').trim(),
+      url: normalizeHttpsUrl(value.url, `${label}.url`),
+      revision: String(value.revision || '').trim(),
+      license: String(value.license || '').trim(),
+      attribution: String(value.attribution || '').trim()
+    };
+    invariant(/^[a-z][a-z0-9-]*$/.test(normalized.id), `${label}.id is invalid`);
+    for (const [key, entry] of Object.entries(normalized)) invariant(entry, `${label}.${key} is required`);
+    return normalized;
+  }
+  const source = normalizeSource(options.source, 'source');
+  const additionalSources = (options.additionalSources || []).map((value, index) =>
+    normalizeSource(value, `additionalSources[${index}]`));
+  const sourceIds = new Set([source.id]);
+  for (const additionalSource of additionalSources) {
+    invariant(!sourceIds.has(additionalSource.id), `duplicate source id ${additionalSource.id}`);
+    sourceIds.add(additionalSource.id);
+  }
 
   const identities = options.identities || {};
   invariant(isPlainObject(identities), 'identities must be an object keyed by slug');
@@ -182,6 +245,17 @@ export function buildBundle(catalog, options) {
     invariant(!ids.has(shard.id), `duplicate canonical id ${shard.id}`);
     ids.add(shard.id);
     shards.push(shard);
+  }
+  for (const identitySlug of Object.keys(identities)) {
+    invariant(slugs.has(identitySlug), `identity mapping references unknown slug ${identitySlug}`);
+  }
+  const externalIds = new Set();
+  for (const shard of shards) {
+    for (const [provider, value] of Object.entries(shard.identity.ids)) {
+      const externalId = `${provider}:${value}`;
+      invariant(!externalIds.has(externalId), `duplicate external id ${externalId}`);
+      externalIds.add(externalId);
+    }
   }
   shards.sort((a, b) => compareText(a.id, b.id));
 
@@ -213,9 +287,10 @@ export function buildBundle(catalog, options) {
   const episodeCount = indexItems.reduce((sum, item) => sum + item.episodeCount, 0);
   const manifest = {
     schemaVersion: SCHEMA_VERSION,
-    buildId: `${source.id}-${source.revision.slice(0, 12)}`,
+    buildId: [source, ...additionalSources]
+      .map(entry => `${entry.id}-${entry.revision.slice(0, 12)}`).join('-'),
     generatedAt: String(options.generatedAt || new Date().toISOString()),
-    sources: [source],
+    sources: [source, ...additionalSources],
     catalog: {
       index: 'index.json',
       sha256: sha256(indexBody),

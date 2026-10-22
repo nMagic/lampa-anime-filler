@@ -4,13 +4,165 @@
   "identity": {
     "mediaType": "series",
     "title": "Naruto: Shippuden",
-    "aliases": [],
-    "ids": {}
+    "aliases": [
+      "NARUTO -ナルト- 疾風伝",
+      "Наруто: Ураганные хроники"
+    ],
+    "ids": {
+      "tmdbTv": 31910
+    }
   },
   "numbering": {
     "scope": "regular",
     "basis": "absolute",
-    "startsAt": 1
+    "startsAt": 1,
+    "sourceMappings": {
+      "online_mod": {
+        "system": "tmdb",
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 32,
+              "absoluteStart": 1
+            }
+          ],
+          "2": [
+            {
+              "episodeStart": 33,
+              "episodeEnd": 53,
+              "absoluteStart": 33
+            }
+          ],
+          "3": [
+            {
+              "episodeStart": 54,
+              "episodeEnd": 71,
+              "absoluteStart": 54
+            }
+          ],
+          "4": [
+            {
+              "episodeStart": 72,
+              "episodeEnd": 88,
+              "absoluteStart": 72
+            }
+          ],
+          "5": [
+            {
+              "episodeStart": 89,
+              "episodeEnd": 112,
+              "absoluteStart": 89
+            }
+          ],
+          "6": [
+            {
+              "episodeStart": 113,
+              "episodeEnd": 143,
+              "absoluteStart": 113
+            }
+          ],
+          "7": [
+            {
+              "episodeStart": 144,
+              "episodeEnd": 151,
+              "absoluteStart": 144
+            }
+          ],
+          "8": [
+            {
+              "episodeStart": 152,
+              "episodeEnd": 175,
+              "absoluteStart": 152
+            }
+          ],
+          "9": [
+            {
+              "episodeStart": 176,
+              "episodeEnd": 196,
+              "absoluteStart": 176
+            }
+          ],
+          "10": [
+            {
+              "episodeStart": 197,
+              "episodeEnd": 221,
+              "absoluteStart": 197
+            }
+          ],
+          "11": [
+            {
+              "episodeStart": 222,
+              "episodeEnd": 242,
+              "absoluteStart": 222
+            }
+          ],
+          "12": [
+            {
+              "episodeStart": 243,
+              "episodeEnd": 275,
+              "absoluteStart": 243
+            }
+          ],
+          "13": [
+            {
+              "episodeStart": 276,
+              "episodeEnd": 295,
+              "absoluteStart": 276
+            }
+          ],
+          "14": [
+            {
+              "episodeStart": 296,
+              "episodeEnd": 320,
+              "absoluteStart": 296
+            }
+          ],
+          "15": [
+            {
+              "episodeStart": 321,
+              "episodeEnd": 348,
+              "absoluteStart": 321
+            }
+          ],
+          "16": [
+            {
+              "episodeStart": 349,
+              "episodeEnd": 361,
+              "absoluteStart": 349
+            }
+          ],
+          "17": [
+            {
+              "episodeStart": 362,
+              "episodeEnd": 372,
+              "absoluteStart": 362
+            }
+          ],
+          "18": [
+            {
+              "episodeStart": 373,
+              "episodeEnd": 393,
+              "absoluteStart": 373
+            }
+          ],
+          "19": [
+            {
+              "episodeStart": 394,
+              "episodeEnd": 413,
+              "absoluteStart": 394
+            }
+          ],
+          "20": [
+            {
+              "episodeStart": 414,
+              "episodeEnd": 500,
+              "absoluteStart": 414
+            }
+          ]
+        }
+      }
+    }
   },
   "classification": {
     "sourceId": "skipthefiller",

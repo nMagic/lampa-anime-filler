@@ -23,7 +23,11 @@ function bundleFixture(options = {}) {
     schemaVersion: 1,
     id: 'skipthefiller:one-piece',
     identity: { mediaType: 'series', title: 'One Piece', aliases: ['Ван-Пис'], ids: { tmdbTv: 37854 } },
-    numbering: { scope: 'regular', basis: 'absolute', startsAt: 1, seasonOffsets: { 1: 0 } },
+    numbering: { scope: 'regular', basis: 'absolute', startsAt: 1, sourceMappings: {
+      online_mod: { system: 'tmdb', seasons: {
+        1: [{ episodeStart: 1, episodeEnd: 55, absoluteStart: 1 }]
+      } }
+    } },
     classification: { sourceId: 'skipthefiller', sourceRevision: 'fixture', sourceUrl: 'https://example.test/one-piece' },
     counts: { canon: 54, manga_canon: 0, anime_canon: 0, filler: 1, mixed: 0 },
     episodes
@@ -178,7 +182,7 @@ test('loads and verifies manifest, index and one title shard', async () => {
   const { api, storage } = createHarness({ fetch });
   const guide = await api.loadBundleGuide({ id: 37854, name: 'Ван-Пис' });
   assert.equal(guide.episodes[55], 'filler');
-  assert.equal(guide.seasonOffsets[1], 0);
+  assert.equal(guide.sourceMappings.online_mod.seasons[1][0].absoluteStart, 1);
   assert.equal(guide.bundle.buildId, 'skipthefiller-fixture');
   assert.match(guide.source, /CC BY 4\.0/);
   assert.ok(storage.has('laf_bundle_active_v1'));
@@ -198,7 +202,30 @@ test('loads the committed One Piece bundle end to end', async () => {
   const guide = await api.loadBundleGuide({ id: 37854, name: 'Ван-Пис', original_name: 'ワンピース' });
   assert.equal(guide.episodes[54], 'filler');
   assert.equal(guide.episodes[58], 'filler');
-  assert.equal(api.classify({ season: 1, episode: 55 }, guide).type, 'filler');
+  assert.equal(api.classify({ sourceAdapter: 'online_mod', season: 1, episode: 55 }, guide).type, 'filler');
+});
+
+test('resolves all curated anime identities by exact TMDB TV id', async () => {
+  const base = 'https://nmagic.github.io/lampa-anime-filler/data/generated/v1/';
+  const fetch = async url => {
+    assert.ok(url.startsWith(base), 'unexpected URL ' + url);
+    const relative = url.slice(base.length);
+    const target = path.join(__dirname, '..', 'data', 'generated', 'v1', ...relative.split('/'));
+    return { ok: true, text: async () => fs.readFileSync(target, 'utf8') };
+  };
+  const { api } = createHarness({ fetch });
+  const expected = [
+    [30984, 'bleach', 408],
+    [37854, 'one-piece', 1173],
+    [46260, 'naruto', 220],
+    [31910, 'naruto-shippuden', 500]
+  ];
+  for (const [id, slug, count] of expected) {
+    const guide = await api.loadBundleGuide({ id, name: 'Локализованное название' });
+    assert.equal(guide.slug, slug);
+    assert.equal(Object.keys(guide.episodes).length, count);
+    assert.equal(guide.bundle.resolution, 'TMDB ID');
+  }
 });
 
 test('uses a previously verified bundle cache when the network is unavailable', async () => {
@@ -298,6 +325,44 @@ test('requires verified offsets for structured seasons and honors explicit absol
   assert.equal(api.classify('Episode 999', guide), null);
 });
 
+test('maps verified Online_Mod TMDB ranges and returns unknown for unverified sources', () => {
+  const { api } = createHarness();
+  function committedGuide(slug) {
+    const shard = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'generated', 'v1', 'titles', slug + '.json'), 'utf8'));
+    return api.normalizeGuide({
+      slug,
+      episodes: shard.episodes,
+      sourceMappings: shard.numbering.sourceMappings
+    }, 'committed bundle');
+  }
+
+  const bleach = committedGuide('bleach');
+  const bleachRows = [];
+  for (let episode = 1; episode <= 366; episode++) bleachRows.push({ sourceAdapter: 'online_mod', season: 1, episode });
+  for (let episode = 1; episode <= 6; episode++) bleachRows.push({ sourceAdapter: 'online_mod', season: 2, episode });
+  assert.equal(bleachRows.length, 372);
+  assert.equal(bleachRows.filter(item => api.classify(item, bleach)).length, 372);
+  assert.equal(api.classify({ sourceAdapter: 'online_mod', season: 1, episode: 366 }, bleach).number, 366);
+  assert.equal(api.classify({ sourceAdapter: 'online_mod', season: 2, episode: 1 }, bleach).number, 367);
+  assert.equal(api.classify({ sourceAdapter: 'online_mod', season: 2, episode: 42 }, bleach).number, 408);
+  assert.equal(api.classify({ sourceAdapter: 'online_mod', season: 2, episode: 43 }, bleach), null);
+
+  const onePiece = committedGuide('one-piece');
+  assert.equal(api.classify({ sourceAdapter: 'online_mod', season: 2, episode: 62 }, onePiece).number, 62);
+  assert.equal(api.classify({ sourceAdapter: 'online_mod', season: 2, episode: 1 }, onePiece), null);
+
+  const naruto = committedGuide('naruto');
+  assert.equal(api.classify({ sourceAdapter: 'online_mod', season: 2, episode: 53 }, naruto).number, 53);
+  assert.equal(api.classify({ sourceAdapter: 'online_mod', season: 2, episode: 1 }, naruto), null);
+
+  const shippuden = committedGuide('naruto-shippuden');
+  assert.equal(api.classify({ sourceAdapter: 'online_mod', season: 20, episode: 414 }, shippuden).number, 414);
+  assert.equal(api.classify({ sourceAdapter: 'online_mod', season: 20, episode: 1 }, shippuden), null);
+  assert.equal(api.classify({ sourceAdapter: 'bwa', season: 1, episode: 366 }, bleach), null);
+  assert.equal(api.classify({ sourceAdapter: 'bwa', absolute_episode: 366 }, bleach).number, 366);
+  assert.equal(api.classify({ sourceAdapter: 'unverified', season: 1, episode: 366 }, bleach), null);
+});
+
 test('template hook carries source metadata for Online_Mod and BWA but ignores unknown templates', () => {
   const { context } = createHarness();
   const online = context.Lampa.Template.get('online_mod', { season: 1, episode: 55 });
@@ -305,7 +370,9 @@ test('template hook carries source metadata for Online_Mod and BWA but ignores u
   const unknown = context.Lampa.Template.get('unrelated_template', { season: 1, episode: 55 });
   assert.equal(online[0].getAttribute('data-laf-episode'), '55');
   assert.equal(online[0].getAttribute('data-laf-season'), '1');
+  assert.equal(online[0].getAttribute('data-laf-source'), 'online_mod');
   assert.equal(bwa[0].getAttribute('data-laf-absolute'), '196');
+  assert.equal(bwa[0].getAttribute('data-laf-source'), 'bwa');
   assert.equal(unknown[0].getAttribute('data-laf-episode'), null);
 });
 

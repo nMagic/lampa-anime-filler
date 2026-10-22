@@ -56,8 +56,13 @@
       "id": "skipthefiller:bleach",
       "slug": "bleach",
       "title": "Bleach",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Блич",
+        "ブリーチ"
+      ],
+      "ids": {
+        "tmdbTv": 30984
+      },
       "episodeCount": 408,
       "counts": {
         "canon": 204,
@@ -67,7 +72,7 @@
         "mixed": 41
       },
       "shard": "titles/bleach.json",
-      "sha256": "3929d79fbc6cbed1ab55616ec16d0ce45b084424977ac5bb3dd74ce8e49a30d5"
+      "sha256": "e612090c323661a92050b4982c6ec45f91fde7d8672328cc547a2b4e1fbcd47e"
     },
     {
       "id": "skipthefiller:blue-exorcist",
@@ -515,8 +520,13 @@
       "id": "skipthefiller:naruto",
       "slug": "naruto",
       "title": "Naruto",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "NARUTO -ナルト-",
+        "Наруто"
+      ],
+      "ids": {
+        "tmdbTv": 46260
+      },
       "episodeCount": 220,
       "counts": {
         "canon": 74,
@@ -526,14 +536,19 @@
         "mixed": 56
       },
       "shard": "titles/naruto.json",
-      "sha256": "10de6099d9ba53f0fc2b0f65e2a5b155b64bd4cc0480095b518ea6d0710a10f6"
+      "sha256": "e0f853bca9ed399c55e02fa54d56d64563308b84f948f85c006ecdc6117096d9"
     },
     {
       "id": "skipthefiller:naruto-shippuden",
       "slug": "naruto-shippuden",
       "title": "Naruto: Shippuden",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "NARUTO -ナルト- 疾風伝",
+        "Наруто: Ураганные хроники"
+      ],
+      "ids": {
+        "tmdbTv": 31910
+      },
       "episodeCount": 500,
       "counts": {
         "canon": 233,
@@ -543,7 +558,7 @@
         "mixed": 64
       },
       "shard": "titles/naruto-shippuden.json",
-      "sha256": "70cb1fa066bfba108afa1d48aeab39c6db0fb4f00160754d275f464007e8e15f"
+      "sha256": "f2e3c1f8f0c6afc3e0ef7a99f3d1fe0145a6146c78aec3b44e6c1c9b30d596a8"
     },
     {
       "id": "skipthefiller:one-piece",
@@ -565,7 +580,7 @@
         "mixed": 43
       },
       "shard": "titles/one-piece.json",
-      "sha256": "2572938715a52cdc8ebbb62a05d2754bb6e04915188478e90c33f56e5f795b8a"
+      "sha256": "66d9e7578e050a403352cb86add0f40c559d27e125c0b6aca87d4ee79aeff778"
     },
     {
       "id": "skipthefiller:pokemon",

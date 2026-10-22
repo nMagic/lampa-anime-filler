@@ -40,7 +40,7 @@ Title-only candidates may be shown in diagnostics for manual confirmation but do
 
 ### Episode Mapper
 
-The mapper receives structured adapter context: source adapter id, canonical title id, numbering basis, season, episode, absolute episode and file range. It prefers a verified absolute number; seasonal positions require an explicit mapping. Mappings should pass a reverse/round-trip check when both directions exist. Ambiguity returns `unknown`.
+The mapper receives structured adapter context: source adapter id, canonical title id, numbering basis, season, episode, absolute episode and file range. It prefers a verified absolute number; seasonal positions require an explicit mapping for the exact adapter and title. Runtime v0.4.1 implements validated TMDB ranges for Online_Mod and intentionally leaves BWA season/episode values unknown until its numbering is device-verified. Mappings should pass a reverse/round-trip check when both directions exist. Ambiguity returns `unknown`.
 
 ### Lampa Adapter
 
@@ -56,4 +56,4 @@ The project is non-commercial. Non-commercial and ShareAlike datasets are accept
 
 ## Current implementation boundary
 
-Version 0.4.0 publishes and consumes the first versioned SkipTheFiller bundle. Resolver confidence is intentionally narrow: exact TMDB TV id, explicit user mapping, or a verified alias. When no verified bundle identity exists, the existing exact-title resolver is retained only in the legacy marking fallback so current coverage does not regress. The Online_Mod hook is unchanged, automatic skipping is still absent, and LG webOS must be tested again after deployment; BWA, Tizen and Android TV remain separate device tests.
+Version 0.4.1 publishes and consumes the versioned SkipTheFiller bundle plus a pinned build-time TMDB mapping. Resolver confidence is intentionally narrow: exact TMDB TV id, explicit user mapping, or a verified alias. Online_Mod structured rows carry an adapter id into the source-aware mapper; BWA is accepted only when it provides an explicit absolute episode. Automatic skipping is still absent, and LG webOS must be tested again after deployment; BWA, Tizen and Android TV remain separate device tests.

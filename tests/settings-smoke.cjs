@@ -66,7 +66,7 @@ const context = {
 };
 
 vm.runInNewContext(source, context);
-assert.equal(context.window.LampaAnimeFiller.version, '0.4.0');
+assert.equal(context.window.LampaAnimeFiller.version, '0.4.1');
 assert.equal(components.length, 1);
 assert.equal(params.length, 4);
 const debug = params.find(p => p.param.name === 'laf_diagnostics');
@@ -100,15 +100,19 @@ new Promise(resolve => setImmediate(resolve)).then(() => {
   const guide = context.window.LampaAnimeFiller.state.guide;
   assert.ok(guide && guide.episodes[196] === 'filler',
     'One Piece guide must load via fallback dataset');
-  assert.equal(context.window.LampaAnimeFiller.classify({season:1,episode:55}, guide).type, 'filler');
+  assert.equal(context.window.LampaAnimeFiller.classify({absolute_episode:55}, guide).type, 'filler');
+  assert.equal(context.window.LampaAnimeFiller.classify({sourceAdapter:'online_mod',season:1,episode:55}, guide), null,
+    'Legacy fallback has no verified source mapping');
   assert.equal(context.window.LampaAnimeFiller.classify({season:2,episode:1}, guide), null,
     'Do not guess offsets for unsupported seasons');
   assert.equal(context.window.LampaAnimeFiller.parseEpisode('55 серия'), 55);
   const returned = context.Lampa.Template.get('online_mod', {episode:55,season:1});
   assert.equal(returned[0].getAttribute('data-laf-episode'), '55');
   assert.equal(returned[0].getAttribute('data-laf-season'), '1');
+  assert.equal(returned[0].getAttribute('data-laf-source'), 'online_mod');
   const bwa = context.Lampa.Template.get('lampac_prestige_full', {episode:55,season:1});
   assert.equal(bwa[0].getAttribute('data-laf-episode'), '55');
+  assert.equal(bwa[0].getAttribute('data-laf-source'), 'bwa');
   debug.onChange();
   assert.ok(modalInfo && modalInfo.title.includes('диагностика'));
   console.log('One Piece localized-title, Online_Mod/BWA template hooks and diagnostics passed.');
