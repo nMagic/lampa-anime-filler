@@ -62,6 +62,20 @@ function normalizeAliases(value, primaryTitle, context) {
   return aliases.filter(alias => alias !== primaryTitle).sort(compareText);
 }
 
+function normalizeSeasonOffsets(value, context) {
+  if (value === undefined) return undefined;
+  invariant(isPlainObject(value), `${context}: seasonOffsets must be an object`);
+  const result = {};
+  for (const [season, offset] of Object.entries(value)) {
+    invariant(/^[1-9][0-9]*$/.test(season), `${context}: invalid season ${season}`);
+    invariant(Number.isSafeInteger(offset) && offset >= 0,
+      `${context}: season ${season} offset must be a non-negative safe integer`);
+    result[season] = offset;
+  }
+  invariant(Object.keys(result).length, `${context}: seasonOffsets must not be empty`);
+  return Object.fromEntries(Object.entries(result).sort(([a], [b]) => Number(a) - Number(b)));
+}
+
 function normalizeHttpsUrl(value, context) {
   let url;
   try { url = new URL(String(value || '')); }
@@ -102,6 +116,14 @@ function normalizeShow(show, source, identity = {}) {
   Object.values(episodes).forEach(status => { counts[status] += 1; });
   const ids = normalizeIds(identity.ids, context);
   const aliases = normalizeAliases(identity.aliases, title, context);
+  const seasonOffsets = normalizeSeasonOffsets(identity.seasonOffsets, context);
+
+  const numbering = {
+    scope: 'regular',
+    basis: 'absolute',
+    startsAt: 1
+  };
+  if (seasonOffsets) numbering.seasonOffsets = seasonOffsets;
 
   return {
     schemaVersion: SCHEMA_VERSION,
@@ -112,11 +134,7 @@ function normalizeShow(show, source, identity = {}) {
       aliases,
       ids
     },
-    numbering: {
-      scope: 'regular',
-      basis: 'absolute',
-      startsAt: 1
-    },
+    numbering,
     classification: {
       sourceId: source.id,
       sourceRevision: source.revision,

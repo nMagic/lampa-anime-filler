@@ -16,13 +16,13 @@ const source = {
   attribution: 'Test fixture'
 };
 
-function build(catalog = fixture) {
+function build(catalog = fixture, identities = {
+  naruto: { ids: { tmdbTv: 46260, mal: 20 }, aliases: ['Наруто'], seasonOffsets: { 1: 0 } }
+}) {
   return buildBundle(catalog, {
     source,
     generatedAt: '2026-10-22T00:00:00.000Z',
-    identities: {
-      naruto: { ids: { tmdbTv: 46260, mal: 20 }, aliases: ['Наруто'] }
-    }
+    identities
   });
 }
 
@@ -36,6 +36,7 @@ test('builds deterministic manifest, index and per-title shards', () => {
   assert.equal(first.index.titles[1].id, 'fixture:naruto-shippuden');
   assert.equal(first.shards[0].identity.ids.tmdbTv, 46260);
   assert.deepEqual(first.shards[0].identity.aliases, ['Наруто']);
+  assert.deepEqual(first.shards[0].numbering.seasonOffsets, { 1: 0 });
 });
 
 test('checksums cover the exact serialized shard and index bytes', () => {
@@ -86,4 +87,5 @@ test('rejects non-series-safe input instead of guessing', () => {
   assert.throws(() => build([{ ...base, totalEpisodes: 1, episodes: [{ number: '1', type: 'Canon' }] }]), /positive safe integer/);
   assert.throws(() => build([{ ...base, totalEpisodes: 2 }]), /totalEpisodes=2 but 3 episodes/);
   assert.throws(() => build([{ ...base, url: 'http://example.test/naruto' }]), /only HTTPS URLs/);
+  assert.throws(() => build(fixture, { naruto: { seasonOffsets: { 1: -1 } } }), /offset/);
 });

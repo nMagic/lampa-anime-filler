@@ -1,4 +1,5 @@
 const assert = require('node:assert/strict');
+const crypto = require('node:crypto');
 const fs = require('node:fs');
 const path = require('node:path');
 const test = require('node:test');
@@ -8,6 +9,46 @@ const source = fs.readFileSync(path.join(__dirname, '..', 'lampa-anime-filler.js
 
 function flushPromises() {
   return new Promise(resolve => setImmediate(resolve));
+}
+
+async function flushMany(count = 8) {
+  for (let index = 0; index < count; index++) await flushPromises();
+}
+
+function bundleFixture(options = {}) {
+  const base = 'https://nmagic.github.io/lampa-anime-filler/data/generated/v1';
+  const episodes = {};
+  for (let number = 1; number <= 55; number++) episodes[number] = number === 55 ? 'filler' : 'canon';
+  const shard = {
+    schemaVersion: 1,
+    id: 'skipthefiller:one-piece',
+    identity: { mediaType: 'series', title: 'One Piece', aliases: ['Ван-Пис'], ids: { tmdbTv: 37854 } },
+    numbering: { scope: 'regular', basis: 'absolute', startsAt: 1, seasonOffsets: { 1: 0 } },
+    classification: { sourceId: 'skipthefiller', sourceRevision: 'fixture', sourceUrl: 'https://example.test/one-piece' },
+    counts: { canon: 54, manga_canon: 0, anime_canon: 0, filler: 1, mixed: 0 },
+    episodes
+  };
+  const shardText = JSON.stringify(shard);
+  const shardHash = crypto.createHash('sha256').update(shardText).digest('hex');
+  const index = { schemaVersion: 1, titles: [{
+    id: shard.id, slug: 'one-piece', title: 'One Piece', aliases: ['Ван-Пис'], ids: { tmdbTv: 37854 },
+    episodeCount: 55, counts: shard.counts, shard: 'titles/one-piece.json', sha256: shardHash
+  }] };
+  const indexText = JSON.stringify(index);
+  const indexHash = crypto.createHash('sha256').update(indexText).digest('hex');
+  const manifest = {
+    schemaVersion: 1, buildId: 'skipthefiller-fixture', generatedAt: '2026-10-22T00:00:00.000Z',
+    sources: [{ id: 'skipthefiller', name: 'SkipTheFiller', url: 'https://example.test', revision: 'fixture',
+      license: 'CC BY 4.0', attribution: 'Fixture' }],
+    catalog: { index: 'index.json', sha256: indexHash, titleCount: 1, episodeCount: 55,
+      shardPattern: 'titles/{slug}.json' }, validation: {}
+  };
+  const responses = new Map([
+    [base + '/manifest.json', JSON.stringify(manifest)],
+    [base + '/index.json', options.corruptIndex ? indexText + ' ' : indexText],
+    [base + '/titles/one-piece.json', options.corruptShard ? shardText + ' ' : shardText]
+  ]);
+  return { base, manifest, index, shard, responses };
 }
 
 function fakeNode() {
@@ -119,6 +160,90 @@ test('normalizes supported classifications and ignores malformed entries', () =>
   assert.equal(guide.episodes[0], undefined);
   assert.equal(guide.episodes[4], undefined);
   assert.equal(guide.source, 'fixture source');
+});
+
+test('computes SHA-256 without Web Crypto, including UTF-8 text', () => {
+  const { api } = createHarness();
+  for (const value of ['', 'abc', 'Ван-Пис ワンピース']) {
+    assert.equal(api.sha256Text(value), crypto.createHash('sha256').update(value).digest('hex'));
+  }
+});
+
+test('loads and verifies manifest, index and one title shard', async () => {
+  const fixture = bundleFixture();
+  const fetch = async url => {
+    assert.ok(fixture.responses.has(url), 'unexpected URL ' + url);
+    return { ok: true, text: async () => fixture.responses.get(url) };
+  };
+  const { api, storage } = createHarness({ fetch });
+  const guide = await api.loadBundleGuide({ id: 37854, name: 'Ван-Пис' });
+  assert.equal(guide.episodes[55], 'filler');
+  assert.equal(guide.seasonOffsets[1], 0);
+  assert.equal(guide.bundle.buildId, 'skipthefiller-fixture');
+  assert.match(guide.source, /CC BY 4\.0/);
+  assert.ok(storage.has('laf_bundle_active_v1'));
+  assert.ok([...storage.keys()].some(key => key.startsWith('laf_bundle_shard_v1_')));
+  assert.equal(guide.bundle.resolution, 'TMDB ID');
+});
+
+test('loads the committed One Piece bundle end to end', async () => {
+  const base = 'https://nmagic.github.io/lampa-anime-filler/data/generated/v1/';
+  const fetch = async url => {
+    assert.ok(url.startsWith(base), 'unexpected URL ' + url);
+    const relative = url.slice(base.length);
+    const target = path.join(__dirname, '..', 'data', 'generated', 'v1', ...relative.split('/'));
+    return { ok: true, text: async () => fs.readFileSync(target, 'utf8') };
+  };
+  const { api } = createHarness({ fetch });
+  const guide = await api.loadBundleGuide({ id: 37854, name: 'Ван-Пис', original_name: 'ワンピース' });
+  assert.equal(guide.episodes[54], 'filler');
+  assert.equal(guide.episodes[58], 'filler');
+  assert.equal(api.classify({ season: 1, episode: 55 }, guide).type, 'filler');
+});
+
+test('uses a previously verified bundle cache when the network is unavailable', async () => {
+  const fixture = bundleFixture();
+  const online = createHarness({
+    fetch: async url => ({ ok: true, text: async () => fixture.responses.get(url) })
+  });
+  await online.api.loadBundleGuide({ id: 37854, title: 'One Piece' });
+
+  const offline = createHarness({
+    storage: Object.fromEntries(online.storage),
+    fetch: async () => { throw new Error('offline'); }
+  });
+  const guide = await offline.api.loadBundleGuide({ id: 37854, title: 'One Piece' });
+  assert.equal(guide.episodes[55], 'filler');
+  assert.equal(guide.bundle.resolution, 'TMDB ID');
+});
+
+test('rejects an unsupported bundle schema version', async () => {
+  const fixture = bundleFixture();
+  const manifestUrl = fixture.base + '/manifest.json';
+  const manifest = JSON.parse(fixture.responses.get(manifestUrl));
+  manifest.schemaVersion = 2;
+  fixture.responses.set(manifestUrl, JSON.stringify(manifest));
+  const { api } = createHarness({
+    fetch: async url => ({ ok: true, text: async () => fixture.responses.get(url) })
+  });
+  await assert.rejects(api.loadBundleGuide({ id: 37854, title: 'One Piece' }), /Unsupported bundle schema/);
+});
+
+test('falls back to the legacy catalog when bundle integrity validation fails', async () => {
+  const fixture = bundleFixture({ corruptIndex: true });
+  const fetch = async url => {
+    if (fixture.responses.has(url)) return { ok: true, text: async () => fixture.responses.get(url) };
+    if (url.includes('anime-filler-list-data')) return { ok: true, json: async () => [{
+      slug: 'one-piece', title: 'One Piece', episodes: [{ number: 55, type: 'Filler' }]
+    }] };
+    throw new Error('unexpected URL ' + url);
+  };
+  const { api, listeners } = createHarness({ fetch });
+  listeners.full[0]({ type: 'complite', data: { movie: { id: 37854, name: 'Ван-Пис' } }, object: {} });
+  await flushMany();
+  assert.equal(api.state.guide.episodes[55], 'filler');
+  assert.equal(api.state.diagnostics.provider, 'legacy fallback');
+  assert.match(api.state.diagnostics.error, /checksum mismatch/);
 });
 
 test('keeps long-running titles separate and matches only exact normalized titles', () => {

@@ -7,6 +7,7 @@ on:
       - 'a.js'
       - 'scripts/**'
       - 'schemas/**'
+      - 'data/**'
       - 'tests/**'
       - '.github/workflows/plugin-tests.yml'
   workflow_dispatch:
@@ -24,8 +25,8 @@ jobs:
       - name: Run unit and integration tests
         run: node --test tests/*.test.cjs tests/*.test.mjs && node tests/settings-smoke.cjs
 
-      - name: Validate pinned data source and bundle contract
-        run: node scripts/build-data.mjs --check
+      - name: Validate pinned data source and committed bundle
+        run: node scripts/build-data.mjs --verify data/generated/v1
 
       - name: Check public fallback dataset and CORS
         shell: bash

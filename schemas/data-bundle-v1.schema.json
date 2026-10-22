@@ -119,7 +119,13 @@
           "properties": {
             "scope": { "const": "regular" },
             "basis": { "const": "absolute" },
-            "startsAt": { "const": 1 }
+            "startsAt": { "const": 1 },
+            "seasonOffsets": {
+              "type": "object",
+              "minProperties": 1,
+              "propertyNames": { "pattern": "^[1-9][0-9]*$" },
+              "additionalProperties": { "type": "integer", "minimum": 0 }
+            }
           }
         },
         "classification": {
