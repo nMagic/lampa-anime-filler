@@ -1,0 +1,23 @@
+[
+  {
+    "slug": "naruto",
+    "title": "Naruto",
+    "totalEpisodes": 3,
+    "url": "https://example.test/naruto",
+    "episodes": [
+      { "number": 1, "type": "Canon" },
+      { "number": 2, "type": "Filler" },
+      { "number": 3, "type": "Mixed" }
+    ]
+  },
+  {
+    "slug": "naruto-shippuden",
+    "title": "Naruto Shippuden",
+    "totalEpisodes": 2,
+    "url": "https://example.test/naruto-shippuden",
+    "episodes": [
+      { "number": 1, "type": "Canon" },
+      { "number": 2, "type": "Filler" }
+    ]
+  }
+]

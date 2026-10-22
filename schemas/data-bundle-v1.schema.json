@@ -1,0 +1,145 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://nmagic.github.io/lampa-anime-filler/schemas/data-bundle-v1.schema.json",
+  "title": "Lampa Anime Filler data bundle v1",
+  "oneOf": [
+    { "$ref": "#/$defs/manifest" },
+    { "$ref": "#/$defs/index" },
+    { "$ref": "#/$defs/titleShard" }
+  ],
+  "$defs": {
+    "positiveInteger": { "type": "integer", "minimum": 1 },
+    "checksum": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canon", "manga_canon", "anime_canon", "filler", "mixed"],
+      "properties": {
+        "canon": { "type": "integer", "minimum": 0 },
+        "manga_canon": { "type": "integer", "minimum": 0 },
+        "anime_canon": { "type": "integer", "minimum": 0 },
+        "filler": { "type": "integer", "minimum": 0 },
+        "mixed": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "ids": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[A-Za-z][A-Za-z0-9]*$" },
+      "additionalProperties": {
+        "oneOf": [
+          { "type": "integer", "minimum": 1 },
+          { "type": "string", "minLength": 1 }
+        ]
+      }
+    },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "name", "url", "revision", "license", "attribution"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "name": { "type": "string", "minLength": 1 },
+        "url": { "type": "string", "format": "uri" },
+        "revision": { "type": "string", "minLength": 1 },
+        "license": { "type": "string", "minLength": 1 },
+        "attribution": { "type": "string", "minLength": 1 }
+      }
+    },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "buildId", "generatedAt", "sources", "catalog", "validation"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "buildId": { "type": "string", "minLength": 1 },
+        "generatedAt": { "type": "string", "format": "date-time" },
+        "sources": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/source" } },
+        "catalog": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["index", "sha256", "titleCount", "episodeCount", "shardPattern"],
+          "properties": {
+            "index": { "type": "string", "const": "index.json" },
+            "sha256": { "$ref": "#/$defs/checksum" },
+            "titleCount": { "$ref": "#/$defs/positiveInteger" },
+            "episodeCount": { "$ref": "#/$defs/positiveInteger" },
+            "shardPattern": { "type": "string", "const": "titles/{slug}.json" }
+          }
+        },
+        "validation": { "type": "object" }
+      }
+    },
+    "indexItem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "slug", "title", "aliases", "ids", "episodeCount", "counts", "shard", "sha256"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "slug": { "type": "string", "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$" },
+        "title": { "type": "string", "minLength": 1 },
+        "aliases": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+        "ids": { "$ref": "#/$defs/ids" },
+        "episodeCount": { "$ref": "#/$defs/positiveInteger" },
+        "counts": { "$ref": "#/$defs/counts" },
+        "shard": { "type": "string", "pattern": "^titles/[a-z0-9]+(?:-[a-z0-9]+)*\\.json$" },
+        "sha256": { "$ref": "#/$defs/checksum" }
+      }
+    },
+    "index": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "titles"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "titles": { "type": "array", "minItems": 1, "items": { "$ref": "#/$defs/indexItem" } }
+      }
+    },
+    "titleShard": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schemaVersion", "id", "identity", "numbering", "classification", "counts", "episodes"],
+      "properties": {
+        "schemaVersion": { "const": 1 },
+        "id": { "type": "string", "minLength": 1 },
+        "identity": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["mediaType", "title", "aliases", "ids"],
+          "properties": {
+            "mediaType": { "const": "series" },
+            "title": { "type": "string", "minLength": 1 },
+            "aliases": { "type": "array", "uniqueItems": true, "items": { "type": "string", "minLength": 1 } },
+            "ids": { "$ref": "#/$defs/ids" }
+          }
+        },
+        "numbering": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scope", "basis", "startsAt"],
+          "properties": {
+            "scope": { "const": "regular" },
+            "basis": { "const": "absolute" },
+            "startsAt": { "const": 1 }
+          }
+        },
+        "classification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["sourceId", "sourceRevision", "sourceUrl"],
+          "properties": {
+            "sourceId": { "type": "string", "minLength": 1 },
+            "sourceRevision": { "type": "string", "minLength": 1 },
+            "sourceUrl": { "type": "string", "format": "uri" }
+          }
+        },
+        "counts": { "$ref": "#/$defs/counts" },
+        "episodes": {
+          "type": "object",
+          "minProperties": 1,
+          "propertyNames": { "pattern": "^[1-9][0-9]*$" },
+          "additionalProperties": { "enum": ["canon", "manga_canon", "anime_canon", "filler", "mixed"] }
+        }
+      }
+    }
+  }
+}
