@@ -66,7 +66,7 @@ const context = {
 };
 
 vm.runInNewContext(source, context);
-assert.equal(context.window.LampaAnimeFiller.version, '0.3.0');
+assert.equal(context.window.LampaAnimeFiller.version, '0.4.0');
 assert.equal(components.length, 1);
 assert.equal(params.length, 4);
 const debug = params.find(p => p.param.name === 'laf_diagnostics');

@@ -22,9 +22,9 @@ Inputs are pinned by revision. Every provider has an explicit license, attributi
 
 The first provider is the CC BY 4.0 SkipTheFiller snapshot. AniFillerPedia is an approved non-commercial provider for the next provider adapter; its CC BY-NC-SA data must retain attribution and ShareAlike terms in a separate source record. Public data and architecture from projects without an explicit license may be integrated, but their source code is not copied verbatim.
 
-### Data Provider
+### Data Provider (implemented in v0.4.0)
 
-Runtime will load the manifest, then the index and only the selected title shard. Cache keys include schema version, provider revision and canonical title id. A timeout or malformed response cannot replace a valid cached bundle.
+Runtime loads the manifest, then the index and only the selected title shard. The index and shard are checked with SHA-256 before parsing; the built-in synchronous implementation also works when an older TV WebView lacks Web Crypto. Cache keys include schema version, build id, canonical title id and shard checksum. A timeout or malformed response cannot replace a valid cached bundle. The previous validated catalog remains available as a rollback snapshot.
 
 ### Anime Resolver
 
@@ -56,4 +56,4 @@ The project is non-commercial. Non-commercial and ShareAlike datasets are accept
 
 ## Current implementation boundary
 
-Version 0.3.0 still downloads the legacy 45-title catalog at runtime. `scripts/build-data.mjs` and `schemas/data-bundle-v1.schema.json` establish the replacement contract without changing that path. Switching runtime to versioned shards is a separate change and must preserve the confirmed LG webOS + Online_Mod behavior.
+Version 0.4.0 publishes and consumes the first versioned SkipTheFiller bundle. Resolver confidence is intentionally narrow: exact TMDB TV id, explicit user mapping, or a verified alias. When no verified bundle identity exists, the existing exact-title resolver is retained only in the legacy marking fallback so current coverage does not regress. The Online_Mod hook is unchanged, automatic skipping is still absent, and LG webOS must be tested again after deployment; BWA, Tizen and Android TV remain separate device tests.

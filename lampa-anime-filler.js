@@ -1,5 +1,5 @@
 /*
- * Lampa Anime Filler — marking-only prototype 0.3.0
+ * Lampa Anime Filler — marking-only prototype 0.4.0
  * Source code is independently written; no Lampa code copied.
  * Metadata backends: optional user-provided AFL JSON, fallback CC BY 4.0 SkipTheFiller dataset.
  * Phase 1: labels only; no playback/playlist modification.
@@ -11,12 +11,17 @@
   if (window.lampa_anime_filler_loaded) return;
   window.lampa_anime_filler_loaded = true;
 
-  var DATASET_URL = 'https://raw.githubusercontent.com/animecannonhunter-hash/anime-filler-list-data/main/anime.json';
+  var BUNDLE_SCHEMA_VERSION = 1;
+  var BUNDLE_BASE_URL = 'https://nmagic.github.io/lampa-anime-filler/data/generated/v1';
+  var LEGACY_DATASET_URL = 'https://raw.githubusercontent.com/animecannonhunter-hash/anime-filler-list-data/main/anime.json';
   var PREFIX = 'laf_';
   var CACHE_TTL = 24 * 60 * 60 * 1000;
+  var FETCH_TIMEOUT = 8000;
   var state = { movie: null, slug: '', guide: null, loadId: 0, dataset: null, datasetPromise: null,
+    bundleCatalog: null,
     diagnostics: { phase: 'ожидаем карточку аниме', error: '', fullEvents: 0, templateHits: 0,
-      rows: 0, matched: 0, parsed: 0, sampleTitle: '', sampleTemplate: '' } };
+      rows: 0, matched: 0, parsed: 0, sampleTitle: '', sampleTemplate: '',
+      provider: '', integrity: '', resolution: '' } };
   var timer = null;
   var observer = null;
   var ROW_SELECTORS = '.online, .online-prestige, .online-prestige__episode, .online-prestige__item, ' +
@@ -129,16 +134,306 @@
       seasonOffsets: input.seasonOffsets || (clean(input.slug) === 'one-piece' ? {'1': 0} : null),
       source: input.source || source || 'Пользовательские данные' };
   }
+  function isObject(value) { return value && typeof value === 'object' && !Array.isArray(value); }
+  function fetchResponse(url) {
+    return new Promise(function (resolve, reject) {
+      var settled = false;
+      var controller = window.AbortController ? new window.AbortController() : null;
+      var timer = setTimeout(function () {
+        if (settled) return;
+        settled = true;
+        if (controller) controller.abort();
+        reject(new Error('Timeout ' + FETCH_TIMEOUT + 'ms'));
+      }, FETCH_TIMEOUT);
+      var options = { method: 'GET', credentials: 'omit' };
+      if (controller) options.signal = controller.signal;
+      fetch(url, options).then(function (response) {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        if (!response.ok) reject(new Error('HTTP ' + response.status));
+        else resolve(response);
+      }, function (error) {
+        if (settled) return;
+        settled = true;
+        clearTimeout(timer);
+        reject(error);
+      });
+    });
+  }
   function fetchJSON(url) {
-    return fetch(url, { method: 'GET', credentials: 'omit' }).then(function (response) {
-      if (!response.ok) throw new Error('HTTP ' + response.status);
-      return response.json();
+    return fetchResponse(url).then(function (response) { return response.json(); });
+  }
+  function fetchText(url) {
+    return fetchResponse(url).then(function (response) {
+      if (typeof response.text !== 'function') throw new Error('Text response is unavailable');
+      return response.text();
+    });
+  }
+
+  // Synchronous SHA-256 keeps integrity checks available on older TV WebViews
+  // where Web Crypto or TextEncoder may be absent.
+  function sha256Text(input) {
+    var bytes = [];
+    var text = String(input);
+    for (var i = 0; i < text.length; i++) {
+      var code = text.charCodeAt(i);
+      if (code >= 0xd800 && code <= 0xdbff && i + 1 < text.length) {
+        var low = text.charCodeAt(i + 1);
+        if (low >= 0xdc00 && low <= 0xdfff) {
+          code = 0x10000 + ((code - 0xd800) << 10) + (low - 0xdc00);
+          i++;
+        }
+      }
+      if (code < 0x80) bytes.push(code);
+      else if (code < 0x800) bytes.push(0xc0 | (code >>> 6), 0x80 | (code & 63));
+      else if (code < 0x10000) bytes.push(0xe0 | (code >>> 12), 0x80 | ((code >>> 6) & 63), 0x80 | (code & 63));
+      else bytes.push(0xf0 | (code >>> 18), 0x80 | ((code >>> 12) & 63),
+        0x80 | ((code >>> 6) & 63), 0x80 | (code & 63));
+    }
+    var bitLength = bytes.length * 8;
+    bytes.push(0x80);
+    while (bytes.length % 64 !== 56) bytes.push(0);
+    var high = Math.floor(bitLength / 0x100000000);
+    var lowBits = bitLength >>> 0;
+    bytes.push((high >>> 24) & 255, (high >>> 16) & 255, (high >>> 8) & 255, high & 255,
+      (lowBits >>> 24) & 255, (lowBits >>> 16) & 255, (lowBits >>> 8) & 255, lowBits & 255);
+
+    var h = [0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
+      0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19];
+    var k = [
+      0x428a2f98,0x71374491,0xb5c0fbcf,0xe9b5dba5,0x3956c25b,0x59f111f1,0x923f82a4,0xab1c5ed5,
+      0xd807aa98,0x12835b01,0x243185be,0x550c7dc3,0x72be5d74,0x80deb1fe,0x9bdc06a7,0xc19bf174,
+      0xe49b69c1,0xefbe4786,0x0fc19dc6,0x240ca1cc,0x2de92c6f,0x4a7484aa,0x5cb0a9dc,0x76f988da,
+      0x983e5152,0xa831c66d,0xb00327c8,0xbf597fc7,0xc6e00bf3,0xd5a79147,0x06ca6351,0x14292967,
+      0x27b70a85,0x2e1b2138,0x4d2c6dfc,0x53380d13,0x650a7354,0x766a0abb,0x81c2c92e,0x92722c85,
+      0xa2bfe8a1,0xa81a664b,0xc24b8b70,0xc76c51a3,0xd192e819,0xd6990624,0xf40e3585,0x106aa070,
+      0x19a4c116,0x1e376c08,0x2748774c,0x34b0bcb5,0x391c0cb3,0x4ed8aa4a,0x5b9cca4f,0x682e6ff3,
+      0x748f82ee,0x78a5636f,0x84c87814,0x8cc70208,0x90befffa,0xa4506ceb,0xbef9a3f7,0xc67178f2
+    ];
+    function rotate(value, amount) { return (value >>> amount) | (value << (32 - amount)); }
+    var words = new Array(64);
+    for (var offset = 0; offset < bytes.length; offset += 64) {
+      for (i = 0; i < 16; i++) {
+        var pos = offset + i * 4;
+        words[i] = ((bytes[pos] << 24) | (bytes[pos + 1] << 16) |
+          (bytes[pos + 2] << 8) | bytes[pos + 3]) >>> 0;
+      }
+      for (i = 16; i < 64; i++) {
+        var s0 = rotate(words[i - 15], 7) ^ rotate(words[i - 15], 18) ^ (words[i - 15] >>> 3);
+        var s1 = rotate(words[i - 2], 17) ^ rotate(words[i - 2], 19) ^ (words[i - 2] >>> 10);
+        words[i] = (words[i - 16] + s0 + words[i - 7] + s1) >>> 0;
+      }
+      var a = h[0], b = h[1], c = h[2], d = h[3], e = h[4], f = h[5], g = h[6], hh = h[7];
+      for (i = 0; i < 64; i++) {
+        var sum1 = rotate(e, 6) ^ rotate(e, 11) ^ rotate(e, 25);
+        var choice = (e & f) ^ ((~e) & g);
+        var temp1 = (hh + sum1 + choice + k[i] + words[i]) >>> 0;
+        var sum0 = rotate(a, 2) ^ rotate(a, 13) ^ rotate(a, 22);
+        var majority = (a & b) ^ (a & c) ^ (b & c);
+        var temp2 = (sum0 + majority) >>> 0;
+        hh = g; g = f; f = e; e = (d + temp1) >>> 0;
+        d = c; c = b; b = a; a = (temp1 + temp2) >>> 0;
+      }
+      h[0] = (h[0] + a) >>> 0; h[1] = (h[1] + b) >>> 0;
+      h[2] = (h[2] + c) >>> 0; h[3] = (h[3] + d) >>> 0;
+      h[4] = (h[4] + e) >>> 0; h[5] = (h[5] + f) >>> 0;
+      h[6] = (h[6] + g) >>> 0; h[7] = (h[7] + hh) >>> 0;
+    }
+    return h.map(function (value) { return ('00000000' + value.toString(16)).slice(-8); }).join('');
+  }
+
+  function parseJSON(text, label) {
+    try { return JSON.parse(text); }
+    catch (_) { throw new Error(label + ': invalid JSON'); }
+  }
+  function validChecksum(value) { return /^[a-f0-9]{64}$/.test(String(value || '')); }
+  function validateManifest(manifest) {
+    if (!isObject(manifest) || manifest.schemaVersion !== BUNDLE_SCHEMA_VERSION) throw new Error('Unsupported bundle schema');
+    if (!manifest.buildId || !Array.isArray(manifest.sources) || !manifest.sources.length ||
+        manifest.sources.some(function (source) {
+          return !isObject(source) || !source.id || !source.revision || !source.license || !source.name;
+        })) throw new Error('Invalid bundle manifest');
+    var catalog = manifest.catalog;
+    if (!isObject(catalog) || catalog.index !== 'index.json' || !validChecksum(catalog.sha256) ||
+        !Number.isInteger(catalog.titleCount) || catalog.titleCount < 1 ||
+        !Number.isInteger(catalog.episodeCount) || catalog.episodeCount < 1) throw new Error('Invalid bundle catalog descriptor');
+    return manifest;
+  }
+  function validateIndexText(text, manifest) {
+    if (sha256Text(text) !== manifest.catalog.sha256) throw new Error('Bundle index checksum mismatch');
+    var index = parseJSON(text, 'Bundle index');
+    if (!isObject(index) || index.schemaVersion !== BUNDLE_SCHEMA_VERSION || !Array.isArray(index.titles) ||
+        index.titles.length !== manifest.catalog.titleCount) throw new Error('Invalid bundle index');
+    var seen = Object.create(null);
+    index.titles.forEach(function (item) {
+      if (!isObject(item) || !item.id || !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(String(item.slug || '')) ||
+          !/^titles\/[a-z0-9]+(?:-[a-z0-9]+)*\.json$/.test(String(item.shard || '')) ||
+          !validChecksum(item.sha256) || !Number.isInteger(item.episodeCount) || item.episodeCount < 1 ||
+          !isObject(item.ids) || !Array.isArray(item.aliases) || seen[item.id]) throw new Error('Invalid bundle title entry');
+      seen[item.id] = true;
+    });
+    return index;
+  }
+  function catalogFromCache(value) {
+    if (!isObject(value) || typeof value.manifestText !== 'string' || typeof value.indexText !== 'string') return null;
+    try {
+      var manifest = validateManifest(parseJSON(value.manifestText, 'Cached manifest'));
+      var index = validateIndexText(value.indexText, manifest);
+      return { date: Number(value.date) || 0, manifest: manifest, index: index,
+        manifestText: value.manifestText, indexText: value.indexText, network: false };
+    } catch (e) { log('Ignoring invalid bundle cache:', e); return null; }
+  }
+  function readBundleCatalog(name) {
+    try { return catalogFromCache(Lampa.Storage.get(PREFIX + 'bundle_' + name + '_v1', null)); }
+    catch (_) { return null; }
+  }
+  function writeBundleCatalog(candidate) {
+    try {
+      var activeKey = PREFIX + 'bundle_active_v1';
+      var active = Lampa.Storage.get(activeKey, null);
+      var activeParsed = catalogFromCache(active);
+      if (activeParsed && activeParsed.manifest.buildId !== candidate.manifest.buildId) {
+        Lampa.Storage.set(PREFIX + 'bundle_previous_v1', active);
+      }
+      Lampa.Storage.set(activeKey, { date: Date.now(), manifestText: candidate.manifestText,
+        indexText: candidate.indexText });
+    } catch (e) { log('Bundle catalog cache write:', e); }
+  }
+  function fetchBundleCatalog() {
+    return fetchText(BUNDLE_BASE_URL + '/manifest.json').then(function (manifestText) {
+      var manifest = validateManifest(parseJSON(manifestText, 'Bundle manifest'));
+      return fetchText(BUNDLE_BASE_URL + '/' + manifest.catalog.index).then(function (indexText) {
+        return { date: Date.now(), manifest: manifest, index: validateIndexText(indexText, manifest),
+          manifestText: manifestText, indexText: indexText, network: true };
+      });
+    });
+  }
+  function resolveBundleItem(index, movie) {
+    var id = String(movie && movie.id || '');
+    var matches = index.titles.filter(function (item) {
+      return item.ids && String(item.ids.tmdbTv || '') === id;
+    });
+    if (matches.length === 1) return { item: matches[0], method: 'TMDB ID' };
+    if (matches.length > 1) throw new Error('Ambiguous TMDB mapping');
+
+    var manual = userMapping(movie);
+    if (manual) {
+      matches = index.titles.filter(function (item) { return clean(item.slug) === manual; });
+      if (matches.length === 1) return { item: matches[0], method: 'ручная привязка' };
+      if (matches.length > 1) throw new Error('Ambiguous manual mapping');
+    }
+
+    var names = titles(movie);
+    matches = index.titles.filter(function (item) {
+      return (item.aliases || []).some(function (alias) { return names.indexOf(clean(alias)) >= 0; });
+    });
+    if (matches.length === 1) return { item: matches[0], method: 'проверенный alias' };
+    if (matches.length > 1) throw new Error('Ambiguous verified alias');
+    return null;
+  }
+  function shardCacheKey(item) {
+    return PREFIX + 'bundle_shard_v1_' + clean(item.id) + '_' + item.sha256.slice(0, 12);
+  }
+  function validateShardText(text, candidate, item) {
+    if (sha256Text(text) !== item.sha256) throw new Error('Bundle shard checksum mismatch');
+    var shard = parseJSON(text, 'Bundle shard');
+    if (!isObject(shard) || shard.schemaVersion !== BUNDLE_SCHEMA_VERSION || shard.id !== item.id ||
+        !isObject(shard.episodes) || Object.keys(shard.episodes).length !== item.episodeCount ||
+        !isObject(shard.identity) || !isObject(shard.numbering) || shard.numbering.scope !== 'regular' ||
+        shard.numbering.basis !== 'absolute' || shard.numbering.startsAt !== 1 ||
+        !isObject(shard.classification)) throw new Error('Invalid bundle shard');
+    var sourceMatch = candidate.manifest.sources.some(function (source) {
+      return source.id === shard.classification.sourceId && source.revision === shard.classification.sourceRevision;
+    });
+    if (!sourceMatch) throw new Error('Bundle shard provenance mismatch');
+    var episodeKeys = Object.keys(shard.episodes);
+    for (var episodeIndex = 0; episodeIndex < episodeKeys.length; episodeIndex++) {
+      var episodeNumber = Number(episodeKeys[episodeIndex]);
+      if (episodeNumber !== episodeIndex + 1 || normalizeType(shard.episodes[episodeKeys[episodeIndex]]) !== shard.episodes[episodeKeys[episodeIndex]]) {
+        throw new Error('Invalid bundle episode classification');
+      }
+    }
+    var guide = normalizeGuide({ slug: item.slug, title: shard.identity.title, episodes: shard.episodes,
+      seasonOffsets: shard.numbering.seasonOffsets || null }, 'Versioned bundle');
+    if (!guide) throw new Error('Bundle shard has no supported episodes');
+    var source = candidate.manifest.sources.filter(function (entry) {
+      return entry.id === shard.classification.sourceId;
+    })[0];
+    guide.source = source.name + ' (' + source.license + '; bundle ' + candidate.manifest.buildId + ')';
+    guide.bundle = { buildId: candidate.manifest.buildId, id: item.id, sha256: item.sha256 };
+    return guide;
+  }
+  function readShard(candidate, item) {
+    try {
+      var cached = Lampa.Storage.get(shardCacheKey(item), null);
+      if (!isObject(cached) || cached.sha256 !== item.sha256 || typeof cached.text !== 'string') return null;
+      return validateShardText(cached.text, candidate, item);
+    } catch (e) { log('Ignoring invalid shard cache:', e); return null; }
+  }
+  function loadShard(candidate, item) {
+    var cached = readShard(candidate, item);
+    if (cached) return Promise.resolve(cached);
+    return fetchText(BUNDLE_BASE_URL + '/' + item.shard).then(function (text) {
+      var guide = validateShardText(text, candidate, item);
+      try { Lampa.Storage.set(shardCacheKey(item), { date: Date.now(), sha256: item.sha256, text: text }); }
+      catch (e) { log('Bundle shard cache write:', e); }
+      return guide;
+    });
+  }
+  function uniqueCatalogs(candidates) {
+    var builds = Object.create(null);
+    return candidates.filter(function (candidate) {
+      if (!candidate || builds[candidate.manifest.buildId]) return false;
+      builds[candidate.manifest.buildId] = true;
+      return true;
+    });
+  }
+  function tryBundleCandidates(candidates, movie, position, lastError, matched) {
+    if (position >= candidates.length) {
+      if (matched && lastError) return Promise.reject(lastError);
+      return Promise.resolve(null);
+    }
+    var candidate = candidates[position];
+    var resolved;
+    try { resolved = resolveBundleItem(candidate.index, movie); }
+    catch (e) { return tryBundleCandidates(candidates, movie, position + 1, e, matched); }
+    if (!resolved) return tryBundleCandidates(candidates, movie, position + 1, lastError, matched);
+    return loadShard(candidate, resolved.item).then(function (guide) {
+      if (candidate.network) writeBundleCatalog(candidate);
+      candidate.date = Date.now();
+      candidate.network = false;
+      state.bundleCatalog = candidate;
+      guide.bundle.resolution = resolved.method;
+      return guide;
+    }).catch(function (error) {
+      return tryBundleCandidates(candidates, movie, position + 1, error, true);
+    });
+  }
+  function loadBundleGuide(movie) {
+    var active = state.bundleCatalog || readBundleCatalog('active');
+    var previous = readBundleCatalog('previous');
+    if (active && active.date > Date.now() - CACHE_TTL) {
+      return tryBundleCandidates(uniqueCatalogs([active, previous]), movie, 0, null, false).catch(function (cachedError) {
+        return fetchBundleCatalog().then(function (network) {
+          state.bundleCatalog = network;
+          return tryBundleCandidates(uniqueCatalogs([network, active, previous]), movie, 0, cachedError, false);
+        });
+      });
+    }
+    return fetchBundleCatalog().then(function (network) {
+      state.bundleCatalog = network;
+      return tryBundleCandidates(uniqueCatalogs([network, active, previous]), movie, 0, null, false);
+    }).catch(function (error) {
+      var cached = uniqueCatalogs([active, previous]);
+      if (!cached.length) throw error;
+      return tryBundleCandidates(cached, movie, 0, error, false);
     });
   }
   function fetchOpenDataset() {
     if (state.dataset) return Promise.resolve(state.dataset);
     if (!state.datasetPromise) {
-      state.datasetPromise = fetchJSON(DATASET_URL).then(function (json) {
+      state.datasetPromise = fetchJSON(LEGACY_DATASET_URL).then(function (json) {
         if (!Array.isArray(json)) throw new Error('Неверный формат каталога');
         state.dataset = json;
         return json;
@@ -172,11 +467,11 @@
     state.guide = null;
     state.diagnostics.phase = 'загружаем каталог';
     state.diagnostics.error = '';
+    state.diagnostics.provider = '';
+    state.diagnostics.integrity = '';
+    state.diagnostics.resolution = '';
     state.slug = candidateSlugs(movie)[0] || '';
     if (!state.slug) return;
-
-    var cached = readCache(state.slug);
-    if (cached) { state.guide = cached; state.diagnostics.phase = 'данные из кеша'; scheduleScan(); updateCard(); return; }
 
     var base = String(getSetting('source_url', '') || '').trim().replace(/\/+$/, '');
     // A user-provided HTTPS JSON endpoint, e.g. https://host.example/filler/naruto.json
@@ -187,13 +482,46 @@
       : Promise.resolve(null);
     custom.then(function (guide) {
       if (guide) return guide;
-      return fetchOpenDataset().then(function (catalog) { return findGuide(catalog, movie); });
+      return loadBundleGuide(movie).catch(function (error) {
+        log('Versioned bundle unavailable:', error);
+        if (requestId === state.loadId) state.diagnostics.error = 'bundle: ' + String(error && error.message || error);
+        return null;
+      }).then(function (bundleGuide) {
+        if (bundleGuide) return bundleGuide;
+        var cached = readCache(state.slug);
+        if (cached) {
+          cached.runtimeProvider = { provider: 'legacy cache', integrity: 'ранее проверенный guide',
+            resolution: 'старый resolver' };
+          return cached;
+        }
+        return fetchOpenDataset().then(function (catalog) {
+          var legacy = findGuide(catalog, movie);
+          if (legacy) {
+            legacy.runtimeProvider = { provider: 'legacy fallback', integrity: 'формат проверен',
+              resolution: 'старый resolver' };
+          }
+          return legacy;
+        });
+      });
     }).then(function (guide) {
       if (requestId !== state.loadId) return;
       if (!guide) { state.diagnostics.phase = 'аниме не найдено в каталоге';
         log('No guide found for', state.slug); updateCard(); return; }
       state.guide = guide;
-      state.diagnostics.phase = 'данные загружены';
+      if (guide.bundle) {
+        state.diagnostics.provider = guide.bundle.buildId;
+        state.diagnostics.integrity = 'SHA-256 проверен';
+        state.diagnostics.resolution = guide.bundle.resolution;
+      } else if (guide.runtimeProvider) {
+        state.diagnostics.provider = guide.runtimeProvider.provider;
+        state.diagnostics.integrity = guide.runtimeProvider.integrity;
+        state.diagnostics.resolution = guide.runtimeProvider.resolution;
+      } else {
+        state.diagnostics.provider = base ? 'custom JSON' : '';
+        state.diagnostics.integrity = 'формат нормализован';
+        state.diagnostics.resolution = base ? 'ручной slug' : '';
+      }
+      state.diagnostics.phase = guide.bundle ? 'данные из versioned bundle' : 'данные загружены';
       writeCache(state.slug, guide);
       updateCard();
       scheduleScan();
@@ -372,12 +700,15 @@
     var diag = state.diagnostics;
     var example = diag.sampleTitle || 'не захвачено';
     var lines = [
-      'Версия: 0.3.0',
+      'Версия: 0.4.0',
       'Карточка: ' + (state.movie ? (state.movie.name || state.movie.title || state.movie.original_name || 'без названия') + ' (TMDB ' + state.movie.id + ')' : 'не открывалась'),
       'Каталог: ' + (state.slug || 'не выбран'),
       'Состояние: ' + diag.phase,
       'Серий в каталоге: ' + (state.guide ? Object.keys(state.guide.episodes).length : 0),
       'Источник: ' + (state.guide ? state.guide.source : 'нет'),
+      'Data Provider: ' + (diag.provider || 'нет'),
+      'Целостность: ' + (diag.integrity || 'не проверялась'),
+      'Сопоставление: ' + (diag.resolution || 'нет'),
       'Открытий карточки: ' + diag.fullEvents,
       'Шаблонов серий: ' + diag.templateHits,
       'Последний шаблон: ' + (diag.sampleTemplate || 'нет'),
@@ -459,10 +790,11 @@
     Lampa.Listener.follow('activity', scheduleScan);
     observer = new MutationObserver(scheduleScan);
     if (document.body) observer.observe(document.body, { childList: true, subtree: true });
-    log('Loaded 0.3.0, marking only');
+    log('Loaded 0.4.0, marking only');
   }
   window.LampaAnimeFiller = { parseEpisode: parseEpisode, normalizeGuide: normalizeGuide,
-    findGuide: findGuide, classify: classify, scan: scan, state: state, version: '0.3.0' };
+    findGuide: findGuide, classify: classify, scan: scan, sha256Text: sha256Text,
+    loadBundleGuide: loadBundleGuide, state: state, version: '0.4.0' };
   if (window.appready) init();
   else Lampa.Listener.follow('app', function (evt) { if (evt.type === 'ready') init(); });
 })();
