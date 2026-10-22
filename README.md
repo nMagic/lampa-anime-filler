@@ -51,6 +51,8 @@ https://nmagic.github.io/lampa-anime-filler/a.js
 
 Проект независимого плагина для Lampa, рассчитанного на Android TV, LG webOS и Samsung Tizen. Online_Mod проверен на LG webOS; остальные платформы и источники требуют отдельных device tests. Код выполняется в интерфейсе Lampa, а не внутри видеоплеера, поэтому внешние видеоплееры не влияют на саму маркировку.
 
+Целевая архитектура, правила безопасного сопоставления и порядок внедрения автоматического пропуска описаны в [`docs/architecture.md`](docs/architecture.md). Контракт versioned data bundle проверяется отдельно и пока не меняет подтверждённый runtime v0.3.0.
+
 ## Что сделано
 
 - Плагин помечает распознанные **эпизоды в списках** (часть разметки Lampa `online`, `torrent-file`, `full-episode` и некоторые альтернативные элементы) на основе классификации канона и филлеров.
@@ -105,8 +107,9 @@ https://nmagic.github.io/lampa-anime-filler/a.js
 ```bash
 node --check lampa-anime-filler.js
 node --check a.js
-node --test tests/*.test.cjs
+node --test tests/*.test.cjs tests/*.test.mjs
 node tests/settings-smoke.cjs
+node scripts/build-data.mjs --check
 ```
 
 Тесты проверяют сопоставление One Piece/Naruto/Naruto Shippuden, абсолютную и сезонную нумерацию, отказ от неоднозначных диапазонов/OVA, структурированные данные Online_Mod/BWA, торрент-файлы, сетевые ошибки и защиту от запоздалого ответа предыдущей карточки. Они **не являются тестами в Lampa, Android TV, webOS или Tizen**.
