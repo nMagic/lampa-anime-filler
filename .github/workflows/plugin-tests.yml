@@ -11,6 +11,16 @@ on:
       - 'reports/**'
       - 'tests/**'
       - '.github/workflows/plugin-tests.yml'
+  pull_request:
+    paths:
+      - 'lampa-anime-filler.js'
+      - 'a.js'
+      - 'scripts/**'
+      - 'schemas/**'
+      - 'data/**'
+      - 'reports/**'
+      - 'tests/**'
+      - '.github/workflows/plugin-tests.yml'
   workflow_dispatch:
 
 permissions:
