@@ -5,12 +5,72 @@
     "mediaType": "series",
     "title": "Pokémon",
     "aliases": [],
-    "ids": {}
+    "ids": {
+      "anidb": 230,
+      "anilist": 527,
+      "mal": 527,
+      "tmdbTv": 60572,
+      "tvdb": 76703
+    }
   },
   "numbering": {
     "scope": "regular",
     "basis": "absolute",
-    "startsAt": 1
+    "startsAt": 1,
+    "providerMappings": {
+      "tmdb": {
+        "mediaId": 60572,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 82,
+              "absoluteStart": 1
+            }
+          ]
+        }
+      },
+      "tvdb": {
+        "mediaId": 76703,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 82,
+              "absoluteStart": 1
+            }
+          ],
+          "2": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 36,
+              "absoluteStart": 83
+            }
+          ],
+          "3": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 41,
+              "absoluteStart": 119
+            }
+          ],
+          "4": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 52,
+              "absoluteStart": 160
+            }
+          ],
+          "5": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 65,
+              "absoluteStart": 212
+            }
+          ]
+        }
+      }
+    }
   },
   "classification": {
     "sourceId": "skipthefiller",

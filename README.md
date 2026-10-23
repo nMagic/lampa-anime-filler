@@ -1,6 +1,18 @@
 # Lampa Anime Filler
 
-Экспериментальный плагин для Lampa: цветные метки эпизодов по классификации филлеров. **Версия 0.4.0 — только маркировка** (без автоматического пропуска). Маркировка One Piece 52–58 была подтверждена в Online_Mod на реальном LG webOS для v0.3.0; после изменения Data Provider нужен повторный device test. BWA, Samsung Tizen и Android TV ещё требуют отдельной проверки.
+Экспериментальный плагин для Lampa: цветные метки эпизодов по классификации филлеров. **Версия 0.4.1 — только маркировка** (без автоматического пропуска). Build-time pipeline анализирует весь каталог, а source-aware mapper применяет сезонный номер только при доказанном numbering basis. LG webOS, BWA, Samsung Tizen и Android TV требуют device-проверки.
+
+## Исправления версии 0.4.1
+
+- Добавлен воспроизводимый pipeline `scripts/build-mappings.mjs`: он проверяет SHA-256 полного generated artifact AniBridge и anime-offline-database, затем анализирует все 45 произведений без runtime-зависимости от этих больших баз.
+- Автоматически генерируются компактный mapping и отчёты [`reports/mapping-coverage.json`](reports/mapping-coverage.json) / [`reports/mapping-coverage.md`](reports/mapping-coverage.md). Текущий snapshot даёт 42 verified identities и 7330 из 9552 проверенных provider→absolute преобразований.
+- Episode Mapper разделяет `providerMappings` (TMDB/TVDB) и `sourceBindings` (конкретный адаптер/балансер). Наличие TMDB ID больше не означает, что любой Online_Mod payload использует TMDB-нумерацию.
+- `scripts/build-source-inventory.mjs` извлекает реестр из закреплённых исходников и генерирует [`reports/source-coverage.md`](reports/source-coverage.md). В текущих ревизиях обнаружены 23 варианта Online_Mod, 71 provider-модуль Lampac NextGen и 8 закрытых endpoint’ов каталога расширений.
+- Online_Mod строки помечаются точным adapter id вида `online_mod:cdnvideohub`; для неизвестного или неподтверждённого балансера сезонный номер возвращает `unknown`. Даже поле `absolute_episode` от именованного адаптера принимается только при доказанном declarative contract.
+- Для Bleach подтверждены TMDB/TVDB преобразования только абсолютных эпизодов `1–366`. Предположение `S2 E1–42 → 367–408` удалено: диагностика из 372 строк не доказывает состав последних шести строк.
+- Удалено неявное правило One Piece `seasonOffsets: {"1": 0}`. Конфликтные, специальные и неполные диапазоны не угадываются.
+- Диагностика показывает балансер, число неизвестных соответствий и пример `source + season + episode → absolute/unknown`.
+- Playback Controller, плейлист и автовоспроизведение не изменялись.
 
 ## Изменения версии 0.4.0
 
@@ -38,7 +50,7 @@
 2. Открыть One Piece (1999), перейти к сериям первого сезона (например, 54–60), попробовать Online_Mod и BWA.
 3. Вернуться в **Настройки → Anime Filler → Показать диагностику**, сделать фото отчёта.
 
-Online_Mod подтверждён на LG webOS для One Piece 52–58. Совместимость BWA пока основана на анализе шаблона и автоматическом тесте; её необходимо подтвердить на реальном устройстве.
+Online_Mod подтверждён на LG webOS для One Piece 52–58 в старом цикле проверки. Текущий аудит BWA/Lampac показал, что публичный `lampac_prestige_full` payload не передаёт `season/episode`; поэтому автоматический тест искусственного payload больше не считается доказательством совместимости.
 
 ## Установка в Lampa
 
@@ -54,13 +66,13 @@ https://nmagic.github.io/lampa-anime-filler/a.js
 
 Если неудобно вводить длинную ссылку пультом, можно скопировать её на телевизор с телефона через приложение-пульт или добавить URL в профиль CUB для синхронизации плагинов (если такая функция доступна в используемой сборке Lampa).
 
-На LG webOS сценарий Online_Mod для One Piece 52–58 подтверждён на v0.3.0. Для v0.4.0 после смены Data Provider требуется повторная проверка; Android TV, Samsung Tizen и остальные источники серий ещё не проверены. Автоматического пропуска нет.
+На LG webOS сценарий Online_Mod для One Piece 52–58 подтверждён на v0.3.0. Для v0.4.1 после смены Data Provider и Episode Mapper требуется повторная проверка; Android TV, Samsung Tizen и остальные источники серий ещё не проверены. Автоматического пропуска нет.
 
 ---
 
 Проект независимого плагина для Lampa, рассчитанного на Android TV, LG webOS и Samsung Tizen. Online_Mod проверен на LG webOS; остальные платформы и источники требуют отдельных device tests. Код выполняется в интерфейсе Lampa, а не внутри видеоплеера, поэтому внешние видеоплееры не влияют на саму маркировку.
 
-Целевая архитектура, правила безопасного сопоставления и порядок внедрения автоматического пропуска описаны в [`docs/architecture.md`](docs/architecture.md). Runtime v0.4.0 использует versioned data bundle, но не меняет адаптер маркировки Online_Mod.
+Целевая архитектура, правила безопасного сопоставления и порядок внедрения автоматического пропуска описаны в [`docs/architecture.md`](docs/architecture.md). Runtime v0.4.1 использует versioned data bundle и source-aware Episode Mapper, но не меняет Playback Controller.
 
 ## Что сделано
 
@@ -87,6 +99,16 @@ https://nmagic.github.io/lampa-anime-filler/a.js
 3. Перезапустить Lampa и открыть карточку аниме (например, Naruto или Bleach).
 4. Открыть список серий у своего онлайн-провайдера или список файлов торрента. Метки появятся только если номер распознан, классификация доступна и разметка этого списка поддерживается.
 5. Если серию не пометило — проверить, есть ли она в базе, точно ли определилось название и является ли номер сквозным.
+
+### Проверка Bleach на LG webOS
+
+1. Удалить прежнюю установку, добавить `https://nmagic.github.io/lampa-anime-filler/a.js` и полностью перезапустить Lampa.
+2. Открыть карточку **Bleach** с TMDB ID `30984`, выбрать в Online_Mod один конкретный активный балансер (сначала `cdnvideohub`) и загрузить строки до E366.
+3. Открыть **Настройки → Anime Filler → Показать диагностику**. Зафиксировать точный шаблон вида `online_mod:cdnvideohub S1 E366` и пример сопоставления. Пока для балансера нет проверенного `sourceBindings`, ожидаемый безопасный результат — `unknown`, без ложных меток.
+4. Повторить шаг 2 отдельно для `kodik` и `anilibria2`. Нельзя переносить результат одного балансера на другой.
+5. Открыть тот же сериал в **BWA/Lampac**. Ожидаемый результат текущей интеграции — отсутствие структурированного номера у hook’а и отсутствие метки; зафиксировать payload/DOM для последующего доказательства контракта.
+6. Отдельно открыть TYBW/S2. Любые `S2 E1…42` должны оставаться `unknown`, пока payload не будет сопоставлен с воспроизводимым provider mapping.
+7. Сохранить фото диагностики для каждого источника с полями `Последний шаблон`, `Пример сопоставления`, `Номеров распознано`, `Неизвестных соответствий` и `Меток проставлено`.
 
 **Важно:** маркировка внутри Online_Mod, BWA, Showy, MODS и прочих модифицированных экранов **не гарантируется** до проверки их фактической разметки. Для исправления понадобится название сборки/плагина и скриншот списка эпизодов или его HTML-структура.
 
@@ -119,16 +141,18 @@ node --check lampa-anime-filler.js
 node --check a.js
 node --test tests/*.test.cjs tests/*.test.mjs
 node tests/settings-smoke.cjs
+node scripts/build-mappings.mjs --verify
+node scripts/build-source-inventory.mjs --verify
 node scripts/build-data.mjs --check
 node scripts/build-data.mjs --verify data/generated/v1
 ```
 
-Тесты проверяют SHA-256 и fallback Data Provider, сопоставление One Piece/Naruto/Naruto Shippuden, абсолютную и сезонную нумерацию, отказ от неоднозначных диапазонов/OVA, структурированные данные Online_Mod/BWA, торрент-файлы, сетевые ошибки и защиту от запоздалого ответа предыдущей карточки. Они **не являются тестами в Lampa, Android TV, webOS или Tizen**.
+Тесты проверяют все 45 записей mapping coverage и все 102 записи source inventory, пересчёт статистики, provenance и границы каждого range, обнаружение нового балансера, fail-closed контракты, SHA-256 и fallback Data Provider, Bleach/One Piece/Naruto/Naruto Shippuden, похожие и локализованные названия, TV/фильм, reset/continuous numbering, specials/OVA, конфликтные и повреждённые данные и смену upstream mapping. Они **не являются тестами в Lampa, Android TV, webOS или Tizen**.
 
 ## Существующие ограничения
 
 - Проверены лишь часть распространённых DOM-классов, не все интерфейсы внешних онлайн-плагинов.
-- Нет автоматического определения соответствия сезонов TMDB и абсолютной нумерации.
+- Автоматического угадывания соответствия сезонов нет: provider mapping применяется к источнику только через проверенный `sourceBindings` для точного балансера.
 - Мультисерийные файлы, сезонные архивы без ясных эпизодов и неоднозначные названия намеренно не маркируются.
 - Плагину необходим доступ к источнику JSON с устройства (сетевые ограничения на конкретном ТВ могут помешать).
 - Для реального испытания нужен HTTPS URL на JS. Архив содержит только исходники.
@@ -137,6 +161,8 @@ node scripts/build-data.mjs --verify data/generated/v1
 
 - AnimeFillerList: https://www.animefillerlist.com/
 - Отдельный резервный датасет: https://github.com/animecannonhunter-hash/anime-filler-list-data (CC BY 4.0).
+- Cross-ID и episode mapping: https://github.com/anibridge/anibridge-mappings (MIT, pinned generated artifact + SHA-256 in `data/NOTICE.md`).
+- Identity metadata: https://github.com/cedya77/anime-offline-database (ODbL 1.0 / DbCL 1.0, pinned release in `data/NOTICE.md`).
 - Lampa: https://github.com/yumata/lampa-source
 
 У самого плагина пока нет файла `LICENSE`; до приёма внешних вкладов и широкого распространения необходимо выбрать и добавить лицензию проекта.

@@ -4,13 +4,178 @@
   "identity": {
     "mediaType": "series",
     "title": "Urusei Yatsura (1981)",
-    "aliases": [],
-    "ids": {}
+    "aliases": [
+      "Urusei Yatsura"
+    ],
+    "ids": {
+      "anidb": 377,
+      "anilist": 1293,
+      "mal": 1293,
+      "tmdbTv": 34163,
+      "tvdb": 75113
+    }
   },
   "numbering": {
     "scope": "regular",
     "basis": "absolute",
-    "startsAt": 1
+    "startsAt": 1,
+    "providerMappings": {
+      "tmdb": {
+        "mediaId": 34163,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 1,
+              "absoluteStart": 1
+            },
+            {
+              "episodeStart": 3,
+              "episodeEnd": 3,
+              "absoluteStart": 2
+            },
+            {
+              "episodeStart": 5,
+              "episodeEnd": 5,
+              "absoluteStart": 3
+            },
+            {
+              "episodeStart": 7,
+              "episodeEnd": 7,
+              "absoluteStart": 4
+            },
+            {
+              "episodeStart": 10,
+              "episodeEnd": 11,
+              "absoluteStart": 5
+            },
+            {
+              "episodeStart": 13,
+              "episodeEnd": 13,
+              "absoluteStart": 7
+            },
+            {
+              "episodeStart": 15,
+              "episodeEnd": 15,
+              "absoluteStart": 8
+            },
+            {
+              "episodeStart": 17,
+              "episodeEnd": 17,
+              "absoluteStart": 9
+            },
+            {
+              "episodeStart": 19,
+              "episodeEnd": 19,
+              "absoluteStart": 10
+            },
+            {
+              "episodeStart": 21,
+              "episodeEnd": 21,
+              "absoluteStart": 11
+            },
+            {
+              "episodeStart": 23,
+              "episodeEnd": 23,
+              "absoluteStart": 12
+            },
+            {
+              "episodeStart": 25,
+              "episodeEnd": 25,
+              "absoluteStart": 13
+            },
+            {
+              "episodeStart": 27,
+              "episodeEnd": 27,
+              "absoluteStart": 14
+            },
+            {
+              "episodeStart": 29,
+              "episodeEnd": 29,
+              "absoluteStart": 15
+            },
+            {
+              "episodeStart": 31,
+              "episodeEnd": 31,
+              "absoluteStart": 16
+            },
+            {
+              "episodeStart": 33,
+              "episodeEnd": 33,
+              "absoluteStart": 17
+            },
+            {
+              "episodeStart": 35,
+              "episodeEnd": 35,
+              "absoluteStart": 18
+            },
+            {
+              "episodeStart": 37,
+              "episodeEnd": 37,
+              "absoluteStart": 19
+            },
+            {
+              "episodeStart": 39,
+              "episodeEnd": 39,
+              "absoluteStart": 20
+            },
+            {
+              "episodeStart": 41,
+              "episodeEnd": 41,
+              "absoluteStart": 21
+            },
+            {
+              "episodeStart": 43,
+              "episodeEnd": 43,
+              "absoluteStart": 22
+            },
+            {
+              "episodeStart": 45,
+              "episodeEnd": 45,
+              "absoluteStart": 23
+            },
+            {
+              "episodeStart": 70,
+              "episodeEnd": 70,
+              "absoluteStart": 46
+            }
+          ]
+        }
+      },
+      "tvdb": {
+        "mediaId": 75113,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 54,
+              "absoluteStart": 1
+            }
+          ],
+          "2": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 52,
+              "absoluteStart": 55
+            }
+          ],
+          "3": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 43,
+              "absoluteStart": 107
+            }
+          ],
+          "4": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 18,
+              "absoluteStart": 150
+            }
+          ]
+        }
+      }
+    }
   },
   "classification": {
     "sourceId": "skipthefiller",

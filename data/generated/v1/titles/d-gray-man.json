@@ -4,7 +4,9 @@
   "identity": {
     "mediaType": "series",
     "title": "D.Gray-man",
-    "aliases": [],
+    "aliases": [
+      "D.Gray-man Hallow"
+    ],
     "ids": {}
   },
   "numbering": {

@@ -5,12 +5,100 @@
     "mediaType": "series",
     "title": "Dragon Ball Z",
     "aliases": [],
-    "ids": {}
+    "ids": {
+      "anidb": 1530,
+      "anilist": 813,
+      "mal": 813,
+      "tmdbTv": 12971,
+      "tvdb": 81472
+    }
   },
   "numbering": {
     "scope": "regular",
     "basis": "absolute",
-    "startsAt": 1
+    "startsAt": 1,
+    "providerMappings": {
+      "tmdb": {
+        "mediaId": 12971,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 39,
+              "absoluteStart": 1
+            }
+          ]
+        }
+      },
+      "tvdb": {
+        "mediaId": 81472,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 39,
+              "absoluteStart": 1
+            }
+          ],
+          "2": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 35,
+              "absoluteStart": 40
+            }
+          ],
+          "3": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 33,
+              "absoluteStart": 75
+            }
+          ],
+          "4": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 32,
+              "absoluteStart": 108
+            }
+          ],
+          "5": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 26,
+              "absoluteStart": 140
+            }
+          ],
+          "6": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 29,
+              "absoluteStart": 166
+            }
+          ],
+          "7": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 25,
+              "absoluteStart": 195
+            }
+          ],
+          "8": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 34,
+              "absoluteStart": 220
+            }
+          ],
+          "9": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 38,
+              "absoluteStart": 254
+            }
+          ]
+        }
+      }
+    }
   },
   "classification": {
     "sourceId": "skipthefiller",

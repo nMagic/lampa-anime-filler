@@ -4,13 +4,47 @@
   "identity": {
     "mediaType": "series",
     "title": "JoJo's Bizarre Adventure",
-    "aliases": [],
-    "ids": {}
+    "aliases": [
+      "JoJo no Kimyou na Bouken (TV)"
+    ],
+    "ids": {
+      "anidb": 9304,
+      "anilist": 14719,
+      "mal": 14719,
+      "tmdbTv": 45790,
+      "tvdb": 262954
+    }
   },
   "numbering": {
     "scope": "regular",
     "basis": "absolute",
-    "startsAt": 1
+    "startsAt": 1,
+    "providerMappings": {
+      "tmdb": {
+        "mediaId": 45790,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 26,
+              "absoluteStart": 1
+            }
+          ]
+        }
+      },
+      "tvdb": {
+        "mediaId": 262954,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 26,
+              "absoluteStart": 1
+            }
+          ]
+        }
+      }
+    }
   },
   "classification": {
     "sourceId": "skipthefiller",

@@ -4,13 +4,47 @@
   "identity": {
     "mediaType": "series",
     "title": "Haikyu!!",
-    "aliases": [],
-    "ids": {}
+    "aliases": [
+      "Haikyuu!!"
+    ],
+    "ids": {
+      "anidb": 10145,
+      "anilist": 20464,
+      "mal": 20583,
+      "tmdbTv": 60863,
+      "tvdb": 278157
+    }
   },
   "numbering": {
     "scope": "regular",
     "basis": "absolute",
-    "startsAt": 1
+    "startsAt": 1,
+    "providerMappings": {
+      "tmdb": {
+        "mediaId": 60863,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 25,
+              "absoluteStart": 1
+            }
+          ]
+        }
+      },
+      "tvdb": {
+        "mediaId": 278157,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 25,
+              "absoluteStart": 1
+            }
+          ]
+        }
+      }
+    }
   },
   "classification": {
     "sourceId": "skipthefiller",

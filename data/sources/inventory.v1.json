@@ -1,0 +1,3300 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-23T00:00:00.000Z",
+  "repositories": [
+    {
+      "id": "online_mod",
+      "url": "https://github.com/nb557/plugins",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "artifact": "online_mod.js",
+      "sha256": "02b758821deaae1afe16f75beba6a76991e93dc4577fba96f8150f38f165ab6a"
+    },
+    {
+      "id": "lampac",
+      "url": "https://github.com/lampac-nextgen/lampac",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "artifact": "Modules/Online* + Online/plugin.js + extensions.json",
+      "sha256": "2f423801c09ea7eee7dd32e5258b37778ffb4b7545980a5f39456cc262a5fbf0"
+    }
+  ],
+  "extraction": {
+    "onlineModRegistryEntries": 23,
+    "lampacProviderModules": 71,
+    "opaqueCatalogEndpoints": 8
+  },
+  "sources": [
+    {
+      "sourceId": "lampa-extension:arkmv-ru-cacd8f5d3c",
+      "name": "Онлайн Stream",
+      "plugin": "Lampa extension catalog",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "http://arkmv.ru/vod",
+      "availability": {
+        "status": "listed",
+        "expression": "available_lampa=1"
+      },
+      "episodeDataFormat": "unavailable",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": false,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/LampaWeb/plugins/extensions.json: video catalog entry"
+      ],
+      "aniBridgeMapping": "not-applicable-without-source-contract",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The catalog exposes a distribution endpoint but not a revision-pinned source registry or numbering contract.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampa-extension:bwa-ad-cff37b3203",
+      "name": "BwaRC",
+      "plugin": "Lampa extension catalog",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "http://bwa.ad/rc",
+      "availability": {
+        "status": "listed",
+        "expression": "available_lampa=1"
+      },
+      "episodeDataFormat": "unavailable",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": false,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/LampaWeb/plugins/extensions.json: best catalog entry"
+      ],
+      "aniBridgeMapping": "not-applicable-without-source-contract",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The catalog exposes a distribution endpoint but not a revision-pinned source registry or numbering contract.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampa-extension:bwa-ad-f4eebfd894",
+      "name": "Клубничка 18+",
+      "plugin": "Lampa extension catalog",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "http://bwa.ad/re",
+      "availability": {
+        "status": "listed",
+        "expression": "available_lampa=1"
+      },
+      "episodeDataFormat": "unavailable",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": false,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/LampaWeb/plugins/extensions.json: video catalog entry"
+      ],
+      "aniBridgeMapping": "not-applicable-without-source-contract",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The catalog exposes a distribution endpoint but not a revision-pinned source registry or numbering contract.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampa-extension:e-xsena-red-e6c08bf2ae",
+      "name": "Xsena 18+",
+      "plugin": "Lampa extension catalog",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "http://e.xsena.red",
+      "availability": {
+        "status": "listed",
+        "expression": "available_lampa=1"
+      },
+      "episodeDataFormat": "unavailable",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": false,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/LampaWeb/plugins/extensions.json: video catalog entry"
+      ],
+      "aniBridgeMapping": "not-applicable-without-source-contract",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The catalog exposes a distribution endpoint but not a revision-pinned source registry or numbering contract.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampa-extension:lampa-stream-809213dbe9",
+      "name": "MODS's",
+      "plugin": "Lampa extension catalog",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "http://lampa.stream/modss",
+      "availability": {
+        "status": "listed",
+        "expression": "available_lampa=1"
+      },
+      "episodeDataFormat": "unavailable",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": false,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/LampaWeb/plugins/extensions.json: best catalog entry"
+      ],
+      "aniBridgeMapping": "not-applicable-without-source-contract",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The catalog exposes a distribution endpoint but not a revision-pinned source registry or numbering contract.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampa-extension:lampaplugins-github-io-fda26acae0",
+      "name": "Filmix",
+      "plugin": "Lampa extension catalog",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "https://lampaplugins.github.io/store/fx.js",
+      "availability": {
+        "status": "listed",
+        "expression": "available_lampa=1"
+      },
+      "episodeDataFormat": "unavailable",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": false,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/LampaWeb/plugins/extensions.json: video catalog entry"
+      ],
+      "aniBridgeMapping": "not-applicable-without-source-contract",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The catalog exposes a distribution endpoint but not a revision-pinned source registry or numbering contract.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampa-extension:llpp-in-e3234fdf4b",
+      "name": "Онлайн Stream 2",
+      "plugin": "Lampa extension catalog",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "http://llpp.in/v/vod.js",
+      "availability": {
+        "status": "listed",
+        "expression": "available_lampa=1"
+      },
+      "episodeDataFormat": "unavailable",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": false,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/LampaWeb/plugins/extensions.json: video catalog entry"
+      ],
+      "aniBridgeMapping": "not-applicable-without-source-contract",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The catalog exposes a distribution endpoint but not a revision-pinned source registry or numbering contract.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampa-extension:showy-online-1f212e5f68",
+      "name": "Showy",
+      "plugin": "Lampa extension catalog",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "http://showy.online/m.js",
+      "availability": {
+        "status": "listed",
+        "expression": "available_lampa=1"
+      },
+      "episodeDataFormat": "unavailable",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": false,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/LampaWeb/plugins/extensions.json: best catalog entry"
+      ],
+      "aniBridgeMapping": "not-applicable-without-source-contract",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The catalog exposes a distribution endpoint but not a revision-pinned source registry or numbering contract.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:anime:ailiberty",
+      "name": "AiLiberty",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineAnime/AiLiberty",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineAnime/AiLiberty/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:anime:anidub",
+      "name": "AniDub",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineAnime/AniDub",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineAnime/AniDub/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:anime:aniliberty",
+      "name": "AniLiberty",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineAnime/AniLiberty",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineAnime/AniLiberty/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:anime:anilibria",
+      "name": "AniLibria",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineAnime/AniLibria",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineAnime/AniLibria/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:anime:animebesst",
+      "name": "Animebesst",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineAnime/Animebesst",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineAnime/Animebesst/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:anime:animedia",
+      "name": "AniMedia",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineAnime/AniMedia",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineAnime/AniMedia/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:anime:animego",
+      "name": "AnimeGo",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineAnime/AnimeGo",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineAnime/AnimeGo/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:anime:animelib",
+      "name": "AnimeLib",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineAnime/AnimeLib",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineAnime/AnimeLib/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:anime:animeon",
+      "name": "AnimeON",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineAnime/AnimeON",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineAnime/AnimeON/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:anime:animevost",
+      "name": "Animevost",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineAnime/Animevost",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineAnime/Animevost/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:anime:dreamerscast",
+      "name": "Dreamerscast",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineAnime/Dreamerscast",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineAnime/Dreamerscast/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:anime:kodik",
+      "name": "Kodik",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineAnime/Kodik",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineAnime/Kodik/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:anime:mikai",
+      "name": "Mikai",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineAnime/Mikai",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineAnime/Mikai/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:anime:moonanime",
+      "name": "MoonAnime",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineAnime/MoonAnime",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineAnime/MoonAnime/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:eng:autoembed",
+      "name": "AutoEmbed",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineENG/AutoEmbed",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineENG/AutoEmbed/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:eng:hydraflix",
+      "name": "HydraFlix",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineENG/HydraFlix",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineENG/HydraFlix/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:eng:movpi",
+      "name": "MovPI",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineENG/MovPI",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineENG/MovPI/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:eng:playembed",
+      "name": "PlayEmbed",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineENG/PlayEmbed",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineENG/PlayEmbed/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:eng:rgshows",
+      "name": "RgShows",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineENG/RgShows",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineENG/RgShows/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:eng:smashystream",
+      "name": "SmashyStream",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineENG/SmashyStream",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineENG/SmashyStream/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:eng:twoembed",
+      "name": "TwoEmbed",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineENG/TwoEmbed",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineENG/TwoEmbed/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:eng:videasy",
+      "name": "Videasy",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineENG/Videasy",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineENG/Videasy/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:eng:vidlink",
+      "name": "VidLink",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineENG/VidLink",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineENG/VidLink/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:eng:vidsrc",
+      "name": "VidSrc",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineENG/VidSrc",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineENG/VidSrc/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:geo:asiage",
+      "name": "AsiaGe",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineGEO/AsiaGe",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineGEO/AsiaGe/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:geo:geosaitebi",
+      "name": "Geosaitebi",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineGEO/Geosaitebi",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineGEO/Geosaitebi/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:geo:kinoflix",
+      "name": "Kinoflix",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineGEO/Kinoflix",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineGEO/Kinoflix/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:paid:alloha",
+      "name": "Alloha",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlinePaid/Alloha",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlinePaid/Alloha/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:paid:filmix",
+      "name": "Filmix",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlinePaid/Filmix",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlinePaid/Filmix/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:paid:getstv",
+      "name": "GetsTV",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlinePaid/GetsTV",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlinePaid/GetsTV/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:paid:iptvonline",
+      "name": "IptvOnline",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlinePaid/IptvOnline",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlinePaid/IptvOnline/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:paid:iremux",
+      "name": "iRemux",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlinePaid/iRemux",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlinePaid/iRemux/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:paid:kinopub",
+      "name": "KinoPub",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlinePaid/KinoPub",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlinePaid/KinoPub/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:paid:rezka",
+      "name": "Rezka",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlinePaid/Rezka",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlinePaid/Rezka/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:paid:sakhtv",
+      "name": "SakhTV",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlinePaid/SakhTV",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlinePaid/SakhTV/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:paid:vokino",
+      "name": "VoKino",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlinePaid/VoKino",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlinePaid/VoKino/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:aladin",
+      "name": "Aladin",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/Aladin",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/Aladin/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:cdnvideohub",
+      "name": "CDNvideohub",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/CDNvideohub",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/CDNvideohub/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:collaps",
+      "name": "Collaps",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/Collaps",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/Collaps/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:fancdn",
+      "name": "FanCDN",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/FanCDN",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/FanCDN/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:flixcdn",
+      "name": "FlixCDN",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/FlixCDN",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/FlixCDN/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:gencit",
+      "name": "Gencit",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/Gencit",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/Gencit/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:hdvb",
+      "name": "HDVB",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/HDVB",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/HDVB/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:kinobase",
+      "name": "Kinobase",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/Kinobase",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/Kinobase/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:kinogo",
+      "name": "Kinogo",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/Kinogo",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/Kinogo/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:kinoteatrkg",
+      "name": "Kinoteatrkg",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/Kinoteatrkg",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/Kinoteatrkg/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:kinotochka",
+      "name": "Kinotochka",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/Kinotochka",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/Kinotochka/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:leproduction",
+      "name": "LeProduction",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/LeProduction",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/LeProduction/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:lordfilm",
+      "name": "LordFilm",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/LordFilm",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/LordFilm/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:mirage",
+      "name": "Mirage",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/Mirage",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/Mirage/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:phantom",
+      "name": "Phantom",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/Phantom",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/Phantom/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:pizdatoehd",
+      "name": "PizdatoeHD",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/PizdatoeHD",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/PizdatoeHD/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:redheadsound",
+      "name": "Redheadsound",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/Redheadsound",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/Redheadsound/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:rudub",
+      "name": "RuDub",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/RuDub",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/RuDub/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:rutubemovie",
+      "name": "RutubeMovie",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/RutubeMovie",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/RutubeMovie/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:spectre",
+      "name": "Spectre",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/Spectre",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/Spectre/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:veoveo",
+      "name": "VeoVeo",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/VeoVeo",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/VeoVeo/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:vibix",
+      "name": "Vibix",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/Vibix",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/Vibix/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:videodb",
+      "name": "VideoDB",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/VideoDB",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/VideoDB/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:videoseed",
+      "name": "Videoseed",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/Videoseed",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/Videoseed/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:vkmovie",
+      "name": "VkMovie",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/VkMovie",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/VkMovie/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:zetflix",
+      "name": "Zetflix",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/Zetflix",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/Zetflix/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:rus:zetflixdb",
+      "name": "ZetflixDB",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineRUS/ZetflixDB",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineRUS/ZetflixDB/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:ukr:ashdi",
+      "name": "Ashdi",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineUKR/Ashdi",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineUKR/Ashdi/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:ukr:bamboo",
+      "name": "BamBoo",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineUKR/BamBoo",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineUKR/BamBoo/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:ukr:eneyida",
+      "name": "Eneyida",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineUKR/Eneyida",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineUKR/Eneyida/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:ukr:hdvbua",
+      "name": "HdvbUA",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineUKR/HdvbUA",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineUKR/HdvbUA/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:ukr:kinoukr",
+      "name": "KinoUkr",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineUKR/KinoUkr",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineUKR/KinoUkr/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:ukr:tortuga",
+      "name": "Tortuga",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineUKR/Tortuga",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineUKR/Tortuga/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:ukr:uafilm",
+      "name": "UAFilm",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineUKR/UAFilm",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineUKR/UAFilm/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "lampac:ukr:uakino",
+      "name": "UaKino",
+      "plugin": "Lampac NextGen Online",
+      "revision": "402df720422648cbd3f232293746681688598b69",
+      "module": "Modules/OnlineUKR/UaKino",
+      "availability": {
+        "status": "conditional",
+        "expression": "manifest.enable=true; manifest.dynamic=true"
+      },
+      "episodeDataFormat": "backend HTML attributes s/e -> internal element.season/element.episode; public lampac_prestige_full payload omits both",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": false
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "Modules/OnlineUKR/UaKino/manifest.json: module manifest",
+        "Online/plugin.js: s/e attributes are parsed into internal season/episode",
+        "Online/plugin.js: lampac_prestige_full receives title/time/info/quality only"
+      ],
+      "aniBridgeMapping": "blocked-by-unexposed-numbering-and-unknown-basis",
+      "binding": null,
+      "supportStatus": "unsupported",
+      "reason": "The current public template payload does not expose provider season/episode to Anime Filler, and no provider basis is asserted.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:alloha",
+      "name": "Alloha",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "alloha",
+      "availability": {
+        "status": "disabled",
+        "expression": "true"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L14140: registry entry",
+        "online_mod.js#L12653: alloha implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:anilibria",
+      "name": "AniLibria",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "anilibria",
+      "availability": {
+        "status": "disabled",
+        "expression": "true"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L14104: registry entry",
+        "online_mod.js#L10469: anilibria implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:anilibria2",
+      "name": "AniLibria.top",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "anilibria2",
+      "availability": {
+        "status": "active",
+        "expression": "false"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L14113: registry entry",
+        "online_mod.js#L10901: anilibria2 implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:animelib",
+      "name": "AnimeLib",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "animelib",
+      "availability": {
+        "status": "disabled",
+        "expression": "true"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L14122: registry entry",
+        "online_mod.js#L11331: animelib implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:cdnmovies",
+      "name": "CDNMovies",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "cdnmovies",
+      "availability": {
+        "status": "disabled",
+        "expression": "true"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L14003: registry entry",
+        "online_mod.js#L4322: cdnmovies implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:cdnvideohub",
+      "name": "CDNVideoHub",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "cdnvideohub",
+      "availability": {
+        "status": "active",
+        "expression": "false"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L14095: registry entry",
+        "online_mod.js#L9986: cdnvideohub implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:collaps",
+      "name": "Collaps",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "collaps",
+      "availability": {
+        "status": "conditional",
+        "expression": "collapsBlocked"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L13983: registry entry",
+        "online_mod.js#L3891: collaps implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:collaps-dash",
+      "name": "Collaps (DASH)",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "collaps",
+      "availability": {
+        "status": "conditional",
+        "expression": "collapsBlocked"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L13992: registry entry",
+        "online_mod.js#L3891: collaps implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:fancdn",
+      "name": "FanCDN",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "fancdn",
+      "availability": {
+        "status": "conditional",
+        "expression": "disable_dbg"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L14030: registry entry",
+        "online_mod.js#L6182: fancdn implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:fancdn2",
+      "name": "FanCDN (ID)",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "fancdn2",
+      "availability": {
+        "status": "disabled",
+        "expression": "true"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L14039: registry entry",
+        "online_mod.js#L7098: fancdn2 implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:fanserials",
+      "name": "FanSerials",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "fanserials",
+      "availability": {
+        "status": "conditional",
+        "expression": "disable_dbg && !isAndroid"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L14048: registry entry",
+        "online_mod.js#L7650: fanserials implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:filmix",
+      "name": "Filmix",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "filmix",
+      "availability": {
+        "status": "active",
+        "expression": "false"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L14012: registry entry",
+        "online_mod.js#L4900: filmix implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:kinobase",
+      "name": "Kinobase",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "kinobase",
+      "availability": {
+        "status": "disabled",
+        "expression": "true"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L13974: registry entry",
+        "online_mod.js#L3147: kinobase implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:kinopub",
+      "name": "KinoPub",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "kinopub",
+      "availability": {
+        "status": "disabled",
+        "expression": "true"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L14149: registry entry",
+        "online_mod.js#L13162: kinopub implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:kodik",
+      "name": "Kodik",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "kodik",
+      "availability": {
+        "status": "active",
+        "expression": "false"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L14131: registry entry",
+        "online_mod.js#L11946: kodik implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:lumex",
+      "name": "Lumex",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "lumex",
+      "availability": {
+        "status": "disabled",
+        "expression": "true"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L13947: registry entry",
+        "online_mod.js#L575: lumex implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:lumex2",
+      "name": "Lumex (Ads)",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "lumex2",
+      "availability": {
+        "status": "disabled",
+        "expression": "true"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L13956: registry entry",
+        "online_mod.js#L1234: lumex2 implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:redheadsound",
+      "name": "RedHeadSound",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "redheadsound",
+      "availability": {
+        "status": "disabled",
+        "expression": "true"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L14075: registry entry",
+        "online_mod.js#L9501: redheadsound implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:redheadsound-dash",
+      "name": "RedHeadSound (DASH)",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "redheadsound",
+      "availability": {
+        "status": "disabled",
+        "expression": "true"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L14084: registry entry",
+        "online_mod.js#L9501: redheadsound implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:rezka2",
+      "name": "HDrezka",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "rezka2",
+      "availability": {
+        "status": "active",
+        "expression": "false"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L13965: registry entry",
+        "online_mod.js#L1637: rezka2 implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:vibix",
+      "name": "Vibix",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "vibix",
+      "availability": {
+        "status": "disabled",
+        "expression": "true"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L14066: registry entry",
+        "online_mod.js#L8816: vibix implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:videoseed",
+      "name": "VideoSeed",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "videoseed",
+      "availability": {
+        "status": "disabled",
+        "expression": "true"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L14057: registry entry",
+        "online_mod.js#L8250: videoseed implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    },
+    {
+      "sourceId": "online_mod:zetflix",
+      "name": "Zetflix",
+      "plugin": "Online_Mod",
+      "revision": "9fbcac14ef8331ca8026a486e92c1a7f59220756",
+      "module": "zetflix",
+      "availability": {
+        "status": "disabled",
+        "expression": "true"
+      },
+      "episodeDataFormat": "online_mod template payload: element.season + element.episode",
+      "episodeNumbers": {
+        "absolute": false,
+        "seasonal": true,
+        "exposedToAnimeFiller": true
+      },
+      "numberingBasis": "unknown",
+      "evidence": [
+        "online_mod.js#L14021: registry entry",
+        "online_mod.js#L5758: zetflix implementation",
+        "online_mod.js: provider-derived element is passed to Lampa.Template.get(\"online_mod\", element)"
+      ],
+      "aniBridgeMapping": "not-applicable-until-basis-is-proved",
+      "binding": null,
+      "supportStatus": "unknown",
+      "reason": "The source exposes season/episode, but its external numbering basis is not proved by the implementation.",
+      "coverage": {
+        "titles": 0,
+        "episodes": 0
+      },
+      "deviceVerification": "not-tested"
+    }
+  ],
+  "statistics": {
+    "discoveredSources": 102,
+    "sourceAuditedImplementations": 94,
+    "confirmedNumberingBasis": 0,
+    "implementedBindings": 0,
+    "statuses": {
+      "verified": 0,
+      "partial": 0,
+      "unknown": 31,
+      "unsupported": 71
+    },
+    "sourceBoundCoverage": {
+      "titles": 0,
+      "episodes": 0
+    },
+    "providerConversionInventory": {
+      "titles": 41,
+      "episodes": 7330,
+      "note": "Build-time provider conversions are not source bindings."
+    },
+    "catalog": {
+      "titles": 45,
+      "episodes": 9552
+    }
+  }
+}

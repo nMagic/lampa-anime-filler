@@ -1,0 +1,3162 @@
+{
+  "schemaVersion": 1,
+  "revision": "generated-20261022065554",
+  "sources": [
+    {
+      "id": "anibridge",
+      "name": "AniBridge generated mappings",
+      "url": "https://github.com/anibridge/anibridge-mappings",
+      "revision": "schema-3.0.3-generated-2026-10-22T06:55:54Z",
+      "license": "MIT",
+      "attribution": "Generated AniBridge v3 mappings; exact artifact digest is pinned because the v3 release tag is mutable."
+    },
+    {
+      "id": "anime-offline-database",
+      "name": "anime-offline-database",
+      "url": "https://github.com/cedya77/anime-offline-database",
+      "revision": "2026-43",
+      "license": "ODbL-1.0 / DbCL-1.0",
+      "attribution": "Metadata and cross-database identifiers from anime-offline-database release 2026-43."
+    }
+  ],
+  "titles": {
+    "ace-of-diamond": {
+      "ids": {
+        "tmdbTv": 60761,
+        "anilist": 18689,
+        "mal": 18689,
+        "anidb": 9881,
+        "tvdb": 273005
+      },
+      "aliases": [
+        "Diamond no Ace"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 60761,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 75,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 273005,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 75,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "attack-on-titan": {
+      "ids": {
+        "tmdbTv": 1429,
+        "anilist": 16498,
+        "mal": 16498,
+        "anidb": 9541,
+        "tvdb": 267440
+      },
+      "aliases": [
+        "Shingeki no Kyojin"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 1429,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 267440,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "black-clover": {
+      "ids": {
+        "tmdbTv": 73223,
+        "anilist": 97940,
+        "mal": 34572,
+        "anidb": 12665,
+        "tvdb": 331753
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 73223,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 170,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 331753,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 170,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "bleach": {
+      "ids": {
+        "tmdbTv": 30984,
+        "anilist": 269,
+        "mal": 269,
+        "anidb": 2369,
+        "tvdb": 74796
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 30984,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 366,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 74796,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 20,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 21,
+                "absoluteStart": 21
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 22,
+                "absoluteStart": 42
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 28,
+                "absoluteStart": 64
+              }
+            ],
+            "5": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 18,
+                "absoluteStart": 92
+              }
+            ],
+            "6": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 22,
+                "absoluteStart": 110
+              }
+            ],
+            "7": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 20,
+                "absoluteStart": 132
+              }
+            ],
+            "8": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 16,
+                "absoluteStart": 152
+              }
+            ],
+            "9": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 22,
+                "absoluteStart": 168
+              }
+            ],
+            "10": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 16,
+                "absoluteStart": 190
+              }
+            ],
+            "11": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 7,
+                "absoluteStart": 206
+              }
+            ],
+            "12": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 17,
+                "absoluteStart": 213
+              }
+            ],
+            "13": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 36,
+                "absoluteStart": 230
+              }
+            ],
+            "14": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 51,
+                "absoluteStart": 266
+              }
+            ],
+            "15": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 26,
+                "absoluteStart": 317
+              }
+            ],
+            "16": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 343
+              }
+            ]
+          }
+        }
+      }
+    },
+    "blue-exorcist": {
+      "ids": {
+        "tmdbTv": 38464,
+        "anilist": 9919,
+        "mal": 9919,
+        "anidb": 8148,
+        "tvdb": 248035
+      },
+      "aliases": [
+        "Ao no Exorcist"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 38464,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 248035,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "bobobo-bo-bobo": {
+      "ids": {
+        "tmdbTv": 35236,
+        "anilist": 1050,
+        "mal": 1050,
+        "anidb": 1180,
+        "tvdb": 79355
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 35236,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 76,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 79355,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 76,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "boruto": {
+      "ids": {
+        "tmdbTv": 70881,
+        "anilist": 97938,
+        "mal": 34566,
+        "anidb": 12661,
+        "tvdb": 321285
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 70881,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 293,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 321285,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 293,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "cardcaptor-sakura": {
+      "ids": {
+        "tmdbTv": 35790,
+        "anilist": 232,
+        "mal": 232,
+        "anidb": 102,
+        "tvdb": 70668
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 35790,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 35,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 70668,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 35,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 11,
+                "absoluteStart": 36
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 47
+              }
+            ]
+          }
+        }
+      }
+    },
+    "certain-magical-index": {
+      "ids": {
+        "tmdbTv": 30980,
+        "anilist": 4654,
+        "mal": 4654,
+        "anidb": 5975,
+        "tvdb": 83322
+      },
+      "aliases": [
+        "Toaru Majutsu no Index"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 30980,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 83322,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "d-gray-man": {
+      "ids": {},
+      "aliases": [
+        "D.Gray-man Hallow"
+      ]
+    },
+    "detective-conan": {
+      "ids": {
+        "tmdbTv": 30983,
+        "anilist": 235,
+        "mal": 235,
+        "anidb": 266,
+        "tvdb": 72454
+      },
+      "aliases": [
+        "Meitantei Conan"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 30983,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 1209,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 72454,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 28,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 26,
+                "absoluteStart": 29
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 28,
+                "absoluteStart": 55
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 83
+              }
+            ],
+            "5": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 28,
+                "absoluteStart": 107
+              }
+            ],
+            "6": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 28,
+                "absoluteStart": 135
+              }
+            ],
+            "7": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 31,
+                "absoluteStart": 163
+              }
+            ],
+            "8": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 26,
+                "absoluteStart": 194
+              }
+            ],
+            "9": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 35,
+                "absoluteStart": 220
+              }
+            ],
+            "10": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 31,
+                "absoluteStart": 255
+              }
+            ],
+            "11": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 30,
+                "absoluteStart": 286
+              }
+            ],
+            "12": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 38,
+                "absoluteStart": 316
+              }
+            ],
+            "13": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 36,
+                "absoluteStart": 354
+              }
+            ],
+            "14": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 37,
+                "absoluteStart": 390
+              }
+            ],
+            "15": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 39,
+                "absoluteStart": 427
+              }
+            ],
+            "16": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 466
+              }
+            ],
+            "17": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 33,
+                "absoluteStart": 491
+              }
+            ],
+            "18": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 42,
+                "absoluteStart": 524
+              }
+            ],
+            "19": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 40,
+                "absoluteStart": 566
+              }
+            ],
+            "20": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 40,
+                "absoluteStart": 606
+              }
+            ],
+            "21": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 35,
+                "absoluteStart": 646
+              }
+            ],
+            "22": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 43,
+                "absoluteStart": 681
+              }
+            ],
+            "23": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 39,
+                "absoluteStart": 724
+              }
+            ],
+            "24": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 41,
+                "absoluteStart": 763
+              }
+            ],
+            "25": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 83,
+                "absoluteStart": 804
+              }
+            ],
+            "26": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 40,
+                "absoluteStart": 887
+              }
+            ],
+            "27": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 38,
+                "absoluteStart": 927
+              }
+            ],
+            "28": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 28,
+                "absoluteStart": 965
+              }
+            ],
+            "29": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 40,
+                "absoluteStart": 993
+              }
+            ],
+            "30": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 35,
+                "absoluteStart": 1033
+              }
+            ],
+            "31": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 41,
+                "absoluteStart": 1068
+              }
+            ],
+            "32": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 39,
+                "absoluteStart": 1109
+              }
+            ],
+            "33": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 39,
+                "absoluteStart": 1148
+              }
+            ],
+            "34": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 1,
+                "absoluteStart": 1187
+              }
+            ]
+          }
+        }
+      }
+    },
+    "digimon-adventure": {
+      "ids": {},
+      "aliases": []
+    },
+    "dr-stone": {
+      "ids": {
+        "tmdbTv": 86031,
+        "anilist": 105333,
+        "mal": 38691,
+        "anidb": 14491,
+        "tvdb": 355774
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 86031,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 355774,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "dragon-ball": {
+      "ids": {
+        "tmdbTv": 12609,
+        "anilist": 223,
+        "mal": 223,
+        "anidb": 231,
+        "tvdb": 76666
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 12609,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 153,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 76666,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 13,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 15,
+                "absoluteStart": 14
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 40,
+                "absoluteStart": 29
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 33,
+                "absoluteStart": 69
+              }
+            ],
+            "5": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 31,
+                "absoluteStart": 102
+              }
+            ],
+            "6": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 21,
+                "absoluteStart": 133
+              }
+            ]
+          }
+        }
+      }
+    },
+    "dragon-ball-super": {
+      "ids": {
+        "tmdbTv": 62715,
+        "anilist": 21175,
+        "mal": 30694,
+        "anidb": 11210,
+        "tvdb": 295068
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 62715,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 131,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 295068,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 14,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 13,
+                "absoluteStart": 15
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 19,
+                "absoluteStart": 28
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 30,
+                "absoluteStart": 47
+              }
+            ],
+            "5": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 55,
+                "absoluteStart": 77
+              }
+            ]
+          }
+        }
+      }
+    },
+    "dragon-ball-z": {
+      "ids": {
+        "tmdbTv": 12971,
+        "anilist": 813,
+        "mal": 813,
+        "anidb": 1530,
+        "tvdb": 81472
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 12971,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 39,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 81472,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 39,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 35,
+                "absoluteStart": 40
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 33,
+                "absoluteStart": 75
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 32,
+                "absoluteStart": 108
+              }
+            ],
+            "5": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 26,
+                "absoluteStart": 140
+              }
+            ],
+            "6": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 29,
+                "absoluteStart": 166
+              }
+            ],
+            "7": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 195
+              }
+            ],
+            "8": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 34,
+                "absoluteStart": 220
+              }
+            ],
+            "9": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 38,
+                "absoluteStart": 254
+              }
+            ]
+          }
+        }
+      }
+    },
+    "fairy-tail": {
+      "ids": {
+        "tmdbTv": 46261,
+        "anilist": 6702,
+        "mal": 6702,
+        "anidb": 6662,
+        "tvdb": 114801
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 46261,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 48,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 114801,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 48,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 48,
+                "absoluteStart": 49
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 54,
+                "absoluteStart": 97
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 151
+              }
+            ]
+          }
+        }
+      }
+    },
+    "fist-of-the-north-star": {
+      "ids": {},
+      "aliases": []
+    },
+    "food-wars": {
+      "ids": {
+        "tmdbTv": 62273,
+        "anilist": 20923,
+        "mal": 28171,
+        "anidb": 10901,
+        "tvdb": 289909
+      },
+      "aliases": [
+        "Shokugeki no Souma"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 62273,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 289909,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "gintama": {
+      "ids": {
+        "tmdbTv": 57041,
+        "tvdb": 79895
+      },
+      "aliases": [
+        "Gintama': Enchousen",
+        "Gintama. (2017)",
+        "Gintama. Shirogane no Tamashii-hen - Kouhan-sen"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 57041,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 49,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 79895,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 49,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 50,
+                "absoluteStart": 50
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 51,
+                "absoluteStart": 100
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 51,
+                "absoluteStart": 151
+              }
+            ]
+          }
+        }
+      }
+    },
+    "haikyuu": {
+      "ids": {
+        "tmdbTv": 60863,
+        "anilist": 20464,
+        "mal": 20583,
+        "anidb": 10145,
+        "tvdb": 278157
+      },
+      "aliases": [
+        "Haikyuu!!"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 60863,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 278157,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "hajime-no-ippo": {
+      "ids": {
+        "tmdbTv": 42705,
+        "anilist": 263,
+        "mal": 263,
+        "anidb": 129,
+        "tvdb": 79685
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 42705,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 75,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 79685,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 75,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "hunter-x-hunter": {
+      "ids": {
+        "tmdbTv": 46298,
+        "anilist": 11061,
+        "mal": 11061,
+        "anidb": 8550,
+        "tvdb": 252322
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 46298,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 62,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 63,
+                "episodeEnd": 136,
+                "absoluteStart": 63
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 137,
+                "episodeEnd": 148,
+                "absoluteStart": 137
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 252322,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 58,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 78,
+                "absoluteStart": 59
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 12,
+                "absoluteStart": 137
+              }
+            ]
+          }
+        }
+      }
+    },
+    "inuyasha": {
+      "ids": {
+        "tmdbTv": 35610,
+        "anilist": 249,
+        "mal": 249,
+        "anidb": 144,
+        "tvdb": 71361
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 35610,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 167,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 71361,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 27,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 27,
+                "absoluteStart": 28
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 28,
+                "absoluteStart": 55
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 28,
+                "absoluteStart": 83
+              }
+            ],
+            "5": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 28,
+                "absoluteStart": 111
+              }
+            ],
+            "6": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 29,
+                "absoluteStart": 139
+              }
+            ]
+          }
+        }
+      }
+    },
+    "jojos-bizarre-adventure": {
+      "ids": {
+        "tmdbTv": 45790,
+        "anilist": 14719,
+        "mal": 14719,
+        "anidb": 9304,
+        "tvdb": 262954
+      },
+      "aliases": [
+        "JoJo no Kimyou na Bouken (TV)"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 45790,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 26,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 262954,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 26,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "katekyo-hitman-reborn": {
+      "ids": {
+        "tmdbTv": 45857,
+        "anilist": 1604,
+        "mal": 1604,
+        "anidb": 4747,
+        "tvdb": 80975
+      },
+      "aliases": [
+        "Katekyou Hitman Reborn!"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 45857,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 33,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 34,
+                "episodeEnd": 65,
+                "absoluteStart": 34
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 66,
+                "episodeEnd": 73,
+                "absoluteStart": 66
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 74,
+                "episodeEnd": 141,
+                "absoluteStart": 74
+              }
+            ],
+            "5": [
+              {
+                "episodeStart": 142,
+                "episodeEnd": 154,
+                "absoluteStart": 142
+              }
+            ],
+            "6": [
+              {
+                "episodeStart": 155,
+                "episodeEnd": 177,
+                "absoluteStart": 155
+              }
+            ],
+            "7": [
+              {
+                "episodeStart": 178,
+                "episodeEnd": 189,
+                "absoluteStart": 178
+              }
+            ],
+            "8": [
+              {
+                "episodeStart": 190,
+                "episodeEnd": 203,
+                "absoluteStart": 190
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 80975,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 33,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 32,
+                "absoluteStart": 34
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 8,
+                "absoluteStart": 66
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 28,
+                "absoluteStart": 74
+              }
+            ],
+            "5": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 39,
+                "absoluteStart": 102
+              }
+            ],
+            "6": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 13,
+                "absoluteStart": 141
+              }
+            ],
+            "7": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 154
+              }
+            ],
+            "8": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 12,
+                "absoluteStart": 178
+              }
+            ],
+            "9": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 14,
+                "absoluteStart": 190
+              }
+            ]
+          }
+        }
+      }
+    },
+    "kingdom": {
+      "ids": {
+        "tmdbTv": 46437,
+        "anilist": 12031,
+        "mal": 12031,
+        "anidb": 8791,
+        "tvdb": 259635
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 46437,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 38,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 259635,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 38,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "kuroko-no-basketball": {
+      "ids": {
+        "tmdbTv": 45783,
+        "anilist": 11771,
+        "mal": 11771,
+        "anidb": 8681,
+        "tvdb": 257765
+      },
+      "aliases": [
+        "Kuroko no Basket"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 45783,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 257765,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "monster": {
+      "ids": {
+        "tmdbTv": 30981,
+        "anilist": 19,
+        "mal": 19,
+        "anidb": 1539,
+        "tvdb": 74599
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 30981,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 74,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 74599,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 74,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "my-hero-academia": {
+      "ids": {
+        "tmdbTv": 65930,
+        "tvdb": 305074
+      },
+      "aliases": [
+        "Boku no Hero Academia 3rd Season",
+        "Boku no Hero Academia 4th Season",
+        "Boku no Hero Academia 5th Season",
+        "Boku no Hero Academia 6th Season",
+        "Boku no Hero Academia 7th Season",
+        "Boku no Hero Academia: Final Season"
+      ]
+    },
+    "naruto": {
+      "ids": {
+        "tmdbTv": 46260,
+        "anilist": 20,
+        "mal": 20,
+        "anidb": 239,
+        "tvdb": 78857
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 46260,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 52,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 53,
+                "episodeEnd": 104,
+                "absoluteStart": 53
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 105,
+                "episodeEnd": 158,
+                "absoluteStart": 105
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 159,
+                "episodeEnd": 220,
+                "absoluteStart": 159
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 78857,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 35,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 48,
+                "absoluteStart": 36
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 48,
+                "absoluteStart": 84
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 48,
+                "absoluteStart": 132
+              }
+            ],
+            "5": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 41,
+                "absoluteStart": 180
+              }
+            ]
+          }
+        }
+      }
+    },
+    "naruto-shippuden": {
+      "ids": {
+        "tmdbTv": 31910,
+        "anilist": 1735,
+        "mal": 1735,
+        "anidb": 4880,
+        "tvdb": 79824
+      },
+      "aliases": [
+        "Naruto: Shippuuden"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 31910,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 32,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 33,
+                "episodeEnd": 53,
+                "absoluteStart": 33
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 54,
+                "episodeEnd": 71,
+                "absoluteStart": 54
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 72,
+                "episodeEnd": 88,
+                "absoluteStart": 72
+              }
+            ],
+            "5": [
+              {
+                "episodeStart": 89,
+                "episodeEnd": 112,
+                "absoluteStart": 89
+              }
+            ],
+            "6": [
+              {
+                "episodeStart": 113,
+                "episodeEnd": 143,
+                "absoluteStart": 113
+              }
+            ],
+            "7": [
+              {
+                "episodeStart": 144,
+                "episodeEnd": 151,
+                "absoluteStart": 144
+              }
+            ],
+            "8": [
+              {
+                "episodeStart": 152,
+                "episodeEnd": 175,
+                "absoluteStart": 152
+              }
+            ],
+            "9": [
+              {
+                "episodeStart": 176,
+                "episodeEnd": 196,
+                "absoluteStart": 176
+              }
+            ],
+            "10": [
+              {
+                "episodeStart": 197,
+                "episodeEnd": 221,
+                "absoluteStart": 197
+              }
+            ],
+            "11": [
+              {
+                "episodeStart": 222,
+                "episodeEnd": 242,
+                "absoluteStart": 222
+              }
+            ],
+            "12": [
+              {
+                "episodeStart": 243,
+                "episodeEnd": 275,
+                "absoluteStart": 243
+              }
+            ],
+            "13": [
+              {
+                "episodeStart": 276,
+                "episodeEnd": 295,
+                "absoluteStart": 276
+              }
+            ],
+            "14": [
+              {
+                "episodeStart": 296,
+                "episodeEnd": 320,
+                "absoluteStart": 296
+              }
+            ],
+            "15": [
+              {
+                "episodeStart": 321,
+                "episodeEnd": 348,
+                "absoluteStart": 321
+              }
+            ],
+            "16": [
+              {
+                "episodeStart": 349,
+                "episodeEnd": 361,
+                "absoluteStart": 349
+              }
+            ],
+            "17": [
+              {
+                "episodeStart": 362,
+                "episodeEnd": 372,
+                "absoluteStart": 362
+              }
+            ],
+            "18": [
+              {
+                "episodeStart": 373,
+                "episodeEnd": 393,
+                "absoluteStart": 373
+              }
+            ],
+            "19": [
+              {
+                "episodeStart": 394,
+                "episodeEnd": 413,
+                "absoluteStart": 394
+              }
+            ],
+            "20": [
+              {
+                "episodeStart": 414,
+                "episodeEnd": 500,
+                "absoluteStart": 414
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 79824,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 32,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 21,
+                "absoluteStart": 33
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 18,
+                "absoluteStart": 54
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 17,
+                "absoluteStart": 72
+              }
+            ],
+            "5": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 89
+              }
+            ],
+            "6": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 31,
+                "absoluteStart": 113
+              }
+            ],
+            "7": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 8,
+                "absoluteStart": 144
+              }
+            ],
+            "8": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 152
+              }
+            ],
+            "9": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 21,
+                "absoluteStart": 176
+              }
+            ],
+            "10": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 26,
+                "absoluteStart": 197
+              }
+            ],
+            "11": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 20,
+                "absoluteStart": 223
+              }
+            ],
+            "12": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 18,
+                "absoluteStart": 243
+              }
+            ],
+            "13": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 35,
+                "absoluteStart": 261
+              }
+            ],
+            "14": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 296
+              }
+            ],
+            "15": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 28,
+                "absoluteStart": 321
+              }
+            ],
+            "16": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 13,
+                "absoluteStart": 349
+              }
+            ],
+            "17": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 32,
+                "absoluteStart": 362
+              }
+            ],
+            "18": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 20,
+                "absoluteStart": 394
+              }
+            ],
+            "19": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 18,
+                "absoluteStart": 414
+              }
+            ],
+            "20": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 19,
+                "absoluteStart": 432
+              }
+            ],
+            "21": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 8,
+                "absoluteStart": 451
+              }
+            ],
+            "22": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 42,
+                "absoluteStart": 459
+              }
+            ]
+          }
+        }
+      }
+    },
+    "one-piece": {
+      "ids": {
+        "tmdbTv": 37854,
+        "anilist": 21,
+        "mal": 21,
+        "anidb": 69,
+        "tvdb": 81797
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 37854,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 61,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 62,
+                "episodeEnd": 77,
+                "absoluteStart": 62
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 78,
+                "episodeEnd": 91,
+                "absoluteStart": 78
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 92,
+                "episodeEnd": 130,
+                "absoluteStart": 92
+              }
+            ],
+            "5": [
+              {
+                "episodeStart": 131,
+                "episodeEnd": 143,
+                "absoluteStart": 131
+              }
+            ],
+            "6": [
+              {
+                "episodeStart": 144,
+                "episodeEnd": 195,
+                "absoluteStart": 144
+              }
+            ],
+            "7": [
+              {
+                "episodeStart": 196,
+                "episodeEnd": 228,
+                "absoluteStart": 196
+              }
+            ],
+            "8": [
+              {
+                "episodeStart": 229,
+                "episodeEnd": 263,
+                "absoluteStart": 229
+              }
+            ],
+            "9": [
+              {
+                "episodeStart": 264,
+                "episodeEnd": 336,
+                "absoluteStart": 264
+              }
+            ],
+            "10": [
+              {
+                "episodeStart": 337,
+                "episodeEnd": 381,
+                "absoluteStart": 337
+              }
+            ],
+            "11": [
+              {
+                "episodeStart": 382,
+                "episodeEnd": 407,
+                "absoluteStart": 382
+              }
+            ],
+            "12": [
+              {
+                "episodeStart": 408,
+                "episodeEnd": 421,
+                "absoluteStart": 408
+              }
+            ],
+            "13": [
+              {
+                "episodeStart": 422,
+                "episodeEnd": 522,
+                "absoluteStart": 422
+              }
+            ],
+            "14": [
+              {
+                "episodeStart": 523,
+                "episodeEnd": 580,
+                "absoluteStart": 523
+              }
+            ],
+            "15": [
+              {
+                "episodeStart": 581,
+                "episodeEnd": 642,
+                "absoluteStart": 581
+              }
+            ],
+            "16": [
+              {
+                "episodeStart": 643,
+                "episodeEnd": 692,
+                "absoluteStart": 643
+              }
+            ],
+            "17": [
+              {
+                "episodeStart": 693,
+                "episodeEnd": 748,
+                "absoluteStart": 693
+              }
+            ],
+            "18": [
+              {
+                "episodeStart": 749,
+                "episodeEnd": 803,
+                "absoluteStart": 749
+              }
+            ],
+            "19": [
+              {
+                "episodeStart": 804,
+                "episodeEnd": 877,
+                "absoluteStart": 804
+              }
+            ],
+            "20": [
+              {
+                "episodeStart": 878,
+                "episodeEnd": 891,
+                "absoluteStart": 878
+              }
+            ],
+            "21": [
+              {
+                "episodeStart": 892,
+                "episodeEnd": 1088,
+                "absoluteStart": 892
+              }
+            ],
+            "22": [
+              {
+                "episodeStart": 2,
+                "episodeEnd": 67,
+                "absoluteStart": 1090
+              },
+              {
+                "episodeStart": 1089,
+                "episodeEnd": 1089,
+                "absoluteStart": 1089
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 81797,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 8,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 22,
+                "absoluteStart": 9
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 17,
+                "absoluteStart": 31
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 13,
+                "absoluteStart": 48
+              }
+            ],
+            "5": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 9,
+                "absoluteStart": 61
+              }
+            ],
+            "6": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 22,
+                "absoluteStart": 70
+              }
+            ],
+            "7": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 39,
+                "absoluteStart": 92
+              }
+            ],
+            "8": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 13,
+                "absoluteStart": 131
+              }
+            ],
+            "9": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 52,
+                "absoluteStart": 144
+              }
+            ],
+            "10": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 31,
+                "absoluteStart": 196
+              }
+            ],
+            "11": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 99,
+                "absoluteStart": 227
+              }
+            ],
+            "12": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 56,
+                "absoluteStart": 326
+              }
+            ],
+            "13": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 100,
+                "absoluteStart": 382
+              }
+            ],
+            "14": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 35,
+                "absoluteStart": 482
+              }
+            ],
+            "15": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 517
+              },
+              {
+                "episodeStart": 26,
+                "episodeEnd": 62,
+                "absoluteStart": 543
+              }
+            ],
+            "16": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 49,
+                "absoluteStart": 580
+              }
+            ],
+            "17": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 118,
+                "absoluteStart": 629
+              }
+            ],
+            "18": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 33,
+                "absoluteStart": 747
+              }
+            ],
+            "19": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 98,
+                "absoluteStart": 780
+              }
+            ],
+            "20": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 14,
+                "absoluteStart": 878
+              }
+            ],
+            "21": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 194,
+                "absoluteStart": 892
+              }
+            ],
+            "22": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 70,
+                "absoluteStart": 1086
+              }
+            ],
+            "23": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 1,
+                "absoluteStart": 1156
+              }
+            ]
+          }
+        }
+      }
+    },
+    "pokemon": {
+      "ids": {
+        "tmdbTv": 60572,
+        "anilist": 527,
+        "mal": 527,
+        "anidb": 230,
+        "tvdb": 76703
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 60572,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 82,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 76703,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 82,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 36,
+                "absoluteStart": 83
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 41,
+                "absoluteStart": 119
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 52,
+                "absoluteStart": 160
+              }
+            ],
+            "5": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 65,
+                "absoluteStart": 212
+              }
+            ]
+          }
+        }
+      }
+    },
+    "ranma-1-2": {
+      "ids": {
+        "tmdbTv": 57706,
+        "mal": 210,
+        "tvdb": 76932
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 57706,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 161,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 76932,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 18,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 22,
+                "absoluteStart": 19
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 41
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 65
+              }
+            ],
+            "5": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 89
+              }
+            ],
+            "6": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 113
+              }
+            ],
+            "7": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 137
+              }
+            ]
+          }
+        }
+      }
+    },
+    "rurouni-kenshin": {
+      "ids": {
+        "tmdbTv": 28136,
+        "anilist": 45,
+        "mal": 45,
+        "anidb": 90,
+        "tvdb": 70863
+      },
+      "aliases": [
+        "Rurouni Kenshin: Meiji Kenkaku Romantan"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 28136,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 27,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 70863,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 27,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 35,
+                "absoluteStart": 28
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 32,
+                "absoluteStart": 63
+              }
+            ]
+          }
+        }
+      }
+    },
+    "sailor-moon": {
+      "ids": {
+        "tmdbTv": 3570,
+        "anilist": 530,
+        "mal": 530,
+        "anidb": 235,
+        "tvdb": 78500
+      },
+      "aliases": [
+        "Bishoujo Senshi Sailor Moon"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 3570,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 46,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 78500,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 46,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "slime-isekai": {
+      "ids": {
+        "tmdbTv": 82684,
+        "anilist": 101280,
+        "mal": 37430,
+        "anidb": 13871,
+        "tvdb": 352408
+      },
+      "aliases": [
+        "Tensei shitara Slime Datta Ken"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 82684,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 352408,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "sword-art-online": {
+      "ids": {
+        "tmdbTv": 45782,
+        "anilist": 11757,
+        "mal": 11757,
+        "anidb": 8692,
+        "tvdb": 259640
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 45782,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 259640,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "the-seven-deadly-sins": {
+      "ids": {
+        "tmdbTv": 62104,
+        "anilist": 20789,
+        "mal": 23755,
+        "anidb": 10596,
+        "tvdb": 284131
+      },
+      "aliases": [
+        "Nanatsu no Taizai"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 62104,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 284131,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 24,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "urusei-yatsura-1981": {
+      "ids": {
+        "tmdbTv": 34163,
+        "anilist": 1293,
+        "mal": 1293,
+        "anidb": 377,
+        "tvdb": 75113
+      },
+      "aliases": [
+        "Urusei Yatsura"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 34163,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 1,
+                "absoluteStart": 1
+              },
+              {
+                "episodeStart": 3,
+                "episodeEnd": 3,
+                "absoluteStart": 2
+              },
+              {
+                "episodeStart": 5,
+                "episodeEnd": 5,
+                "absoluteStart": 3
+              },
+              {
+                "episodeStart": 7,
+                "episodeEnd": 7,
+                "absoluteStart": 4
+              },
+              {
+                "episodeStart": 10,
+                "episodeEnd": 11,
+                "absoluteStart": 5
+              },
+              {
+                "episodeStart": 13,
+                "episodeEnd": 13,
+                "absoluteStart": 7
+              },
+              {
+                "episodeStart": 15,
+                "episodeEnd": 15,
+                "absoluteStart": 8
+              },
+              {
+                "episodeStart": 17,
+                "episodeEnd": 17,
+                "absoluteStart": 9
+              },
+              {
+                "episodeStart": 19,
+                "episodeEnd": 19,
+                "absoluteStart": 10
+              },
+              {
+                "episodeStart": 21,
+                "episodeEnd": 21,
+                "absoluteStart": 11
+              },
+              {
+                "episodeStart": 23,
+                "episodeEnd": 23,
+                "absoluteStart": 12
+              },
+              {
+                "episodeStart": 25,
+                "episodeEnd": 25,
+                "absoluteStart": 13
+              },
+              {
+                "episodeStart": 27,
+                "episodeEnd": 27,
+                "absoluteStart": 14
+              },
+              {
+                "episodeStart": 29,
+                "episodeEnd": 29,
+                "absoluteStart": 15
+              },
+              {
+                "episodeStart": 31,
+                "episodeEnd": 31,
+                "absoluteStart": 16
+              },
+              {
+                "episodeStart": 33,
+                "episodeEnd": 33,
+                "absoluteStart": 17
+              },
+              {
+                "episodeStart": 35,
+                "episodeEnd": 35,
+                "absoluteStart": 18
+              },
+              {
+                "episodeStart": 37,
+                "episodeEnd": 37,
+                "absoluteStart": 19
+              },
+              {
+                "episodeStart": 39,
+                "episodeEnd": 39,
+                "absoluteStart": 20
+              },
+              {
+                "episodeStart": 41,
+                "episodeEnd": 41,
+                "absoluteStart": 21
+              },
+              {
+                "episodeStart": 43,
+                "episodeEnd": 43,
+                "absoluteStart": 22
+              },
+              {
+                "episodeStart": 45,
+                "episodeEnd": 45,
+                "absoluteStart": 23
+              },
+              {
+                "episodeStart": 70,
+                "episodeEnd": 70,
+                "absoluteStart": 46
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 75113,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 54,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 52,
+                "absoluteStart": 55
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 43,
+                "absoluteStart": 107
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 18,
+                "absoluteStart": 150
+              }
+            ]
+          }
+        }
+      }
+    },
+    "yowamushi-pedal": {
+      "ids": {
+        "tmdbTv": 61441,
+        "anilist": 18179,
+        "mal": 18179,
+        "anidb": 9591,
+        "tvdb": 272309
+      },
+      "aliases": [],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 61441,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 38,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 272309,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 38,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        }
+      }
+    },
+    "yu-gi-oh": {
+      "ids": {
+        "tmdbTv": 902,
+        "anilist": 481,
+        "mal": 481,
+        "anidb": 2061,
+        "tvdb": 76894
+      },
+      "aliases": [
+        "Yu☆Gi☆Oh! Duel Monsters"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 902,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 224,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 76894,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 49,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 48,
+                "absoluteStart": 50
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 47,
+                "absoluteStart": 98
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 40,
+                "absoluteStart": 145
+              }
+            ],
+            "5": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 40,
+                "absoluteStart": 185
+              }
+            ]
+          }
+        }
+      }
+    },
+    "yu-yu-hakusho": {
+      "ids": {
+        "tmdbTv": 30669,
+        "anilist": 392,
+        "mal": 392,
+        "anidb": 312,
+        "tvdb": 76665
+      },
+      "aliases": [
+        "Yuu☆Yuu☆Hakusho"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 30669,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 76665,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 25,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 41,
+                "absoluteStart": 26
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 28,
+                "absoluteStart": 67
+              }
+            ],
+            "4": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 18,
+                "absoluteStart": 95
+              }
+            ]
+          }
+        }
+      }
+    },
+    "zatch-bell": {
+      "ids": {
+        "tmdbTv": 35894,
+        "anilist": 250,
+        "mal": 250,
+        "anidb": 638,
+        "tvdb": 83421
+      },
+      "aliases": [
+        "Konjiki no Gash Bell!!"
+      ],
+      "providerMappings": {
+        "tmdb": {
+          "mediaId": 35894,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 150,
+                "absoluteStart": 1
+              }
+            ]
+          }
+        },
+        "tvdb": {
+          "mediaId": 83421,
+          "seasons": {
+            "1": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 50,
+                "absoluteStart": 1
+              }
+            ],
+            "2": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 50,
+                "absoluteStart": 51
+              }
+            ],
+            "3": [
+              {
+                "episodeStart": 1,
+                "episodeEnd": 50,
+                "absoluteStart": 101
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

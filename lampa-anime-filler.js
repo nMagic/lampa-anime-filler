@@ -1,5 +1,5 @@
 /*
- * Lampa Anime Filler — marking-only prototype 0.4.0
+ * Lampa Anime Filler — marking-only prototype 0.4.1
  * Source code is independently written; no Lampa code copied.
  * Metadata backends: optional user-provided AFL JSON, fallback CC BY 4.0 SkipTheFiller dataset.
  * Phase 1: labels only; no playback/playlist modification.
@@ -20,7 +20,7 @@
   var state = { movie: null, slug: '', guide: null, loadId: 0, dataset: null, datasetPromise: null,
     bundleCatalog: null,
     diagnostics: { phase: 'ожидаем карточку аниме', error: '', fullEvents: 0, templateHits: 0,
-      rows: 0, matched: 0, parsed: 0, sampleTitle: '', sampleTemplate: '',
+      rows: 0, matched: 0, parsed: 0, unknown: 0, sampleTitle: '', sampleTemplate: '', sampleMapping: '',
       provider: '', integrity: '', resolution: '' } };
   var timer = null;
   var observer = null;
@@ -131,7 +131,10 @@
     if (!Object.keys(map).length) return null;
     return { slug: input.slug || '', title: input.title || '', episodes: map,
       // Season offsets are OPTIONAL and must be explicitly sourced/verified.
-      seasonOffsets: input.seasonOffsets || (clean(input.slug) === 'one-piece' ? {'1': 0} : null),
+      seasonOffsets: input.seasonOffsets || null,
+      sourceMappings: input.sourceMappings || null,
+      providerMappings: input.providerMappings || null,
+      sourceBindings: input.sourceBindings || null,
       source: input.source || source || 'Пользовательские данные' };
   }
   function isObject(value) { return value && typeof value === 'object' && !Array.isArray(value); }
@@ -355,7 +358,10 @@
       }
     }
     var guide = normalizeGuide({ slug: item.slug, title: shard.identity.title, episodes: shard.episodes,
-      seasonOffsets: shard.numbering.seasonOffsets || null }, 'Versioned bundle');
+      seasonOffsets: shard.numbering.seasonOffsets || null,
+      sourceMappings: shard.numbering.sourceMappings || null,
+      providerMappings: shard.numbering.providerMappings || null,
+      sourceBindings: shard.numbering.sourceBindings || null }, 'Versioned bundle');
     if (!guide) throw new Error('Bundle shard has no supported episodes');
     var source = candidate.manifest.sources.filter(function (entry) {
       return entry.id === shard.classification.sourceId;
@@ -470,6 +476,12 @@
     state.diagnostics.provider = '';
     state.diagnostics.integrity = '';
     state.diagnostics.resolution = '';
+    state.diagnostics.rows = 0;
+    state.diagnostics.parsed = 0;
+    state.diagnostics.matched = 0;
+    state.diagnostics.unknown = 0;
+    state.diagnostics.sampleTitle = '';
+    state.diagnostics.sampleMapping = '';
     state.slug = candidateSlugs(movie)[0] || '';
     if (!state.slug) return;
 
@@ -565,9 +577,38 @@
   }
   function indexFor(item, guide) {
     if (!guide || !item) return null;
-    if (item.absolute_episode != null && /^\d+$/.test(String(item.absolute_episode))) return Number(item.absolute_episode);
-    // Structured season+episode requires verified offsets. Do not guess from TMDB seasons.
+    if (item.absolute_episode != null && /^\d+$/.test(String(item.absolute_episode))) {
+      var absoluteAdapter = String(item.sourceAdapter || '').toLowerCase();
+      // An explicit field from an identified playback adapter is trusted only
+      // when the build-time source inventory proved that exact contract.
+      if (absoluteAdapter && (!guide.sourceBindings || guide.sourceBindings[absoluteAdapter] !== 'absolute')) return null;
+      return Number(item.absolute_episode);
+    }
+    // Structured season+episode requires a rule for this exact adapter and title.
     if (item.episode != null && /^\d{1,4}$/.test(String(item.episode))) {
+      var adapter = String(item.sourceAdapter || '').toLowerCase();
+      if (adapter) {
+        if (item.season == null || item.season === '' || !/^\d+$/.test(String(item.season))) return null;
+        // Payloads may describe their numbers, but they cannot authorize their
+        // own basis. Only the revision-pinned build-time source contract can.
+        var basis = String(guide.sourceBindings && guide.sourceBindings[adapter] || '').toLowerCase();
+        var mapping = basis && guide.providerMappings && guide.providerMappings[basis];
+        // Backward compatibility for already cached schema-v1 shards. New
+        // bundles use providerMappings + an explicit sourceBindings entry.
+        if (!mapping && guide.sourceMappings && guide.sourceMappings[adapter]) {
+          mapping = guide.sourceMappings[adapter];
+          basis = mapping.system || '';
+        }
+        var ranges = mapping && basis && mapping.seasons && mapping.seasons[String(item.season)];
+        if (!Array.isArray(ranges)) return null;
+        var episode = Number(item.episode);
+        var matches = ranges.filter(function (range) {
+          return range && Number.isInteger(range.episodeStart) && Number.isInteger(range.episodeEnd) &&
+            Number.isInteger(range.absoluteStart) && episode >= range.episodeStart && episode <= range.episodeEnd;
+        });
+        if (matches.length !== 1) return null;
+        return matches[0].absoluteStart + episode - matches[0].episodeStart;
+      }
       if (item.season == null || item.season === '') return Number(item.episode);
       var offsets = guide.seasonOffsets;
       var key = String(item.season);
@@ -639,7 +680,7 @@
     }
     var nodes = document.querySelectorAll(ROW_SELECTORS);
     var diag = state.diagnostics;
-    var rows = 0, parsed = 0, matched = 0, sampleTitle = '';
+    var rows = 0, parsed = 0, matched = 0, unknown = 0, sampleTitle = '', sampleMapping = '';
     for (var i = 0; i < nodes.length && i < 1000; i++) {
       var node = nodes[i];
       if (node.closest('.laf-summary')) continue;
@@ -649,18 +690,24 @@
       var metadataEpisode = node.getAttribute('data-laf-episode');
       var metadataSeason = node.getAttribute('data-laf-season');
       var absolute = node.getAttribute('data-laf-absolute');
-      var item = metadataEpisode ? { episode: metadataEpisode,
-        season: metadataSeason !== null ? metadataSeason : null } :
-        absolute ? { absolute_episode: absolute } : label;
+      var sourceAdapter = node.getAttribute('data-laf-source');
+      var item = metadataEpisode || absolute ? { episode: metadataEpisode,
+        season: metadataSeason !== null ? metadataSeason : null, absolute_episode: absolute,
+        sourceAdapter: sourceAdapter || '' } : label;
       var n = typeof item === 'string' ? parseEpisode(item, state.guide.seasonOffsets) : indexFor(item, state.guide);
       if (n) parsed++;
+      else if (metadataEpisode || absolute) unknown++;
+      if (!sampleMapping && (metadataEpisode || absolute)) {
+        sampleMapping = (sourceAdapter || 'unknown') + ' S' + (metadataSeason || '?') +
+          ' E' + (metadataEpisode || absolute || '?') + ' → ' + (n || 'unknown');
+      }
       var found = n && state.guide.episodes[n] ? { number: n, type: state.guide.episodes[n] } : null;
       if (found) { matched++; statusTag(node, found); }
       else clearTag(node);
     }
     if (rows) {
-      diag.rows = rows; diag.parsed = parsed; diag.matched = matched;
-      diag.sampleTitle = sampleTitle;
+      diag.rows = rows; diag.parsed = parsed; diag.matched = matched; diag.unknown = unknown;
+      diag.sampleTitle = sampleTitle; diag.sampleMapping = sampleMapping;
     }
   }
   function scheduleScan() {
@@ -700,7 +747,7 @@
     var diag = state.diagnostics;
     var example = diag.sampleTitle || 'не захвачено';
     var lines = [
-      'Версия: 0.4.0',
+      'Версия: 0.4.1',
       'Карточка: ' + (state.movie ? (state.movie.name || state.movie.title || state.movie.original_name || 'без названия') + ' (TMDB ' + state.movie.id + ')' : 'не открывалась'),
       'Каталог: ' + (state.slug || 'не выбран'),
       'Состояние: ' + diag.phase,
@@ -714,7 +761,9 @@
       'Последний шаблон: ' + (diag.sampleTemplate || 'нет'),
       'Строк на последнем экране: ' + diag.rows,
       'Номеров распознано: ' + diag.parsed,
+      'Неизвестных соответствий: ' + diag.unknown,
       'Меток проставлено: ' + diag.matched,
+      'Пример сопоставления: ' + (diag.sampleMapping || 'нет'),
       'Пример названия: ' + example,
       'Ошибка: ' + (diag.error || 'нет')
     ];
@@ -734,18 +783,33 @@
     if (!Lampa.Template || typeof Lampa.Template.get !== 'function') return;
     if (Lampa.Template.get.lafWrapped) return;
     var originalGet = Lampa.Template.get;
-    var watched = { online_mod: true, online: true, lampac_prestige_full: true };
+    var adapters = { online_mod: 'online_mod', online: 'lampa_online', lampac_prestige_full: 'bwa' };
+    function sourceAdapter(templateName) {
+      var adapter = adapters[templateName];
+      if (adapter !== 'online_mod') return adapter;
+      var balancer = Lampa.Storage && Lampa.Storage.get ? Lampa.Storage.get('online_mod_balanser', '') : '';
+      var saveLast = Lampa.Storage && typeof Lampa.Storage.field === 'function' &&
+        Lampa.Storage.field('online_mod_save_last_balanser') === true;
+      if (saveLast && state.movie && state.movie.id != null && typeof Lampa.Storage.cache === 'function') {
+        var saved = Lampa.Storage.cache('online_mod_last_balanser', 200, {});
+        if (saved && saved[state.movie.id]) balancer = saved[state.movie.id];
+      }
+      balancer = String(balancer || '').toLowerCase().replace(/[^a-z0-9_.-]/g, '');
+      return 'online_mod:' + (balancer || 'unknown');
+    }
     function wrappedGet(templateName, payload) {
       var element = originalGet.apply(this, arguments);
-      if (!watched[templateName] || !payload || typeof payload !== 'object') return element;
+      if (!adapters[templateName] || !payload || typeof payload !== 'object') return element;
       if (payload.episode == null && payload.absolute_episode == null) return element;
       var node = element && (element.jquery ? element[0] : element);
       if (!node || typeof node.setAttribute !== 'function') return element;
       if (payload.episode != null) node.setAttribute('data-laf-episode', String(payload.episode));
       if (payload.season != null) node.setAttribute('data-laf-season', String(payload.season));
       if (payload.absolute_episode != null) node.setAttribute('data-laf-absolute', String(payload.absolute_episode));
+      var adapter = sourceAdapter(templateName);
+      node.setAttribute('data-laf-source', adapter);
       state.diagnostics.templateHits++;
-      state.diagnostics.sampleTemplate = templateName + ' S' + (payload.season == null ? '?' : payload.season) + ' E' + (payload.episode || '?');
+      state.diagnostics.sampleTemplate = adapter + ' S' + (payload.season == null ? '?' : payload.season) + ' E' + (payload.episode || payload.absolute_episode || '?');
       scheduleScan();
       return element;
     }
@@ -781,7 +845,10 @@
     });
     Lampa.Listener.follow('torrent_file', function (evt) {
       if (evt.type === 'render' && state.guide && getSetting('mark', true)) {
-        var item = evt.element || {};
+        var sourceItem = evt.element || {};
+        var item = {};
+        Object.keys(sourceItem).forEach(function (key) { item[key] = sourceItem[key]; });
+        item.sourceAdapter = sourceItem.sourceAdapter || 'torrent';
         var result = classify(item, state.guide);
         if (result) statusTag(evt.item, result);
       }
@@ -790,11 +857,11 @@
     Lampa.Listener.follow('activity', scheduleScan);
     observer = new MutationObserver(scheduleScan);
     if (document.body) observer.observe(document.body, { childList: true, subtree: true });
-    log('Loaded 0.4.0, marking only');
+    log('Loaded 0.4.1, marking only');
   }
   window.LampaAnimeFiller = { parseEpisode: parseEpisode, normalizeGuide: normalizeGuide,
     findGuide: findGuide, classify: classify, scan: scan, sha256Text: sha256Text,
-    loadBundleGuide: loadBundleGuide, state: state, version: '0.4.0' };
+    loadBundleGuide: loadBundleGuide, state: state, version: '0.4.1' };
   if (window.appready) init();
   else Lampa.Listener.follow('app', function (evt) { if (evt.type === 'ready') init(); });
 })();

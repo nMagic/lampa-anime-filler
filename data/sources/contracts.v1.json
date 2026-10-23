@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-10-23T00:00:00.000Z",
+  "semantics": {
+    "provider-seasonal": "Season and episode are converted through the named provider basis.",
+    "absolute-field": "The adapter exposes a verified regular absolute episode field."
+  },
+  "bindings": {}
+}

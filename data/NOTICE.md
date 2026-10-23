@@ -9,6 +9,36 @@
 
 The build pipeline normalizes the source classification into the Lampa Anime Filler schema and records the source revision in every title shard.
 
+## AniBridge Mappings
+
+- Source: <https://github.com/anibridge/anibridge-mappings>
+- Generated artifact: `mappings.min.json`
+- Schema / generated at: `3.0.3` / `2026-10-22T06:55:54Z`
+- SHA-256: `4e2dd941d4962c0997c30cdb69969eb2249276046f1359f6478348fe74f96cfc`
+- License: MIT
+
+`mappings.edits.yaml` is only an override layer and is not treated as the complete dataset. The pipeline consumes the full generated artifact, preserves direct descriptor/range evidence in the coverage report, rejects non-unique edges, and stores only the compact generated subset needed at runtime. The mutable `v3` URL is accepted only when its exact digest and metadata match this lock.
+
+`provenance.zip` (SHA-256 `2d03ba9166d78db205d6a81dac63a6becf2db50e836dda17463c5b5c81d93011`) was inspected to distinguish source ingestion, inference, and manual override events. It is not required by the normal compact rebuild.
+
+## anime-offline-database
+
+- Source: <https://github.com/cedya77/anime-offline-database>
+- Pinned release: `2026-43`
+- Artifact: `anime-offline-database-minified.json`
+- SHA-256: `1489835bcf9730e718a51c36f758d8bfe1ee2015a146a4449ba27c603aff9367`
+- Database license: Open Data Commons Open Database License 1.0
+- Contents license: Database Contents License 1.0
+
+The database supplies exact primary/alternative titles, TV media type, episode counts, years, and confirmed AniDB/AniList/MyAnimeList links. The generated 45-title identity subset and reports retain this attribution and are redistributed under the applicable database terms.
+
+## Playback source inventory evidence
+
+- Online_Mod registry: <https://github.com/nb557/plugins>, revision `9fbcac14ef8331ca8026a486e92c1a7f59220756`. No license file was present at the pinned revision; no source code is redistributed, only extracted registry facts, hashes and line references.
+- Lampac NextGen: <https://github.com/lampac-nextgen/lampac>, revision `402df720422648cbd3f232293746681688598b69`, GNU AGPL-3.0. The report contains extracted module names, manifest state and references to the common metadata path; it does not redistribute provider implementations.
+
+These sources establish implementation inventory and metadata flow only. They do not establish a TMDB/TVDB numbering contract by themselves.
+
 ## AniFillerPedia
 
 - Source: <https://github.com/Napandee/AniFillerPedia>

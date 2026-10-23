@@ -4,13 +4,278 @@
   "identity": {
     "mediaType": "series",
     "title": "Detective Conan",
-    "aliases": [],
-    "ids": {}
+    "aliases": [
+      "Meitantei Conan"
+    ],
+    "ids": {
+      "anidb": 266,
+      "anilist": 235,
+      "mal": 235,
+      "tmdbTv": 30983,
+      "tvdb": 72454
+    }
   },
   "numbering": {
     "scope": "regular",
     "basis": "absolute",
-    "startsAt": 1
+    "startsAt": 1,
+    "providerMappings": {
+      "tmdb": {
+        "mediaId": 30983,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 1209,
+              "absoluteStart": 1
+            }
+          ]
+        }
+      },
+      "tvdb": {
+        "mediaId": 72454,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 28,
+              "absoluteStart": 1
+            }
+          ],
+          "2": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 26,
+              "absoluteStart": 29
+            }
+          ],
+          "3": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 28,
+              "absoluteStart": 55
+            }
+          ],
+          "4": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 24,
+              "absoluteStart": 83
+            }
+          ],
+          "5": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 28,
+              "absoluteStart": 107
+            }
+          ],
+          "6": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 28,
+              "absoluteStart": 135
+            }
+          ],
+          "7": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 31,
+              "absoluteStart": 163
+            }
+          ],
+          "8": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 26,
+              "absoluteStart": 194
+            }
+          ],
+          "9": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 35,
+              "absoluteStart": 220
+            }
+          ],
+          "10": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 31,
+              "absoluteStart": 255
+            }
+          ],
+          "11": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 30,
+              "absoluteStart": 286
+            }
+          ],
+          "12": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 38,
+              "absoluteStart": 316
+            }
+          ],
+          "13": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 36,
+              "absoluteStart": 354
+            }
+          ],
+          "14": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 37,
+              "absoluteStart": 390
+            }
+          ],
+          "15": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 39,
+              "absoluteStart": 427
+            }
+          ],
+          "16": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 25,
+              "absoluteStart": 466
+            }
+          ],
+          "17": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 33,
+              "absoluteStart": 491
+            }
+          ],
+          "18": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 42,
+              "absoluteStart": 524
+            }
+          ],
+          "19": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 40,
+              "absoluteStart": 566
+            }
+          ],
+          "20": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 40,
+              "absoluteStart": 606
+            }
+          ],
+          "21": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 35,
+              "absoluteStart": 646
+            }
+          ],
+          "22": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 43,
+              "absoluteStart": 681
+            }
+          ],
+          "23": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 39,
+              "absoluteStart": 724
+            }
+          ],
+          "24": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 41,
+              "absoluteStart": 763
+            }
+          ],
+          "25": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 83,
+              "absoluteStart": 804
+            }
+          ],
+          "26": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 40,
+              "absoluteStart": 887
+            }
+          ],
+          "27": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 38,
+              "absoluteStart": 927
+            }
+          ],
+          "28": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 28,
+              "absoluteStart": 965
+            }
+          ],
+          "29": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 40,
+              "absoluteStart": 993
+            }
+          ],
+          "30": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 35,
+              "absoluteStart": 1033
+            }
+          ],
+          "31": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 41,
+              "absoluteStart": 1068
+            }
+          ],
+          "32": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 39,
+              "absoluteStart": 1109
+            }
+          ],
+          "33": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 39,
+              "absoluteStart": 1148
+            }
+          ],
+          "34": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 1,
+              "absoluteStart": 1187
+            }
+          ]
+        }
+      }
+    }
   },
   "classification": {
     "sourceId": "skipthefiller",

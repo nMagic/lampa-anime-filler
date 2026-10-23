@@ -4,8 +4,18 @@
   "identity": {
     "mediaType": "series",
     "title": "My Hero Academia",
-    "aliases": [],
-    "ids": {}
+    "aliases": [
+      "Boku no Hero Academia 3rd Season",
+      "Boku no Hero Academia 4th Season",
+      "Boku no Hero Academia 5th Season",
+      "Boku no Hero Academia 6th Season",
+      "Boku no Hero Academia 7th Season",
+      "Boku no Hero Academia: Final Season"
+    ],
+    "ids": {
+      "tmdbTv": 65930,
+      "tvdb": 305074
+    }
   },
   "numbering": {
     "scope": "regular",
