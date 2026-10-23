@@ -7,7 +7,8 @@
 - Добавлен воспроизводимый pipeline `scripts/build-mappings.mjs`: он проверяет SHA-256 полного generated artifact AniBridge и anime-offline-database, затем анализирует все 45 произведений без runtime-зависимости от этих больших баз.
 - Автоматически генерируются компактный mapping и отчёты [`reports/mapping-coverage.json`](reports/mapping-coverage.json) / [`reports/mapping-coverage.md`](reports/mapping-coverage.md). Текущий snapshot даёт 42 verified identities и 7330 из 9552 проверенных provider→absolute преобразований.
 - Episode Mapper разделяет `providerMappings` (TMDB/TVDB) и `sourceBindings` (конкретный адаптер/балансер). Наличие TMDB ID больше не означает, что любой Online_Mod payload использует TMDB-нумерацию.
-- Online_Mod строки помечаются точным adapter id вида `online_mod:videocdn`; для неизвестного или неподтверждённого балансера сезонный номер возвращает `unknown`. BWA принимается только с явным `absolute_episode`.
+- `scripts/build-source-inventory.mjs` извлекает реестр из закреплённых исходников и генерирует [`reports/source-coverage.md`](reports/source-coverage.md). В текущих ревизиях обнаружены 23 варианта Online_Mod, 71 provider-модуль Lampac NextGen и 8 закрытых endpoint’ов каталога расширений.
+- Online_Mod строки помечаются точным adapter id вида `online_mod:cdnvideohub`; для неизвестного или неподтверждённого балансера сезонный номер возвращает `unknown`. Даже поле `absolute_episode` от именованного адаптера принимается только при доказанном declarative contract.
 - Для Bleach подтверждены TMDB/TVDB преобразования только абсолютных эпизодов `1–366`. Предположение `S2 E1–42 → 367–408` удалено: диагностика из 372 строк не доказывает состав последних шести строк.
 - Удалено неявное правило One Piece `seasonOffsets: {"1": 0}`. Конфликтные, специальные и неполные диапазоны не угадываются.
 - Диагностика показывает балансер, число неизвестных соответствий и пример `source + season + episode → absolute/unknown`.
@@ -49,7 +50,7 @@
 2. Открыть One Piece (1999), перейти к сериям первого сезона (например, 54–60), попробовать Online_Mod и BWA.
 3. Вернуться в **Настройки → Anime Filler → Показать диагностику**, сделать фото отчёта.
 
-Online_Mod подтверждён на LG webOS для One Piece 52–58. Совместимость BWA пока основана на анализе шаблона и автоматическом тесте; её необходимо подтвердить на реальном устройстве.
+Online_Mod подтверждён на LG webOS для One Piece 52–58 в старом цикле проверки. Текущий аудит BWA/Lampac показал, что публичный `lampac_prestige_full` payload не передаёт `season/episode`; поэтому автоматический тест искусственного payload больше не считается доказательством совместимости.
 
 ## Установка в Lampa
 
@@ -102,10 +103,10 @@ https://nmagic.github.io/lampa-anime-filler/a.js
 ### Проверка Bleach на LG webOS
 
 1. Удалить прежнюю установку, добавить `https://nmagic.github.io/lampa-anime-filler/a.js` и полностью перезапустить Lampa.
-2. Открыть карточку **Bleach** с TMDB ID `30984`, выбрать в Online_Mod один конкретный балансер (сначала `videocdn`) и загрузить строки до E366.
-3. Открыть **Настройки → Anime Filler → Показать диагностику**. Зафиксировать точный шаблон вида `online_mod:videocdn S1 E366` и пример сопоставления. Пока для балансера нет проверенного `sourceBindings`, ожидаемый безопасный результат — `unknown`, без ложных меток.
-4. Повторить шаг 2 отдельно для `kodik` (или второго реально доступного балансера). Нельзя переносить результат `videocdn` на него.
-5. Открыть тот же сериал в **BWA**. При `absolute_episode=366` метка должна соответствовать классификации 366; при одном `season + episode` ожидается `bwa … → unknown`.
+2. Открыть карточку **Bleach** с TMDB ID `30984`, выбрать в Online_Mod один конкретный активный балансер (сначала `cdnvideohub`) и загрузить строки до E366.
+3. Открыть **Настройки → Anime Filler → Показать диагностику**. Зафиксировать точный шаблон вида `online_mod:cdnvideohub S1 E366` и пример сопоставления. Пока для балансера нет проверенного `sourceBindings`, ожидаемый безопасный результат — `unknown`, без ложных меток.
+4. Повторить шаг 2 отдельно для `kodik` и `anilibria2`. Нельзя переносить результат одного балансера на другой.
+5. Открыть тот же сериал в **BWA/Lampac**. Ожидаемый результат текущей интеграции — отсутствие структурированного номера у hook’а и отсутствие метки; зафиксировать payload/DOM для последующего доказательства контракта.
 6. Отдельно открыть TYBW/S2. Любые `S2 E1…42` должны оставаться `unknown`, пока payload не будет сопоставлен с воспроизводимым provider mapping.
 7. Сохранить фото диагностики для каждого источника с полями `Последний шаблон`, `Пример сопоставления`, `Номеров распознано`, `Неизвестных соответствий` и `Меток проставлено`.
 
@@ -141,11 +142,12 @@ node --check a.js
 node --test tests/*.test.cjs tests/*.test.mjs
 node tests/settings-smoke.cjs
 node scripts/build-mappings.mjs --verify
+node scripts/build-source-inventory.mjs --verify
 node scripts/build-data.mjs --check
 node scripts/build-data.mjs --verify data/generated/v1
 ```
 
-Тесты проверяют все 45 записей coverage report, пересчёт статистики, provenance и границы каждого range, SHA-256 и fallback Data Provider, Bleach/One Piece/Naruto/Naruto Shippuden, похожие и локализованные названия, TV/фильм, reset/continuous numbering, разные балансеры, specials/OVA, конфликтные и повреждённые данные и смену upstream mapping. Они **не являются тестами в Lampa, Android TV, webOS или Tizen**.
+Тесты проверяют все 45 записей mapping coverage и все 102 записи source inventory, пересчёт статистики, provenance и границы каждого range, обнаружение нового балансера, fail-closed контракты, SHA-256 и fallback Data Provider, Bleach/One Piece/Naruto/Naruto Shippuden, похожие и локализованные названия, TV/фильм, reset/continuous numbering, specials/OVA, конфликтные и повреждённые данные и смену upstream mapping. Они **не являются тестами в Lampa, Android TV, webOS или Tizen**.
 
 ## Существующие ограничения
 

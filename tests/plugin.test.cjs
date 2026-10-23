@@ -206,7 +206,9 @@ test('loads the committed One Piece bundle end to end', async () => {
   assert.equal(guide.episodes[58], 'filler');
   assert.ok(guide.providerMappings.tmdb);
   assert.equal(api.classify({ sourceAdapter: 'online_mod:videocdn', season: 1, episode: 55 }, guide), null);
-  assert.equal(api.classify({ sourceAdapter: 'provider-test', numberingBasis: 'tmdb', season: 1, episode: 55 }, guide).type, 'filler');
+  const fixtureBound = api.normalizeGuide({ episodes: guide.episodes, providerMappings: guide.providerMappings,
+    sourceBindings: { 'provider-test': 'tmdb' } }, 'test-only contract');
+  assert.equal(api.classify({ sourceAdapter: 'provider-test', season: 1, episode: 55 }, fixtureBound).type, 'filler');
 });
 
 test('resolves all curated anime identities by exact TMDB TV id', async () => {
@@ -337,7 +339,7 @@ test('maps only an explicit numbering basis and keeps adapters fail-closed', () 
       slug,
       episodes: shard.episodes,
       providerMappings: shard.numbering.providerMappings,
-      sourceBindings: shard.numbering.sourceBindings
+      sourceBindings: { ...(shard.numbering.sourceBindings || {}), 'provider-test': 'tmdb' }
     }, 'committed bundle');
   }
 
@@ -363,8 +365,13 @@ test('maps only an explicit numbering basis and keeps adapters fail-closed', () 
   assert.equal(api.classify({ sourceAdapter: 'provider-test', numberingBasis: 'tmdb', season: 20, episode: 414 }, shippuden).number, 414);
   assert.equal(api.classify({ sourceAdapter: 'provider-test', numberingBasis: 'tmdb', season: 20, episode: 1 }, shippuden), null);
   assert.equal(api.classify({ sourceAdapter: 'bwa', season: 1, episode: 366 }, bleach), null);
-  assert.equal(api.classify({ sourceAdapter: 'bwa', absolute_episode: 366 }, bleach).number, 366);
+  assert.equal(api.classify({ sourceAdapter: 'bwa', absolute_episode: 366 }, bleach), null,
+    'an adapter-labelled absolute field is untrusted without a source contract');
+  const absoluteBound = api.normalizeGuide({ episodes: { 366: 'Filler' }, sourceBindings: { bwa: 'absolute' } }, 'fixture');
+  assert.equal(api.classify({ sourceAdapter: 'bwa', absolute_episode: 366 }, absoluteBound).number, 366);
   assert.equal(api.classify({ sourceAdapter: 'unverified', season: 1, episode: 366 }, bleach), null);
+  assert.equal(api.classify({ sourceAdapter: 'unverified', numberingBasis: 'tmdb', season: 1, episode: 366 }, bleach), null,
+    'a source payload cannot authorize its own numbering basis');
 
   const bound = api.normalizeGuide({ episodes: { 53: 'Filler' }, providerMappings: naruto.providerMappings,
     sourceBindings: { 'online_mod:videocdn': 'tmdb' } }, 'fixture');

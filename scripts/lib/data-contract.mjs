@@ -166,7 +166,8 @@ function normalizeSourceBindings(value, providerMappings, context) {
   const result = {};
   for (const [adapter, basis] of Object.entries(value).sort(([a], [b]) => compareText(a, b))) {
     invariant(/^[a-z][a-z0-9_.:-]*$/.test(adapter), `${context}: invalid source adapter ${adapter}`);
-    invariant(typeof basis === 'string' && providerMappings && providerMappings[basis], `${context}: ${adapter} references unknown numbering basis ${basis}`);
+    invariant(typeof basis === 'string' && (basis === 'absolute' || providerMappings && providerMappings[basis]),
+      `${context}: ${adapter} references unknown numbering basis ${basis}`);
     result[adapter] = basis;
   }
   invariant(Object.keys(result).length, `${context}: sourceBindings must not be empty`);

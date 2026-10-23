@@ -18,6 +18,7 @@ const CATALOG_URL = `https://raw.githubusercontent.com/animecannonhunter-hash/an
 const COVERAGE_JSON = resolve(ROOT, 'reports/mapping-coverage.json');
 const COVERAGE_MD = resolve(ROOT, 'reports/mapping-coverage.md');
 const RUNTIME_MAPPING = resolve(ROOT, 'data/mappings/generated.v1.json');
+const SOURCE_CONTRACTS = resolve(ROOT, 'data/sources/contracts.v1.json');
 
 function usage() {
   return 'Usage: node scripts/build-mappings.mjs (--refresh | --verify) [--catalog-input FILE] [--aodb-input FILE] [--anibridge-input FILE]';
@@ -60,7 +61,22 @@ async function inputText(file, source) {
   return text;
 }
 
-function runtimeDocument(evidence) {
+function applySourceContracts(titles, contracts) {
+  const result = structuredClone(titles);
+  for (const identity of Object.values(result)) {
+    const bindings = { ...(identity.sourceBindings || {}) };
+    for (const [adapter, contract] of Object.entries(contracts.bindings || {})) {
+      if (contract.kind === 'absolute-field') bindings[adapter] = 'absolute';
+      else if (contract.kind === 'provider-seasonal' && identity.providerMappings && identity.providerMappings[contract.basis]) {
+        bindings[adapter] = contract.basis;
+      }
+    }
+    if (Object.keys(bindings).length) identity.sourceBindings = bindings;
+  }
+  return result;
+}
+
+function runtimeDocument(evidence, contracts) {
   return {
     schemaVersion: 1,
     revision: `generated-${evidence.generatedAt.replace(/[^0-9]/g, '').slice(0, 14)}`,
@@ -72,7 +88,7 @@ function runtimeDocument(evidence) {
       license: source.license,
       attribution: source.attribution
     })),
-    titles: runtimeIdentities(evidence)
+    titles: applySourceContracts(runtimeIdentities(evidence), contracts)
   };
 }
 
@@ -86,6 +102,7 @@ async function write(target, body) {
 }
 
 async function refresh(args) {
+  const contracts = JSON.parse(await readFile(SOURCE_CONTRACTS, 'utf8'));
   const catalogText = args.catalogInput ? await readFile(resolve(ROOT, args.catalogInput), 'utf8') : await fetchText(CATALOG_URL);
   const [databaseText, mappingsText] = await Promise.all([
     inputText(args.aodbInput, UPSTREAM.animeOfflineDatabase),
@@ -104,13 +121,14 @@ async function refresh(args) {
   await Promise.all([
     write(COVERAGE_JSON, json(evidence)),
     write(COVERAGE_MD, renderCoverageMarkdown(evidence)),
-    write(RUNTIME_MAPPING, json(runtimeDocument(evidence)))
+    write(RUNTIME_MAPPING, json(runtimeDocument(evidence, contracts)))
   ]);
   return evidence;
 }
 
 async function verify() {
   const evidence = JSON.parse(await readFile(COVERAGE_JSON, 'utf8'));
+  const contracts = JSON.parse(await readFile(SOURCE_CONTRACTS, 'utf8'));
   const index = JSON.parse(await readFile(resolve(ROOT, 'data/generated/v1/index.json'), 'utf8'));
   if (index.titles.length !== 45 || index.titles.reduce((sum, title) => sum + title.episodeCount, 0) !== 9552) {
     throw new Error('Generated bundle does not contain the full 45-title/9552-episode source catalog');
@@ -133,7 +151,7 @@ async function verify() {
   }
   const expected = new Map([
     [COVERAGE_MD, renderCoverageMarkdown(evidence)],
-    [RUNTIME_MAPPING, json(runtimeDocument(evidence))]
+    [RUNTIME_MAPPING, json(runtimeDocument(evidence, contracts))]
   ]);
   for (const [target, body] of expected) {
     if (await readFile(target, 'utf8') !== body) throw new Error(`Generated artifact is stale: ${target.slice(ROOT.length + 1)}`);

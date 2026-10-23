@@ -32,6 +32,13 @@ The build pipeline normalizes the source classification into the Lampa Anime Fil
 
 The database supplies exact primary/alternative titles, TV media type, episode counts, years, and confirmed AniDB/AniList/MyAnimeList links. The generated 45-title identity subset and reports retain this attribution and are redistributed under the applicable database terms.
 
+## Playback source inventory evidence
+
+- Online_Mod registry: <https://github.com/nb557/plugins>, revision `9fbcac14ef8331ca8026a486e92c1a7f59220756`. No license file was present at the pinned revision; no source code is redistributed, only extracted registry facts, hashes and line references.
+- Lampac NextGen: <https://github.com/lampac-nextgen/lampac>, revision `402df720422648cbd3f232293746681688598b69`, GNU AGPL-3.0. The report contains extracted module names, manifest state and references to the common metadata path; it does not redistribute provider implementations.
+
+These sources establish implementation inventory and metadata flow only. They do not establish a TMDB/TVDB numbering contract by themselves.
+
 ## AniFillerPedia
 
 - Source: <https://github.com/Napandee/AniFillerPedia>

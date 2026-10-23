@@ -28,7 +28,7 @@ Generated from pinned AniBridge and anime-offline-database artifacts at 2026-10-
 
 | Source and basis | Titles | Episodes |
 |---|---:|---:|
-| bwa:absolute_episode | 42 | 9180 |
+| bwa:absolute_episode | 0 | 0 |
 | online_mod:seasonal | 0 | 0 |
 | lampa_online:seasonal | 0 | 0 |
 | unknown:seasonal | 0 | 0 |
@@ -90,4 +90,3 @@ Generated from pinned AniBridge and anime-offline-database artifacts at 2026-10-
 - `node scripts/build-mappings.mjs --refresh` downloads and checksum-verifies the pinned upstream artifacts, analyzes every catalog entry, and rewrites generated evidence, runtime mappings, and both reports.
 - `node scripts/build-mappings.mjs --verify` regenerates the compact runtime mapping and reports from committed evidence and fails on omitted titles or stale artifacts.
 - The mutable AniBridge `v3` URL is never trusted by name alone: its SHA-256 and `$meta` values must match the lock.
-

@@ -39,6 +39,9 @@ jobs:
       - name: Verify full-catalog mapping coverage and generated reports
         run: node scripts/build-mappings.mjs --verify
 
+      - name: Verify complete playback-source inventory and coverage report
+        run: node scripts/build-source-inventory.mjs --verify
+
       - name: Validate pinned data source and committed bundle
         run: node scripts/build-data.mjs --verify data/generated/v1
 

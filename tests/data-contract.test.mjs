@@ -46,6 +46,11 @@ test('builds deterministic manifest, index and per-title shards', () => {
   assert.equal(first.shards[0].numbering.sourceBindings['online_mod:videocdn'], 'tmdb');
 });
 
+test('accepts a proved declarative absolute-field contract without a provider mapping', () => {
+  const shard = build(fixture, { naruto: { sourceBindings: { 'future-adapter': 'absolute' } } }).shards[0];
+  assert.equal(shard.numbering.sourceBindings['future-adapter'], 'absolute');
+});
+
 test('checksums cover the exact serialized shard and index bytes', () => {
   const bundle = build();
   const item = bundle.index.titles.find(entry => entry.slug === 'naruto');

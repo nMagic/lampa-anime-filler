@@ -40,7 +40,11 @@ Title-only candidates may be shown in diagnostics for manual confirmation but do
 
 ### Episode Mapper
 
-The mapper receives structured adapter context: source adapter id, canonical title id, numbering basis, season, episode, absolute episode and file range. It prefers a verified absolute number. Provider ranges (`tmdb`, `tvdb`) are independent from source bindings (`online_mod:videocdn`, `bwa`, and so on); a seasonal position is usable only when the exact adapter is bound to a proved basis. Runtime v0.4.1 captures the Online_Mod balancer and intentionally leaves its seasonal rows and BWA season/episode values unknown until each basis is device-verified. Ambiguity returns `unknown`.
+The mapper receives structured adapter context: source adapter id, canonical title id, numbering basis, season, episode, absolute episode and file range. Provider ranges (`tmdb`, `tvdb`) are independent from source bindings (`online_mod:cdnvideohub`, `bwa`, and so on); a seasonal position is usable only when the exact adapter is bound to a proved basis. An adapter-labelled absolute field is also rejected unless that exact adapter has an `absolute-field` contract. Runtime v0.4.1 captures the Online_Mod balancer and intentionally leaves its seasonal rows and BWA/Lampac values unknown until each basis and metadata surface are proved. Ambiguity returns `unknown`.
+
+### Source inventory and contracts
+
+The build-time source inventory parses the actual Online_Mod `Balancers` registry, every Lampac NextGen `Modules/Online*/manifest.json`, and online-playback endpoints from the Lampac extension catalog. It records pinned revisions, availability expressions, metadata exposure, evidence, status and per-source coverage. `contracts.v1.json` is generated only from evidence-backed entries. Its generic contract kinds are `provider-seasonal` and `absolute-field`, so adding a source that conforms to an existing contract does not add mapper code. An unclassified new entry changes the generated inventory and must be reviewed; it never inherits another source's basis.
 
 ### Lampa Adapter
 
@@ -56,4 +60,4 @@ The project is non-commercial. Non-commercial and ShareAlike datasets are accept
 
 ## Current implementation boundary
 
-Version 0.4.1 publishes and consumes the versioned SkipTheFiller bundle plus a generated compact cross-ID/provider mapping. The build pipeline checks the full 45-title catalog against pinned AniBridge and anime-offline-database artifacts and emits explicit partial/ambiguous outcomes. Resolver confidence is intentionally narrow: exact TMDB TV id, explicit user mapping, or a verified alias. Online_Mod rows carry a balancer-qualified adapter id; BWA is accepted only when it provides an explicit absolute episode. Automatic skipping is still absent, and LG webOS must be tested again after deployment; BWA, Tizen and Android TV remain separate device tests.
+Version 0.4.1 publishes and consumes the versioned SkipTheFiller bundle plus a generated compact cross-ID/provider mapping. The build pipeline checks the full 45-title catalog against pinned AniBridge and anime-offline-database artifacts and emits explicit partial/ambiguous outcomes. Resolver confidence is intentionally narrow: exact TMDB TV id, explicit user mapping, or a verified alias. The current source inventory contains 102 entries but zero evidence-backed runtime bindings: Online_Mod exposes provider-owned seasonal values without a proved external basis, while Lampac's public row template omits its internal season/episode. Automatic skipping is still absent, and LG webOS must be tested again after deployment; BWA, Tizen and Android TV remain separate device tests.

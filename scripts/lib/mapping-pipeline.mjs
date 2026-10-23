@@ -420,7 +420,10 @@ function resolveTitle(show, database, mappings) {
       reason: reason || null
     },
     sourceApplicability: {
-      'bwa:absolute_episode': choice.identityStatus === 'verified' && externalIds.tmdbTv.length === 1 ? show.episodes.length : 0,
+      // Mapper support for an explicit absolute_episode field is a capability,
+      // not proof that a real playback adapter exposes that field. Source
+      // coverage is generated separately from revision-pinned source code.
+      'bwa:absolute_episode': 0,
       'online_mod:seasonal': 0,
       'lampa_online:seasonal': 0,
       'unknown:seasonal': 0
@@ -533,6 +536,6 @@ export function renderCoverageMarkdown(evidence) {
   lines.push('', '## Reproduction', '',
     '- `node scripts/build-mappings.mjs --refresh` downloads and checksum-verifies the pinned upstream artifacts, analyzes every catalog entry, and rewrites generated evidence, runtime mappings, and both reports.',
     '- `node scripts/build-mappings.mjs --verify` regenerates the compact runtime mapping and reports from committed evidence and fails on omitted titles or stale artifacts.',
-    '- The mutable AniBridge `v3` URL is never trusted by name alone: its SHA-256 and `$meta` values must match the lock.', '');
+    '- The mutable AniBridge `v3` URL is never trusted by name alone: its SHA-256 and `$meta` values must match the lock.');
   return `${lines.join('\n')}\n`;
 }

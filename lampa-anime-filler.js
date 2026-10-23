@@ -577,13 +577,21 @@
   }
   function indexFor(item, guide) {
     if (!guide || !item) return null;
-    if (item.absolute_episode != null && /^\d+$/.test(String(item.absolute_episode))) return Number(item.absolute_episode);
+    if (item.absolute_episode != null && /^\d+$/.test(String(item.absolute_episode))) {
+      var absoluteAdapter = String(item.sourceAdapter || '').toLowerCase();
+      // An explicit field from an identified playback adapter is trusted only
+      // when the build-time source inventory proved that exact contract.
+      if (absoluteAdapter && (!guide.sourceBindings || guide.sourceBindings[absoluteAdapter] !== 'absolute')) return null;
+      return Number(item.absolute_episode);
+    }
     // Structured season+episode requires a rule for this exact adapter and title.
     if (item.episode != null && /^\d{1,4}$/.test(String(item.episode))) {
       var adapter = String(item.sourceAdapter || '').toLowerCase();
       if (adapter) {
         if (item.season == null || item.season === '' || !/^\d+$/.test(String(item.season))) return null;
-        var basis = String(item.numberingBasis || guide.sourceBindings && guide.sourceBindings[adapter] || '').toLowerCase();
+        // Payloads may describe their numbers, but they cannot authorize their
+        // own basis. Only the revision-pinned build-time source contract can.
+        var basis = String(guide.sourceBindings && guide.sourceBindings[adapter] || '').toLowerCase();
         var mapping = basis && guide.providerMappings && guide.providerMappings[basis];
         // Backward compatibility for already cached schema-v1 shards. New
         // bundles use providerMappings + an explicit sourceBindings entry.
