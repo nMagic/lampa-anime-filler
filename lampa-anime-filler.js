@@ -133,6 +133,8 @@
       // Season offsets are OPTIONAL and must be explicitly sourced/verified.
       seasonOffsets: input.seasonOffsets || null,
       sourceMappings: input.sourceMappings || null,
+      providerMappings: input.providerMappings || null,
+      sourceBindings: input.sourceBindings || null,
       source: input.source || source || 'Пользовательские данные' };
   }
   function isObject(value) { return value && typeof value === 'object' && !Array.isArray(value); }
@@ -357,7 +359,9 @@
     }
     var guide = normalizeGuide({ slug: item.slug, title: shard.identity.title, episodes: shard.episodes,
       seasonOffsets: shard.numbering.seasonOffsets || null,
-      sourceMappings: shard.numbering.sourceMappings || null }, 'Versioned bundle');
+      sourceMappings: shard.numbering.sourceMappings || null,
+      providerMappings: shard.numbering.providerMappings || null,
+      sourceBindings: shard.numbering.sourceBindings || null }, 'Versioned bundle');
     if (!guide) throw new Error('Bundle shard has no supported episodes');
     var source = candidate.manifest.sources.filter(function (entry) {
       return entry.id === shard.classification.sourceId;
@@ -579,9 +583,15 @@
       var adapter = String(item.sourceAdapter || '').toLowerCase();
       if (adapter) {
         if (item.season == null || item.season === '' || !/^\d+$/.test(String(item.season))) return null;
-        var mapping = guide.sourceMappings && guide.sourceMappings[adapter];
-        var ranges = mapping && mapping.system === 'tmdb' && mapping.seasons &&
-          mapping.seasons[String(item.season)];
+        var basis = String(item.numberingBasis || guide.sourceBindings && guide.sourceBindings[adapter] || '').toLowerCase();
+        var mapping = basis && guide.providerMappings && guide.providerMappings[basis];
+        // Backward compatibility for already cached schema-v1 shards. New
+        // bundles use providerMappings + an explicit sourceBindings entry.
+        if (!mapping && guide.sourceMappings && guide.sourceMappings[adapter]) {
+          mapping = guide.sourceMappings[adapter];
+          basis = mapping.system || '';
+        }
+        var ranges = mapping && basis && mapping.seasons && mapping.seasons[String(item.season)];
         if (!Array.isArray(ranges)) return null;
         var episode = Number(item.episode);
         var matches = ranges.filter(function (range) {
@@ -766,6 +776,19 @@
     if (Lampa.Template.get.lafWrapped) return;
     var originalGet = Lampa.Template.get;
     var adapters = { online_mod: 'online_mod', online: 'lampa_online', lampac_prestige_full: 'bwa' };
+    function sourceAdapter(templateName) {
+      var adapter = adapters[templateName];
+      if (adapter !== 'online_mod') return adapter;
+      var balancer = Lampa.Storage && Lampa.Storage.get ? Lampa.Storage.get('online_mod_balanser', '') : '';
+      var saveLast = Lampa.Storage && typeof Lampa.Storage.field === 'function' &&
+        Lampa.Storage.field('online_mod_save_last_balanser') === true;
+      if (saveLast && state.movie && state.movie.id != null && typeof Lampa.Storage.cache === 'function') {
+        var saved = Lampa.Storage.cache('online_mod_last_balanser', 200, {});
+        if (saved && saved[state.movie.id]) balancer = saved[state.movie.id];
+      }
+      balancer = String(balancer || '').toLowerCase().replace(/[^a-z0-9_.-]/g, '');
+      return 'online_mod:' + (balancer || 'unknown');
+    }
     function wrappedGet(templateName, payload) {
       var element = originalGet.apply(this, arguments);
       if (!adapters[templateName] || !payload || typeof payload !== 'object') return element;
@@ -775,9 +798,10 @@
       if (payload.episode != null) node.setAttribute('data-laf-episode', String(payload.episode));
       if (payload.season != null) node.setAttribute('data-laf-season', String(payload.season));
       if (payload.absolute_episode != null) node.setAttribute('data-laf-absolute', String(payload.absolute_episode));
-      node.setAttribute('data-laf-source', adapters[templateName]);
+      var adapter = sourceAdapter(templateName);
+      node.setAttribute('data-laf-source', adapter);
       state.diagnostics.templateHits++;
-      state.diagnostics.sampleTemplate = templateName + ' S' + (payload.season == null ? '?' : payload.season) + ' E' + (payload.episode || '?');
+      state.diagnostics.sampleTemplate = adapter + ' S' + (payload.season == null ? '?' : payload.season) + ' E' + (payload.episode || payload.absolute_episode || '?');
       scheduleScan();
       return element;
     }

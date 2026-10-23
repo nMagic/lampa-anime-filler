@@ -17,11 +17,11 @@ const source = {
 };
 
 function build(catalog = fixture, identities = {
-  naruto: { ids: { tmdbTv: 46260, mal: 20 }, aliases: ['Наруто'], sourceMappings: {
-    online_mod: { system: 'tmdb', seasons: {
+  naruto: { ids: { tmdbTv: 46260, mal: 20 }, aliases: ['Наруто'], providerMappings: {
+    tmdb: { mediaId: 46260, seasons: {
       1: [{ episodeStart: 1, episodeEnd: 3, absoluteStart: 1 }]
     } }
-  } }
+  }, sourceBindings: { 'online_mod:videocdn': 'tmdb' } }
 }) {
   return buildBundle(catalog, {
     source,
@@ -40,9 +40,10 @@ test('builds deterministic manifest, index and per-title shards', () => {
   assert.equal(first.index.titles[1].id, 'fixture:naruto-shippuden');
   assert.equal(first.shards[0].identity.ids.tmdbTv, 46260);
   assert.deepEqual(first.shards[0].identity.aliases, ['Наруто']);
-  assert.deepEqual(first.shards[0].numbering.sourceMappings.online_mod.seasons[1], [
+  assert.deepEqual(first.shards[0].numbering.providerMappings.tmdb.seasons[1], [
     { episodeStart: 1, episodeEnd: 3, absoluteStart: 1 }
   ]);
+  assert.equal(first.shards[0].numbering.sourceBindings['online_mod:videocdn'], 'tmdb');
 });
 
 test('checksums cover the exact serialized shard and index bytes', () => {
@@ -108,4 +109,10 @@ test('rejects non-series-safe input instead of guessing', () => {
       ]
     } }
   } } }), /ranges overlap/);
+  assert.throws(() => build(fixture, { naruto: { providerMappings: {
+    tmdb: { mediaId: 46260, seasons: { 1: [{ episodeStart: 1, episodeEnd: 4, absoluteStart: 1 }] } }
+  } } }), /maps past catalog episode/);
+  assert.throws(() => build(fixture, { naruto: { providerMappings: {
+    tmdb: { mediaId: 46260, seasons: { 1: [{ episodeStart: 1, episodeEnd: 3, absoluteStart: 1 }] } }
+  }, sourceBindings: { 'online_mod:videocdn': 'tvdb' } } }), /unknown numbering basis/);
 });

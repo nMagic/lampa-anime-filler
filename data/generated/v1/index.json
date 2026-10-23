@@ -5,8 +5,16 @@
       "id": "skipthefiller:ace-of-diamond",
       "slug": "ace-of-diamond",
       "title": "Ace of Diamond",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Diamond no Ace"
+      ],
+      "ids": {
+        "anidb": 9881,
+        "anilist": 18689,
+        "mal": 18689,
+        "tmdbTv": 60761,
+        "tvdb": 273005
+      },
       "episodeCount": 191,
       "counts": {
         "canon": 184,
@@ -16,14 +24,22 @@
         "mixed": 2
       },
       "shard": "titles/ace-of-diamond.json",
-      "sha256": "5e81a92dafd3897441d0cadcfe4c645c919453ca44ad2ef9624d9d2e9e1d8ee3"
+      "sha256": "2493bb2a0fa3e287651f6de538bfc11eda9fb8cb85112cf8d8a955d57da43950"
     },
     {
       "id": "skipthefiller:attack-on-titan",
       "slug": "attack-on-titan",
       "title": "Attack on Titan",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Shingeki no Kyojin"
+      ],
+      "ids": {
+        "anidb": 9541,
+        "anilist": 16498,
+        "mal": 16498,
+        "tmdbTv": 1429,
+        "tvdb": 267440
+      },
       "episodeCount": 94,
       "counts": {
         "canon": 88,
@@ -33,14 +49,20 @@
         "mixed": 6
       },
       "shard": "titles/attack-on-titan.json",
-      "sha256": "00f791f76856cdb2e2209f2adfb2ae31296e01930fffaeec8bd85cd57738cf8c"
+      "sha256": "be8254e6d69ef66c9c82315499eec33f2386c0e26a46a5626cc1e70efe9ccb06"
     },
     {
       "id": "skipthefiller:black-clover",
       "slug": "black-clover",
       "title": "Black Clover",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "anidb": 12665,
+        "anilist": 97940,
+        "mal": 34572,
+        "tmdbTv": 73223,
+        "tvdb": 331753
+      },
       "episodeCount": 170,
       "counts": {
         "canon": 145,
@@ -50,18 +72,19 @@
         "mixed": 7
       },
       "shard": "titles/black-clover.json",
-      "sha256": "cd43a67757c6e3bf132dd072646014adbabe79f1a5d0c4420f2623ec6efd72d9"
+      "sha256": "7b515041dffa8b76d8708cf66a80aa2ab2912c057ca53e9eb12337735673ce8b"
     },
     {
       "id": "skipthefiller:bleach",
       "slug": "bleach",
       "title": "Bleach",
-      "aliases": [
-        "Блич",
-        "ブリーチ"
-      ],
+      "aliases": [],
       "ids": {
-        "tmdbTv": 30984
+        "anidb": 2369,
+        "anilist": 269,
+        "mal": 269,
+        "tmdbTv": 30984,
+        "tvdb": 74796
       },
       "episodeCount": 408,
       "counts": {
@@ -72,14 +95,22 @@
         "mixed": 41
       },
       "shard": "titles/bleach.json",
-      "sha256": "e612090c323661a92050b4982c6ec45f91fde7d8672328cc547a2b4e1fbcd47e"
+      "sha256": "99ad35126ab91bb4b5c229a301a4b27410fcda5d5011f1e2b465e58b64f36cfe"
     },
     {
       "id": "skipthefiller:blue-exorcist",
       "slug": "blue-exorcist",
       "title": "Blue Exorcist",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Ao no Exorcist"
+      ],
+      "ids": {
+        "anidb": 8148,
+        "anilist": 9919,
+        "mal": 9919,
+        "tmdbTv": 38464,
+        "tvdb": 248035
+      },
       "episodeCount": 73,
       "counts": {
         "canon": 58,
@@ -89,14 +120,20 @@
         "mixed": 5
       },
       "shard": "titles/blue-exorcist.json",
-      "sha256": "9fb018f77f655c6a576a3cfc90ee37d6f30ab41ac13fe24c8724c67ba72223af"
+      "sha256": "a5cf25bd7982b5983674ddd7b58bea553eaf741c59305d1ae24750eddc2c11e0"
     },
     {
       "id": "skipthefiller:bobobo-bo-bobo",
       "slug": "bobobo-bo-bobo",
       "title": "Bobobo-bo Bo-bobo",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "anidb": 1180,
+        "anilist": 1050,
+        "mal": 1050,
+        "tmdbTv": 35236,
+        "tvdb": 79355
+      },
       "episodeCount": 76,
       "counts": {
         "canon": 76,
@@ -106,14 +143,20 @@
         "mixed": 0
       },
       "shard": "titles/bobobo-bo-bobo.json",
-      "sha256": "69279cbfec6333b3503c41b018eb8aa28aba1a7a5251a6ae41f633ffef60f9cc"
+      "sha256": "c8f29c2a795674c1e0f116bdfb683602435f8d88f0d8546588fe0cdd86205c56"
     },
     {
       "id": "skipthefiller:boruto",
       "slug": "boruto",
       "title": "Boruto: Naruto Next Generations",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "anidb": 12661,
+        "anilist": 97938,
+        "mal": 34566,
+        "tmdbTv": 70881,
+        "tvdb": 321285
+      },
       "episodeCount": 293,
       "counts": {
         "canon": 134,
@@ -123,14 +166,20 @@
         "mixed": 16
       },
       "shard": "titles/boruto.json",
-      "sha256": "a9e073d5cba62e0d0c2d1b15f820a4e63c854a4748fb4ce46451ca251fe8a13c"
+      "sha256": "75109e1224a9edbfeeaa5c8722a2151d85a779a356a7ff4925b467a9b63e0b24"
     },
     {
       "id": "skipthefiller:cardcaptor-sakura",
       "slug": "cardcaptor-sakura",
       "title": "Cardcaptor Sakura",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "anidb": 102,
+        "anilist": 232,
+        "mal": 232,
+        "tmdbTv": 35790,
+        "tvdb": 70668
+      },
       "episodeCount": 93,
       "counts": {
         "canon": 60,
@@ -140,14 +189,22 @@
         "mixed": 0
       },
       "shard": "titles/cardcaptor-sakura.json",
-      "sha256": "d60fb1f58c2b1c3d61a282babc397bb4c0d745826a9b342a10579c31e1df1502"
+      "sha256": "fd9b31001526bbce32dc228f99fd220d933398aa7714a9a98629d37ef0b30c2d"
     },
     {
       "id": "skipthefiller:certain-magical-index",
       "slug": "certain-magical-index",
       "title": "A Certain Magical Index",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Toaru Majutsu no Index"
+      ],
+      "ids": {
+        "anidb": 5975,
+        "anilist": 4654,
+        "mal": 4654,
+        "tmdbTv": 30980,
+        "tvdb": 83322
+      },
       "episodeCount": 74,
       "counts": {
         "canon": 74,
@@ -157,13 +214,15 @@
         "mixed": 0
       },
       "shard": "titles/certain-magical-index.json",
-      "sha256": "0a477c365b38b6adfa4acaa4199176be0448011d1da0bb961379696a88672a6d"
+      "sha256": "8d123e06d379ef63dc23a0a0f690f6a4f3b985e391d0230ea6917a28d108c7bd"
     },
     {
       "id": "skipthefiller:d-gray-man",
       "slug": "d-gray-man",
       "title": "D.Gray-man",
-      "aliases": [],
+      "aliases": [
+        "D.Gray-man Hallow"
+      ],
       "ids": {},
       "episodeCount": 116,
       "counts": {
@@ -174,14 +233,22 @@
         "mixed": 3
       },
       "shard": "titles/d-gray-man.json",
-      "sha256": "e5ae009164913e3ea3e52a0e37e3eeb70d8c3fcf26da645946b0ae853eccc886"
+      "sha256": "eac9b030e4387c45ad240cc1f5cd8f76cdb609e3fd2075ec52ada9044d4bc1ae"
     },
     {
       "id": "skipthefiller:detective-conan",
       "slug": "detective-conan",
       "title": "Detective Conan",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Meitantei Conan"
+      ],
+      "ids": {
+        "anidb": 266,
+        "anilist": 235,
+        "mal": 235,
+        "tmdbTv": 30983,
+        "tvdb": 72454
+      },
       "episodeCount": 1209,
       "counts": {
         "canon": 637,
@@ -191,7 +258,7 @@
         "mixed": 1
       },
       "shard": "titles/detective-conan.json",
-      "sha256": "32b53d48f2b3c5e479c113c2d845aa548526802ad672a455273eb5a995459dba"
+      "sha256": "0f7ea742a21c67ff6d64c4e1f2c7a4ef6a1951ee3f465ca697834ebbe6fed992"
     },
     {
       "id": "skipthefiller:digimon-adventure",
@@ -215,7 +282,13 @@
       "slug": "dr-stone",
       "title": "Dr. Stone",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "anidb": 14491,
+        "anilist": 105333,
+        "mal": 38691,
+        "tmdbTv": 86031,
+        "tvdb": 355774
+      },
       "episodeCount": 94,
       "counts": {
         "canon": 94,
@@ -225,14 +298,20 @@
         "mixed": 0
       },
       "shard": "titles/dr-stone.json",
-      "sha256": "d54cfd941359322f50390f2b335f9a32817f5a72cfa0fee41ea75aba0fa1123f"
+      "sha256": "f768f67d77676bb3868accae9a8903ff9f041cc52e1e1c485a1379f20fe6981d"
     },
     {
       "id": "skipthefiller:dragon-ball",
       "slug": "dragon-ball",
       "title": "Dragon Ball",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "anidb": 231,
+        "anilist": 223,
+        "mal": 223,
+        "tmdbTv": 12609,
+        "tvdb": 76666
+      },
       "episodeCount": 153,
       "counts": {
         "canon": 102,
@@ -242,14 +321,20 @@
         "mixed": 10
       },
       "shard": "titles/dragon-ball.json",
-      "sha256": "5a7a09afa52f607770351f584fa0a1a2d55da9e3d1ff060b54de0cfa1931a891"
+      "sha256": "756591f0afc9c3a1b215bd4188ed76c4f538b02e6ba32be2203399f29c239ad0"
     },
     {
       "id": "skipthefiller:dragon-ball-super",
       "slug": "dragon-ball-super",
       "title": "Dragon Ball Super",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "anidb": 11210,
+        "anilist": 21175,
+        "mal": 30694,
+        "tmdbTv": 62715,
+        "tvdb": 295068
+      },
       "episodeCount": 131,
       "counts": {
         "canon": 114,
@@ -259,14 +344,20 @@
         "mixed": 3
       },
       "shard": "titles/dragon-ball-super.json",
-      "sha256": "3a0cabf00b4d2f34011518ce0b9ab6562191f93e9395e5cd8471d72ebec87468"
+      "sha256": "6a571d5bfdd46d25b5dbdfa9360c5ae1348079c5cb63c96e95b6a0b28685f084"
     },
     {
       "id": "skipthefiller:dragon-ball-z",
       "slug": "dragon-ball-z",
       "title": "Dragon Ball Z",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "anidb": 1530,
+        "anilist": 813,
+        "mal": 813,
+        "tmdbTv": 12971,
+        "tvdb": 81472
+      },
       "episodeCount": 291,
       "counts": {
         "canon": 244,
@@ -276,14 +367,20 @@
         "mixed": 9
       },
       "shard": "titles/dragon-ball-z.json",
-      "sha256": "6107535a85613482bb0c0efa78b08b0494c8aacd02459f39b60d037f98ad437a"
+      "sha256": "bf5a4b109bfb875e97cf3d4ebc21fde9cb7402ca5621fcb4611b5b9cfd2e9ff1"
     },
     {
       "id": "skipthefiller:fairy-tail",
       "slug": "fairy-tail",
       "title": "Fairy Tail",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "anidb": 6662,
+        "anilist": 6702,
+        "mal": 6702,
+        "tmdbTv": 46261,
+        "tvdb": 114801
+      },
       "episodeCount": 328,
       "counts": {
         "canon": 256,
@@ -293,7 +390,7 @@
         "mixed": 11
       },
       "shard": "titles/fairy-tail.json",
-      "sha256": "3cec41a9aec418894e7562fca99bcc3c2bcc8cc576651a161b1ea0471c1de261"
+      "sha256": "0bccbb22496a31cdf602375c4f81aba99c71aaa4cb17ccb7bbb59827bdcbd6e7"
     },
     {
       "id": "skipthefiller:fist-of-the-north-star",
@@ -316,8 +413,16 @@
       "id": "skipthefiller:food-wars",
       "slug": "food-wars",
       "title": "Food Wars! Shokugeki no Soma",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Shokugeki no Souma"
+      ],
+      "ids": {
+        "anidb": 10901,
+        "anilist": 20923,
+        "mal": 28171,
+        "tmdbTv": 62273,
+        "tvdb": 289909
+      },
       "episodeCount": 86,
       "counts": {
         "canon": 86,
@@ -327,14 +432,21 @@
         "mixed": 0
       },
       "shard": "titles/food-wars.json",
-      "sha256": "4ed89c98d05c92369ed8cd11fedde3d5aa5ec7f54445347f91a7b260a792fd69"
+      "sha256": "6e62a98a525a1117c19f0970be14f32fb328257cfdaf058874ea1d4b9da52740"
     },
     {
       "id": "skipthefiller:gintama",
       "slug": "gintama",
       "title": "Gintama",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Gintama': Enchousen",
+        "Gintama. (2017)",
+        "Gintama. Shirogane no Tamashii-hen - Kouhan-sen"
+      ],
+      "ids": {
+        "tmdbTv": 57041,
+        "tvdb": 79895
+      },
       "episodeCount": 367,
       "counts": {
         "canon": 340,
@@ -344,14 +456,22 @@
         "mixed": 4
       },
       "shard": "titles/gintama.json",
-      "sha256": "611e967e83e1a1c2cb4a1b3dcda6d19e7f9527f8de27afa640204b47cffa9cf1"
+      "sha256": "8e7bde023ddb2841f09ef28d92459e933fc830d116b4e67e529cbd42aedd484d"
     },
     {
       "id": "skipthefiller:haikyuu",
       "slug": "haikyuu",
       "title": "Haikyu!!",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Haikyuu!!"
+      ],
+      "ids": {
+        "anidb": 10145,
+        "anilist": 20464,
+        "mal": 20583,
+        "tmdbTv": 60863,
+        "tvdb": 278157
+      },
       "episodeCount": 85,
       "counts": {
         "canon": 85,
@@ -361,14 +481,20 @@
         "mixed": 0
       },
       "shard": "titles/haikyuu.json",
-      "sha256": "e061a7a9a6ec1daf4b9bb8697c0526459822dd26960358301abaa70b6ebb6082"
+      "sha256": "5da9f4cd2aabd76fbc3ab7fdf00d30bd2349799719edf894cf39bb45e34dec00"
     },
     {
       "id": "skipthefiller:hajime-no-ippo",
       "slug": "hajime-no-ippo",
       "title": "Hajime no Ippo",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "anidb": 129,
+        "anilist": 263,
+        "mal": 263,
+        "tmdbTv": 42705,
+        "tvdb": 79685
+      },
       "episodeCount": 127,
       "counts": {
         "canon": 124,
@@ -378,14 +504,20 @@
         "mixed": 1
       },
       "shard": "titles/hajime-no-ippo.json",
-      "sha256": "d9b83c41260505e129fbf0dc82bab5955de3dfca0cb7825c866e2e77f6ae63cf"
+      "sha256": "abed565517ff49319115819f680025c7f7f2a5b99cb3f50da9621a5188549e41"
     },
     {
       "id": "skipthefiller:hunter-x-hunter",
       "slug": "hunter-x-hunter",
       "title": "Hunter x Hunter (2011)",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "anidb": 8550,
+        "anilist": 11061,
+        "mal": 11061,
+        "tmdbTv": 46298,
+        "tvdb": 252322
+      },
       "episodeCount": 148,
       "counts": {
         "canon": 145,
@@ -395,14 +527,20 @@
         "mixed": 1
       },
       "shard": "titles/hunter-x-hunter.json",
-      "sha256": "883e5f159e05ca6511d92fc562b77c973b7d7baa26a8b878852509099d234afb"
+      "sha256": "2120bb0e71c8bdd1cc40e710dbf32c7d0df089d3ffceed86a32c394fbf31d9bd"
     },
     {
       "id": "skipthefiller:inuyasha",
       "slug": "inuyasha",
       "title": "Inuyasha",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "anidb": 144,
+        "anilist": 249,
+        "mal": 249,
+        "tmdbTv": 35610,
+        "tvdb": 71361
+      },
       "episodeCount": 167,
       "counts": {
         "canon": 121,
@@ -412,14 +550,22 @@
         "mixed": 15
       },
       "shard": "titles/inuyasha.json",
-      "sha256": "57781991eb2dfa1406b2d562ece936e0c52ae444e1c27a55690b2f79cf2f1311"
+      "sha256": "e679f7c0925ee4fde3ea2b7b30ef318df505323cd6a9d1d09f647f23a238de7b"
     },
     {
       "id": "skipthefiller:jojos-bizarre-adventure",
       "slug": "jojos-bizarre-adventure",
       "title": "JoJo's Bizarre Adventure",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "JoJo no Kimyou na Bouken (TV)"
+      ],
+      "ids": {
+        "anidb": 9304,
+        "anilist": 14719,
+        "mal": 14719,
+        "tmdbTv": 45790,
+        "tvdb": 262954
+      },
       "episodeCount": 191,
       "counts": {
         "canon": 191,
@@ -429,14 +575,22 @@
         "mixed": 0
       },
       "shard": "titles/jojos-bizarre-adventure.json",
-      "sha256": "aef84e01e6cc4fb51366bfac36ad5b03ff3500c6578c8c63079dfec6c6595d44"
+      "sha256": "2f3dd9a130973522af437288c879ad897d7f30ec45d0e5957e4e920be5a5ad0e"
     },
     {
       "id": "skipthefiller:katekyo-hitman-reborn",
       "slug": "katekyo-hitman-reborn",
       "title": "Katekyo Hitman Reborn!",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Katekyou Hitman Reborn!"
+      ],
+      "ids": {
+        "anidb": 4747,
+        "anilist": 1604,
+        "mal": 1604,
+        "tmdbTv": 45857,
+        "tvdb": 80975
+      },
       "episodeCount": 203,
       "counts": {
         "canon": 165,
@@ -446,14 +600,20 @@
         "mixed": 8
       },
       "shard": "titles/katekyo-hitman-reborn.json",
-      "sha256": "4c7c46a139e531cb9a295812c5612bb50f551275690ed02fac5cf961757344a5"
+      "sha256": "27f451bac577dfdd73dffbc55645349e52eef83367f5705cf89bd710bfe1ba49"
     },
     {
       "id": "skipthefiller:kingdom",
       "slug": "kingdom",
       "title": "Kingdom",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "anidb": 8791,
+        "anilist": 12031,
+        "mal": 12031,
+        "tmdbTv": 46437,
+        "tvdb": 259635
+      },
       "episodeCount": 155,
       "counts": {
         "canon": 155,
@@ -463,14 +623,22 @@
         "mixed": 0
       },
       "shard": "titles/kingdom.json",
-      "sha256": "b14ba7c79b779e26c85eafa1e7787c96db70ea72dbef032ff08812b3763a1027"
+      "sha256": "39d6dce6098ad3e5f69b84ccadf1ce78ef96666d0dad2cc520bc4cc72b0c95cc"
     },
     {
       "id": "skipthefiller:kuroko-no-basketball",
       "slug": "kuroko-no-basketball",
       "title": "Kuroko's Basketball",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Kuroko no Basket"
+      ],
+      "ids": {
+        "anidb": 8681,
+        "anilist": 11771,
+        "mal": 11771,
+        "tmdbTv": 45783,
+        "tvdb": 257765
+      },
       "episodeCount": 75,
       "counts": {
         "canon": 75,
@@ -480,14 +648,20 @@
         "mixed": 0
       },
       "shard": "titles/kuroko-no-basketball.json",
-      "sha256": "51c7755960c509240ca85fd1667e4945fc8363efa1198b79ca0dfa39e5677ada"
+      "sha256": "6b69e0ca7a9f443bc42f0515ce5b548f570e8f30379fe99a910fb127e6b489c6"
     },
     {
       "id": "skipthefiller:monster",
       "slug": "monster",
       "title": "Monster",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "anidb": 1539,
+        "anilist": 19,
+        "mal": 19,
+        "tmdbTv": 30981,
+        "tvdb": 74599
+      },
       "episodeCount": 74,
       "counts": {
         "canon": 74,
@@ -497,14 +671,24 @@
         "mixed": 0
       },
       "shard": "titles/monster.json",
-      "sha256": "e1236a1674fa2e2ef4e1553a0de0b632c5095f51921aabe0bbece01a5e524a6e"
+      "sha256": "9a42b83de04a5aa6f19c507ab978d8ce2978833f793ea9435918636357fc0f7b"
     },
     {
       "id": "skipthefiller:my-hero-academia",
       "slug": "my-hero-academia",
       "title": "My Hero Academia",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Boku no Hero Academia 3rd Season",
+        "Boku no Hero Academia 4th Season",
+        "Boku no Hero Academia 5th Season",
+        "Boku no Hero Academia 6th Season",
+        "Boku no Hero Academia 7th Season",
+        "Boku no Hero Academia: Final Season"
+      ],
+      "ids": {
+        "tmdbTv": 65930,
+        "tvdb": 305074
+      },
       "episodeCount": 138,
       "counts": {
         "canon": 129,
@@ -514,18 +698,19 @@
         "mixed": 5
       },
       "shard": "titles/my-hero-academia.json",
-      "sha256": "2080811db209c86ec942075816d411077b779c962c4ddf6b595e2eb7d3109be6"
+      "sha256": "e1db4c6740ad8d0f425f22750229199f0d58a0d0dfcd0e044418f316bbf82fb7"
     },
     {
       "id": "skipthefiller:naruto",
       "slug": "naruto",
       "title": "Naruto",
-      "aliases": [
-        "NARUTO -ナルト-",
-        "Наруто"
-      ],
+      "aliases": [],
       "ids": {
-        "tmdbTv": 46260
+        "anidb": 239,
+        "anilist": 20,
+        "mal": 20,
+        "tmdbTv": 46260,
+        "tvdb": 78857
       },
       "episodeCount": 220,
       "counts": {
@@ -536,18 +721,21 @@
         "mixed": 56
       },
       "shard": "titles/naruto.json",
-      "sha256": "e0f853bca9ed399c55e02fa54d56d64563308b84f948f85c006ecdc6117096d9"
+      "sha256": "1fabb62d24598c246104efecb3aa21af5cab82dafe9374a22c5ad1c7e774e0e9"
     },
     {
       "id": "skipthefiller:naruto-shippuden",
       "slug": "naruto-shippuden",
       "title": "Naruto: Shippuden",
       "aliases": [
-        "NARUTO -ナルト- 疾風伝",
-        "Наруто: Ураганные хроники"
+        "Naruto: Shippuuden"
       ],
       "ids": {
-        "tmdbTv": 31910
+        "anidb": 4880,
+        "anilist": 1735,
+        "mal": 1735,
+        "tmdbTv": 31910,
+        "tvdb": 79824
       },
       "episodeCount": 500,
       "counts": {
@@ -558,18 +746,19 @@
         "mixed": 64
       },
       "shard": "titles/naruto-shippuden.json",
-      "sha256": "f2e3c1f8f0c6afc3e0ef7a99f3d1fe0145a6146c78aec3b44e6c1c9b30d596a8"
+      "sha256": "b743f691de75a3567a2e6555c98afcc7b7da4047874eeca7721203978f21bd1d"
     },
     {
       "id": "skipthefiller:one-piece",
       "slug": "one-piece",
       "title": "One Piece",
-      "aliases": [
-        "Ван-Пис",
-        "ワンピース"
-      ],
+      "aliases": [],
       "ids": {
-        "tmdbTv": 37854
+        "anidb": 69,
+        "anilist": 21,
+        "mal": 21,
+        "tmdbTv": 37854,
+        "tvdb": 81797
       },
       "episodeCount": 1173,
       "counts": {
@@ -580,14 +769,20 @@
         "mixed": 43
       },
       "shard": "titles/one-piece.json",
-      "sha256": "66d9e7578e050a403352cb86add0f40c559d27e125c0b6aca87d4ee79aeff778"
+      "sha256": "1417a2e98a29b7c965248cd980529d03aa119a0a7b6e1552889488fcc81c98b1"
     },
     {
       "id": "skipthefiller:pokemon",
       "slug": "pokemon",
       "title": "Pokémon",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "anidb": 230,
+        "anilist": 527,
+        "mal": 527,
+        "tmdbTv": 60572,
+        "tvdb": 76703
+      },
       "episodeCount": 276,
       "counts": {
         "canon": 44,
@@ -597,14 +792,18 @@
         "mixed": 107
       },
       "shard": "titles/pokemon.json",
-      "sha256": "f88318882e4dad2933acf00d434a7d5c76629ba1b93d353988d862581718e29c"
+      "sha256": "2dd438ad29f917f144be6445ca440c47e1902f067e192a64ed288dabfe87a628"
     },
     {
       "id": "skipthefiller:ranma-1-2",
       "slug": "ranma-1-2",
       "title": "Ranma ½",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "mal": 210,
+        "tmdbTv": 57706,
+        "tvdb": 76932
+      },
       "episodeCount": 161,
       "counts": {
         "canon": 77,
@@ -614,14 +813,22 @@
         "mixed": 13
       },
       "shard": "titles/ranma-1-2.json",
-      "sha256": "280e2c509b9a4e25473635d95874d3269a8e97744b8c8d9263aefae568759b07"
+      "sha256": "b88bb4aaf824771db0748200d126c7fbba6765ffdff4dde29719f525e614f443"
     },
     {
       "id": "skipthefiller:rurouni-kenshin",
       "slug": "rurouni-kenshin",
       "title": "Rurouni Kenshin",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Rurouni Kenshin: Meiji Kenkaku Romantan"
+      ],
+      "ids": {
+        "anidb": 90,
+        "anilist": 45,
+        "mal": 45,
+        "tmdbTv": 28136,
+        "tvdb": 70863
+      },
       "episodeCount": 95,
       "counts": {
         "canon": 51,
@@ -631,14 +838,22 @@
         "mixed": 1
       },
       "shard": "titles/rurouni-kenshin.json",
-      "sha256": "addc6906cc9ed6671caf7064f1ad34456d130ff9142de9108eae403942d33319"
+      "sha256": "8c7043120188a30555f01919692b5a037f5773ab3aaaa86de17fc6bcdfd05c10"
     },
     {
       "id": "skipthefiller:sailor-moon",
       "slug": "sailor-moon",
       "title": "Sailor Moon",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Bishoujo Senshi Sailor Moon"
+      ],
+      "ids": {
+        "anidb": 235,
+        "anilist": 530,
+        "mal": 530,
+        "tmdbTv": 3570,
+        "tvdb": 78500
+      },
       "episodeCount": 200,
       "counts": {
         "canon": 85,
@@ -648,14 +863,22 @@
         "mixed": 17
       },
       "shard": "titles/sailor-moon.json",
-      "sha256": "cc11044fdd7a6be59b1526ae95ed939a311688a99fb57124e4214ac8f285d0a2"
+      "sha256": "f2428c7b0d062576e7e9f97f6f884f311fe5f7399aa4b7fc729d390b33bbd6ba"
     },
     {
       "id": "skipthefiller:slime-isekai",
       "slug": "slime-isekai",
       "title": "That Time I Got Reincarnated as a Slime",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Tensei shitara Slime Datta Ken"
+      ],
+      "ids": {
+        "anidb": 13871,
+        "anilist": 101280,
+        "mal": 37430,
+        "tmdbTv": 82684,
+        "tvdb": 352408
+      },
       "episodeCount": 75,
       "counts": {
         "canon": 70,
@@ -665,14 +888,20 @@
         "mixed": 2
       },
       "shard": "titles/slime-isekai.json",
-      "sha256": "70182634c2a81881bd8713bf012440b4b507744433d7e9977efb03aa77a7baff"
+      "sha256": "b7509a435c7a4384df0e3c759218f0624d94fd3b2954f330469b2a51e79a3aa9"
     },
     {
       "id": "skipthefiller:sword-art-online",
       "slug": "sword-art-online",
       "title": "Sword Art Online",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "anidb": 8692,
+        "anilist": 11757,
+        "mal": 11757,
+        "tmdbTv": 45782,
+        "tvdb": 259640
+      },
       "episodeCount": 96,
       "counts": {
         "canon": 96,
@@ -682,14 +911,22 @@
         "mixed": 0
       },
       "shard": "titles/sword-art-online.json",
-      "sha256": "704b2406406be29bc8237137005eae300db1bba2116883ea1de97e9cab9879b2"
+      "sha256": "687257a1d5d58c57c5886a23ce2792562fdb923acb1409c1739411618311e63b"
     },
     {
       "id": "skipthefiller:the-seven-deadly-sins",
       "slug": "the-seven-deadly-sins",
       "title": "The Seven Deadly Sins",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Nanatsu no Taizai"
+      ],
+      "ids": {
+        "anidb": 10596,
+        "anilist": 20789,
+        "mal": 23755,
+        "tmdbTv": 62104,
+        "tvdb": 284131
+      },
       "episodeCount": 100,
       "counts": {
         "canon": 91,
@@ -699,14 +936,22 @@
         "mixed": 5
       },
       "shard": "titles/the-seven-deadly-sins.json",
-      "sha256": "170d0070efd0b9d04e1fcc9aaba8eb0ac69837b6129b427df2cd76d171ebbe75"
+      "sha256": "02717bc919d6a8482280131af5f79d7811d28fc999236bf16f8a678ca0e920fb"
     },
     {
       "id": "skipthefiller:urusei-yatsura-1981",
       "slug": "urusei-yatsura-1981",
       "title": "Urusei Yatsura (1981)",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Urusei Yatsura"
+      ],
+      "ids": {
+        "anidb": 377,
+        "anilist": 1293,
+        "mal": 1293,
+        "tmdbTv": 34163,
+        "tvdb": 75113
+      },
       "episodeCount": 167,
       "counts": {
         "canon": 134,
@@ -716,14 +961,20 @@
         "mixed": 13
       },
       "shard": "titles/urusei-yatsura-1981.json",
-      "sha256": "38b3c439ea5fa3c5bda5483a8fcd1510e6c8e8fd293cb8e4de7f09f23edd3a41"
+      "sha256": "c510bd476556e1a80f3623a53c3284c5377cadc43088ee24d39555177ec43b47"
     },
     {
       "id": "skipthefiller:yowamushi-pedal",
       "slug": "yowamushi-pedal",
       "title": "Yowamushi Pedal",
       "aliases": [],
-      "ids": {},
+      "ids": {
+        "anidb": 9591,
+        "anilist": 18179,
+        "mal": 18179,
+        "tmdbTv": 61441,
+        "tvdb": 272309
+      },
       "episodeCount": 137,
       "counts": {
         "canon": 135,
@@ -733,14 +984,22 @@
         "mixed": 2
       },
       "shard": "titles/yowamushi-pedal.json",
-      "sha256": "8e190812e011b2e7dbf2bd685a035d0f1e0bb87fbabdea0fdecd15a9fccaf87d"
+      "sha256": "29f3f1554a004acbe3774c4a01533aa9be428c0197805ab17aed14d5284da85f"
     },
     {
       "id": "skipthefiller:yu-gi-oh",
       "slug": "yu-gi-oh",
       "title": "Yu-Gi-Oh!",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Yu☆Gi☆Oh! Duel Monsters"
+      ],
+      "ids": {
+        "anidb": 2061,
+        "anilist": 481,
+        "mal": 481,
+        "tmdbTv": 902,
+        "tvdb": 76894
+      },
       "episodeCount": 224,
       "counts": {
         "canon": 152,
@@ -750,14 +1009,22 @@
         "mixed": 15
       },
       "shard": "titles/yu-gi-oh.json",
-      "sha256": "e696dab4730d841212cf55e4186ed26d6f7ffb5432df16e7e5239300055376ed"
+      "sha256": "6d9f65d1ac3c95deb7f08975865a8cccd87d4bbd8922f753cc1ed95596aaec78"
     },
     {
       "id": "skipthefiller:yu-yu-hakusho",
       "slug": "yu-yu-hakusho",
       "title": "Yu Yu Hakusho",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Yuu☆Yuu☆Hakusho"
+      ],
+      "ids": {
+        "anidb": 312,
+        "anilist": 392,
+        "mal": 392,
+        "tmdbTv": 30669,
+        "tvdb": 76665
+      },
       "episodeCount": 112,
       "counts": {
         "canon": 108,
@@ -767,14 +1034,22 @@
         "mixed": 4
       },
       "shard": "titles/yu-yu-hakusho.json",
-      "sha256": "81a18f81e37d0a8d215f155a79ce75c1b96953eb34fbb068f25e5f4614273a44"
+      "sha256": "df3e4145f7f75058de2bf69494c408cfb5a2ded6d4ed24040034c53538f50040"
     },
     {
       "id": "skipthefiller:zatch-bell",
       "slug": "zatch-bell",
       "title": "Zatch Bell!",
-      "aliases": [],
-      "ids": {},
+      "aliases": [
+        "Konjiki no Gash Bell!!"
+      ],
+      "ids": {
+        "anidb": 638,
+        "anilist": 250,
+        "mal": 250,
+        "tmdbTv": 35894,
+        "tvdb": 83421
+      },
       "episodeCount": 150,
       "counts": {
         "canon": 121,
@@ -784,7 +1059,7 @@
         "mixed": 0
       },
       "shard": "titles/zatch-bell.json",
-      "sha256": "da1bf3ad2689b514951c1d5d80170746503225e40574805d69d9fadbdd09e874"
+      "sha256": "d1c91a383186e9f6ba496a4d2a77c42240f33ee0befb7180f4591a1153cd8320"
     }
   ]
 }

@@ -5,20 +5,23 @@
     "mediaType": "series",
     "title": "Naruto: Shippuden",
     "aliases": [
-      "NARUTO -ナルト- 疾風伝",
-      "Наруто: Ураганные хроники"
+      "Naruto: Shippuuden"
     ],
     "ids": {
-      "tmdbTv": 31910
+      "anidb": 4880,
+      "anilist": 1735,
+      "mal": 1735,
+      "tmdbTv": 31910,
+      "tvdb": 79824
     }
   },
   "numbering": {
     "scope": "regular",
     "basis": "absolute",
     "startsAt": 1,
-    "sourceMappings": {
-      "online_mod": {
-        "system": "tmdb",
+    "providerMappings": {
+      "tmdb": {
+        "mediaId": 31910,
         "seasons": {
           "1": [
             {
@@ -158,6 +161,165 @@
               "episodeStart": 414,
               "episodeEnd": 500,
               "absoluteStart": 414
+            }
+          ]
+        }
+      },
+      "tvdb": {
+        "mediaId": 79824,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 32,
+              "absoluteStart": 1
+            }
+          ],
+          "2": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 21,
+              "absoluteStart": 33
+            }
+          ],
+          "3": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 18,
+              "absoluteStart": 54
+            }
+          ],
+          "4": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 17,
+              "absoluteStart": 72
+            }
+          ],
+          "5": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 24,
+              "absoluteStart": 89
+            }
+          ],
+          "6": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 31,
+              "absoluteStart": 113
+            }
+          ],
+          "7": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 8,
+              "absoluteStart": 144
+            }
+          ],
+          "8": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 24,
+              "absoluteStart": 152
+            }
+          ],
+          "9": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 21,
+              "absoluteStart": 176
+            }
+          ],
+          "10": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 26,
+              "absoluteStart": 197
+            }
+          ],
+          "11": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 20,
+              "absoluteStart": 223
+            }
+          ],
+          "12": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 18,
+              "absoluteStart": 243
+            }
+          ],
+          "13": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 35,
+              "absoluteStart": 261
+            }
+          ],
+          "14": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 25,
+              "absoluteStart": 296
+            }
+          ],
+          "15": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 28,
+              "absoluteStart": 321
+            }
+          ],
+          "16": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 13,
+              "absoluteStart": 349
+            }
+          ],
+          "17": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 32,
+              "absoluteStart": 362
+            }
+          ],
+          "18": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 20,
+              "absoluteStart": 394
+            }
+          ],
+          "19": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 18,
+              "absoluteStart": 414
+            }
+          ],
+          "20": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 19,
+              "absoluteStart": 432
+            }
+          ],
+          "21": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 8,
+              "absoluteStart": 451
+            }
+          ],
+          "22": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 42,
+              "absoluteStart": 459
             }
           ]
         }

@@ -40,7 +40,7 @@ Title-only candidates may be shown in diagnostics for manual confirmation but do
 
 ### Episode Mapper
 
-The mapper receives structured adapter context: source adapter id, canonical title id, numbering basis, season, episode, absolute episode and file range. It prefers a verified absolute number; seasonal positions require an explicit mapping for the exact adapter and title. Runtime v0.4.1 implements validated TMDB ranges for Online_Mod and intentionally leaves BWA season/episode values unknown until its numbering is device-verified. Mappings should pass a reverse/round-trip check when both directions exist. Ambiguity returns `unknown`.
+The mapper receives structured adapter context: source adapter id, canonical title id, numbering basis, season, episode, absolute episode and file range. It prefers a verified absolute number. Provider ranges (`tmdb`, `tvdb`) are independent from source bindings (`online_mod:videocdn`, `bwa`, and so on); a seasonal position is usable only when the exact adapter is bound to a proved basis. Runtime v0.4.1 captures the Online_Mod balancer and intentionally leaves its seasonal rows and BWA season/episode values unknown until each basis is device-verified. Ambiguity returns `unknown`.
 
 ### Lampa Adapter
 
@@ -56,4 +56,4 @@ The project is non-commercial. Non-commercial and ShareAlike datasets are accept
 
 ## Current implementation boundary
 
-Version 0.4.1 publishes and consumes the versioned SkipTheFiller bundle plus a pinned build-time TMDB mapping. Resolver confidence is intentionally narrow: exact TMDB TV id, explicit user mapping, or a verified alias. Online_Mod structured rows carry an adapter id into the source-aware mapper; BWA is accepted only when it provides an explicit absolute episode. Automatic skipping is still absent, and LG webOS must be tested again after deployment; BWA, Tizen and Android TV remain separate device tests.
+Version 0.4.1 publishes and consumes the versioned SkipTheFiller bundle plus a generated compact cross-ID/provider mapping. The build pipeline checks the full 45-title catalog against pinned AniBridge and anime-offline-database artifacts and emits explicit partial/ambiguous outcomes. Resolver confidence is intentionally narrow: exact TMDB TV id, explicit user mapping, or a verified alias. Online_Mod rows carry a balancer-qualified adapter id; BWA is accepted only when it provides an explicit absolute episode. Automatic skipping is still absent, and LG webOS must be tested again after deployment; BWA, Tizen and Android TV remain separate device tests.

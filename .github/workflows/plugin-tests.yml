@@ -8,6 +8,7 @@ on:
       - 'scripts/**'
       - 'schemas/**'
       - 'data/**'
+      - 'reports/**'
       - 'tests/**'
       - '.github/workflows/plugin-tests.yml'
   workflow_dispatch:
@@ -24,6 +25,9 @@ jobs:
         run: node --check lampa-anime-filler.js && node --check a.js
       - name: Run unit and integration tests
         run: node --test tests/*.test.cjs tests/*.test.mjs && node tests/settings-smoke.cjs
+
+      - name: Verify full-catalog mapping coverage and generated reports
+        run: node scripts/build-mappings.mjs --verify
 
       - name: Validate pinned data source and committed bundle
         run: node scripts/build-data.mjs --verify data/generated/v1

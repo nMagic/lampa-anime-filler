@@ -1,14 +1,16 @@
 # Lampa Anime Filler
 
-Экспериментальный плагин для Lampa: цветные метки эпизодов по классификации филлеров. **Версия 0.4.1 — только маркировка** (без автоматического пропуска). Source-aware mapper исправляет сопоставление Bleach в Online_Mod; релиз требует проверки на реальном LG webOS. BWA, Samsung Tizen и Android TV ещё требуют отдельной проверки.
+Экспериментальный плагин для Lampa: цветные метки эпизодов по классификации филлеров. **Версия 0.4.1 — только маркировка** (без автоматического пропуска). Build-time pipeline анализирует весь каталог, а source-aware mapper применяет сезонный номер только при доказанном numbering basis. LG webOS, BWA, Samsung Tizen и Android TV требуют device-проверки.
 
 ## Исправления версии 0.4.1
 
-- Добавлен build-time mapping с проверенными TMDB TV ID: Bleach `30984`, One Piece `37854`, Naruto `46260`, Naruto Shippuden `31910`.
-- Episode Mapper теперь получает идентификатор адаптера (`online_mod`, `bwa`, `lampa_online`, `torrent`) и применяет только диапазоны, подтверждённые для конкретного источника и аниме.
-- Удалено неявное правило One Piece `seasonOffsets: {"1": 0}`. Online_Mod использует явные TMDB-диапазоны; неподтверждённая сезонная нумерация BWA и других источников возвращает `unknown`.
-- Для Bleach поддержаны Online_Mod `S1 E1–366 → absolute 1–366` и `S2 E1–42 → absolute 367–408`. Диагностический сценарий из 372 строк покрыт регресс-тестом.
-- Диагностика показывает число неизвестных соответствий и пример `source + season + episode → absolute/unknown`.
+- Добавлен воспроизводимый pipeline `scripts/build-mappings.mjs`: он проверяет SHA-256 полного generated artifact AniBridge и anime-offline-database, затем анализирует все 45 произведений без runtime-зависимости от этих больших баз.
+- Автоматически генерируются компактный mapping и отчёты [`reports/mapping-coverage.json`](reports/mapping-coverage.json) / [`reports/mapping-coverage.md`](reports/mapping-coverage.md). Текущий snapshot даёт 42 verified identities и 7330 из 9552 проверенных provider→absolute преобразований.
+- Episode Mapper разделяет `providerMappings` (TMDB/TVDB) и `sourceBindings` (конкретный адаптер/балансер). Наличие TMDB ID больше не означает, что любой Online_Mod payload использует TMDB-нумерацию.
+- Online_Mod строки помечаются точным adapter id вида `online_mod:videocdn`; для неизвестного или неподтверждённого балансера сезонный номер возвращает `unknown`. BWA принимается только с явным `absolute_episode`.
+- Для Bleach подтверждены TMDB/TVDB преобразования только абсолютных эпизодов `1–366`. Предположение `S2 E1–42 → 367–408` удалено: диагностика из 372 строк не доказывает состав последних шести строк.
+- Удалено неявное правило One Piece `seasonOffsets: {"1": 0}`. Конфликтные, специальные и неполные диапазоны не угадываются.
+- Диагностика показывает балансер, число неизвестных соответствий и пример `source + season + episode → absolute/unknown`.
 - Playback Controller, плейлист и автовоспроизведение не изменялись.
 
 ## Изменения версии 0.4.0
@@ -100,11 +102,12 @@ https://nmagic.github.io/lampa-anime-filler/a.js
 ### Проверка Bleach на LG webOS
 
 1. Удалить прежнюю установку, добавить `https://nmagic.github.io/lampa-anime-filler/a.js` и полностью перезапустить Lampa.
-2. Открыть карточку **Bleach** с TMDB ID `30984`, затем список эпизодов в **Online_Mod** и дождаться загрузки строк до эпизода 366.
-3. Открыть **Настройки → Anime Filler → Показать диагностику**. Ожидаются версия `0.4.1`, сопоставление `TMDB ID`, шаблон `online_mod S1 E366`, пример `online_mod S1 E366 → 366`; число распознанных номеров должно быть близко числу загруженных структурированных строк, а не прежним `7`.
-4. Проверить визуально известные серии разных типов в начале, середине и конце S1; если Online_Mod показывает второй сезон, проверить `S2 E1 → 367` и последний доступный эпизод не выше `S2 E42 → 408`.
-5. Открыть тот же сериал в **BWA**. Если BWA отдаёт `absolute_episode`, метки допустимы; если доступны только `season + episode`, диагностика должна показать `bwa … → unknown`, а неверных меток быть не должно.
-6. Сделать фото диагностики Online_Mod и BWA с видимыми строками `Пример сопоставления`, `Номеров распознано`, `Неизвестных соответствий` и `Меток проставлено`.
+2. Открыть карточку **Bleach** с TMDB ID `30984`, выбрать в Online_Mod один конкретный балансер (сначала `videocdn`) и загрузить строки до E366.
+3. Открыть **Настройки → Anime Filler → Показать диагностику**. Зафиксировать точный шаблон вида `online_mod:videocdn S1 E366` и пример сопоставления. Пока для балансера нет проверенного `sourceBindings`, ожидаемый безопасный результат — `unknown`, без ложных меток.
+4. Повторить шаг 2 отдельно для `kodik` (или второго реально доступного балансера). Нельзя переносить результат `videocdn` на него.
+5. Открыть тот же сериал в **BWA**. При `absolute_episode=366` метка должна соответствовать классификации 366; при одном `season + episode` ожидается `bwa … → unknown`.
+6. Отдельно открыть TYBW/S2. Любые `S2 E1…42` должны оставаться `unknown`, пока payload не будет сопоставлен с воспроизводимым provider mapping.
+7. Сохранить фото диагностики для каждого источника с полями `Последний шаблон`, `Пример сопоставления`, `Номеров распознано`, `Неизвестных соответствий` и `Меток проставлено`.
 
 **Важно:** маркировка внутри Online_Mod, BWA, Showy, MODS и прочих модифицированных экранов **не гарантируется** до проверки их фактической разметки. Для исправления понадобится название сборки/плагина и скриншот списка эпизодов или его HTML-структура.
 
@@ -137,16 +140,17 @@ node --check lampa-anime-filler.js
 node --check a.js
 node --test tests/*.test.cjs tests/*.test.mjs
 node tests/settings-smoke.cjs
+node scripts/build-mappings.mjs --verify
 node scripts/build-data.mjs --check
 node scripts/build-data.mjs --verify data/generated/v1
 ```
 
-Тесты проверяют SHA-256 и fallback Data Provider, сопоставление One Piece/Naruto/Naruto Shippuden, абсолютную и сезонную нумерацию, отказ от неоднозначных диапазонов/OVA, структурированные данные Online_Mod/BWA, торрент-файлы, сетевые ошибки и защиту от запоздалого ответа предыдущей карточки. Они **не являются тестами в Lampa, Android TV, webOS или Tizen**.
+Тесты проверяют все 45 записей coverage report, пересчёт статистики, provenance и границы каждого range, SHA-256 и fallback Data Provider, Bleach/One Piece/Naruto/Naruto Shippuden, похожие и локализованные названия, TV/фильм, reset/continuous numbering, разные балансеры, specials/OVA, конфликтные и повреждённые данные и смену upstream mapping. Они **не являются тестами в Lampa, Android TV, webOS или Tizen**.
 
 ## Существующие ограничения
 
 - Проверены лишь часть распространённых DOM-классов, не все интерфейсы внешних онлайн-плагинов.
-- Автоматического угадывания соответствия сезонов нет: поддерживаются только проверенные build-time диапазоны для конкретного источника.
+- Автоматического угадывания соответствия сезонов нет: provider mapping применяется к источнику только через проверенный `sourceBindings` для точного балансера.
 - Мультисерийные файлы, сезонные архивы без ясных эпизодов и неоднозначные названия намеренно не маркируются.
 - Плагину необходим доступ к источнику JSON с устройства (сетевые ограничения на конкретном ТВ могут помешать).
 - Для реального испытания нужен HTTPS URL на JS. Архив содержит только исходники.
@@ -155,7 +159,8 @@ node scripts/build-data.mjs --verify data/generated/v1
 
 - AnimeFillerList: https://www.animefillerlist.com/
 - Отдельный резервный датасет: https://github.com/animecannonhunter-hash/anime-filler-list-data (CC BY 4.0).
-- TMDB/AniList season mapping: https://github.com/anibridge/anibridge-mappings (MIT, pinned revision in `data/NOTICE.md`).
+- Cross-ID и episode mapping: https://github.com/anibridge/anibridge-mappings (MIT, pinned generated artifact + SHA-256 in `data/NOTICE.md`).
+- Identity metadata: https://github.com/cedya77/anime-offline-database (ODbL 1.0 / DbCL 1.0, pinned release in `data/NOTICE.md`).
 - Lampa: https://github.com/yumata/lampa-source
 
 У самого плагина пока нет файла `LICENSE`; до приёма внешних вкладов и широкого распространения необходимо выбрать и добавить лицензию проекта.

@@ -124,6 +124,55 @@ function normalizeSourceMappings(value, episodeCount, context) {
   return result;
 }
 
+function normalizeProviderMappings(value, episodeCount, context) {
+  if (value === undefined) return undefined;
+  invariant(isPlainObject(value), `${context}: providerMappings must be an object`);
+  const result = {};
+  for (const [basis, mapping] of Object.entries(value).sort(([a], [b]) => compareText(a, b))) {
+    invariant(/^[a-z][a-z0-9_]*$/.test(basis), `${context}: invalid numbering basis ${basis}`);
+    invariant(isPlainObject(mapping), `${context}: ${basis} provider mapping must be an object`);
+    invariant((Number.isSafeInteger(mapping.mediaId) && mapping.mediaId > 0) ||
+      (typeof mapping.mediaId === 'string' && mapping.mediaId.trim()), `${context}: ${basis} mediaId is invalid`);
+    invariant(isPlainObject(mapping.seasons), `${context}: ${basis} seasons must be an object`);
+    const seasons = {};
+    for (const [season, inputRanges] of Object.entries(mapping.seasons).sort(([a], [b]) => Number(a) - Number(b))) {
+      invariant(/^[1-9][0-9]*$/.test(season), `${context}: ${basis} has invalid season ${season}`);
+      invariant(Array.isArray(inputRanges) && inputRanges.length, `${context}: ${basis} season ${season} must contain ranges`);
+      const ranges = inputRanges.map((range, index) => {
+        const rangeContext = `${context}: ${basis} season ${season} range ${index + 1}`;
+        invariant(isPlainObject(range), `${rangeContext} must be an object`);
+        invariant(Object.keys(range).sort().join(',') === 'absoluteStart,episodeEnd,episodeStart', `${rangeContext} has unsupported fields`);
+        invariant(Number.isSafeInteger(range.episodeStart) && range.episodeStart > 0, `${rangeContext} episodeStart must be positive`);
+        invariant(Number.isSafeInteger(range.episodeEnd) && range.episodeEnd >= range.episodeStart, `${rangeContext} episodeEnd is invalid`);
+        invariant(Number.isSafeInteger(range.absoluteStart) && range.absoluteStart > 0, `${rangeContext} absoluteStart must be positive`);
+        invariant(range.absoluteStart + range.episodeEnd - range.episodeStart <= episodeCount, `${rangeContext} maps past catalog episode ${episodeCount}`);
+        return { episodeStart: range.episodeStart, episodeEnd: range.episodeEnd, absoluteStart: range.absoluteStart };
+      }).sort((a, b) => a.episodeStart - b.episodeStart);
+      for (let index = 1; index < ranges.length; index += 1) {
+        invariant(ranges[index - 1].episodeEnd < ranges[index].episodeStart, `${context}: ${basis} season ${season} ranges overlap`);
+      }
+      seasons[season] = ranges;
+    }
+    invariant(Object.keys(seasons).length, `${context}: ${basis} seasons must not be empty`);
+    result[basis] = { mediaId: mapping.mediaId, seasons };
+  }
+  invariant(Object.keys(result).length, `${context}: providerMappings must not be empty`);
+  return result;
+}
+
+function normalizeSourceBindings(value, providerMappings, context) {
+  if (value === undefined) return undefined;
+  invariant(isPlainObject(value), `${context}: sourceBindings must be an object`);
+  const result = {};
+  for (const [adapter, basis] of Object.entries(value).sort(([a], [b]) => compareText(a, b))) {
+    invariant(/^[a-z][a-z0-9_.:-]*$/.test(adapter), `${context}: invalid source adapter ${adapter}`);
+    invariant(typeof basis === 'string' && providerMappings && providerMappings[basis], `${context}: ${adapter} references unknown numbering basis ${basis}`);
+    result[adapter] = basis;
+  }
+  invariant(Object.keys(result).length, `${context}: sourceBindings must not be empty`);
+  return result;
+}
+
 function normalizeHttpsUrl(value, context) {
   let url;
   try { url = new URL(String(value || '')); }
@@ -166,6 +215,8 @@ function normalizeShow(show, source, identity = {}) {
   const aliases = normalizeAliases(identity.aliases, title, context);
   const seasonOffsets = normalizeSeasonOffsets(identity.seasonOffsets, context);
   const sourceMappings = normalizeSourceMappings(identity.sourceMappings, numbers.length, context);
+  const providerMappings = normalizeProviderMappings(identity.providerMappings, numbers.length, context);
+  const sourceBindings = normalizeSourceBindings(identity.sourceBindings, providerMappings, context);
 
   const numbering = {
     scope: 'regular',
@@ -174,6 +225,8 @@ function normalizeShow(show, source, identity = {}) {
   };
   if (seasonOffsets) numbering.seasonOffsets = seasonOffsets;
   if (sourceMappings) numbering.sourceMappings = sourceMappings;
+  if (providerMappings) numbering.providerMappings = providerMappings;
+  if (sourceBindings) numbering.sourceBindings = sourceBindings;
 
   return {
     schemaVersion: SCHEMA_VERSION,

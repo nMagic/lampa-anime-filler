@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "buildId": "skipthefiller-a7b28ff590b7-anibridge-b9e7e129b21d",
+  "buildId": "skipthefiller-a7b28ff590b7-anibridge-schema-3.0.3-anime-offline-database-2026-43",
   "generatedAt": "2026-10-22T00:00:00.000Z",
   "sources": [
     {
@@ -13,16 +13,24 @@
     },
     {
       "id": "anibridge",
-      "name": "AniBridge Mappings",
+      "name": "AniBridge generated mappings",
       "url": "https://github.com/anibridge/anibridge-mappings",
-      "revision": "b9e7e129b21db37e0279c6458ac7d191f4ec1663",
+      "revision": "schema-3.0.3-generated-2026-10-22T06:55:54Z",
       "license": "MIT",
-      "attribution": "TMDB season mappings derived from AniBridge mappings.edits.yaml; Bleach identity and Online_Mod S1 behavior verified against the supplied LG webOS diagnostic"
+      "attribution": "Generated AniBridge v3 mappings; exact artifact digest is pinned because the v3 release tag is mutable."
+    },
+    {
+      "id": "anime-offline-database",
+      "name": "anime-offline-database",
+      "url": "https://github.com/cedya77/anime-offline-database",
+      "revision": "2026-43",
+      "license": "ODbL-1.0 / DbCL-1.0",
+      "attribution": "Metadata and cross-database identifiers from anime-offline-database release 2026-43."
     }
   ],
   "catalog": {
     "index": "index.json",
-    "sha256": "c10d3359e3450c0365f2c5b07c7b395c2f90536ede52d405795311d2b8b08a15",
+    "sha256": "56005adaeb00a1905681be987bfd018557f6166820bf730870b63da3b2e09e68",
     "titleCount": 45,
     "episodeCount": 9552,
     "shardPattern": "titles/{slug}.json"

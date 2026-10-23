@@ -109,7 +109,7 @@ new Promise(resolve => setImmediate(resolve)).then(() => {
   const returned = context.Lampa.Template.get('online_mod', {episode:55,season:1});
   assert.equal(returned[0].getAttribute('data-laf-episode'), '55');
   assert.equal(returned[0].getAttribute('data-laf-season'), '1');
-  assert.equal(returned[0].getAttribute('data-laf-source'), 'online_mod');
+  assert.equal(returned[0].getAttribute('data-laf-source'), 'online_mod:unknown');
   const bwa = context.Lampa.Template.get('lampac_prestige_full', {episode:55,season:1});
   assert.equal(bwa[0].getAttribute('data-laf-episode'), '55');
   assert.equal(bwa[0].getAttribute('data-laf-source'), 'bwa');

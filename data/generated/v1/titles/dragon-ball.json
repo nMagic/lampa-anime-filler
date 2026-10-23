@@ -5,12 +5,79 @@
     "mediaType": "series",
     "title": "Dragon Ball",
     "aliases": [],
-    "ids": {}
+    "ids": {
+      "anidb": 231,
+      "anilist": 223,
+      "mal": 223,
+      "tmdbTv": 12609,
+      "tvdb": 76666
+    }
   },
   "numbering": {
     "scope": "regular",
     "basis": "absolute",
-    "startsAt": 1
+    "startsAt": 1,
+    "providerMappings": {
+      "tmdb": {
+        "mediaId": 12609,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 153,
+              "absoluteStart": 1
+            }
+          ]
+        }
+      },
+      "tvdb": {
+        "mediaId": 76666,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 13,
+              "absoluteStart": 1
+            }
+          ],
+          "2": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 15,
+              "absoluteStart": 14
+            }
+          ],
+          "3": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 40,
+              "absoluteStart": 29
+            }
+          ],
+          "4": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 33,
+              "absoluteStart": 69
+            }
+          ],
+          "5": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 31,
+              "absoluteStart": 102
+            }
+          ],
+          "6": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 21,
+              "absoluteStart": 133
+            }
+          ]
+        }
+      }
+    }
   },
   "classification": {
     "sourceId": "skipthefiller",

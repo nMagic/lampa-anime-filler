@@ -4,13 +4,47 @@
   "identity": {
     "mediaType": "series",
     "title": "Ace of Diamond",
-    "aliases": [],
-    "ids": {}
+    "aliases": [
+      "Diamond no Ace"
+    ],
+    "ids": {
+      "anidb": 9881,
+      "anilist": 18689,
+      "mal": 18689,
+      "tmdbTv": 60761,
+      "tvdb": 273005
+    }
   },
   "numbering": {
     "scope": "regular",
     "basis": "absolute",
-    "startsAt": 1
+    "startsAt": 1,
+    "providerMappings": {
+      "tmdb": {
+        "mediaId": 60761,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 75,
+              "absoluteStart": 1
+            }
+          ]
+        }
+      },
+      "tvdb": {
+        "mediaId": 273005,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 75,
+              "absoluteStart": 1
+            }
+          ]
+        }
+      }
+    }
   },
   "classification": {
     "sourceId": "skipthefiller",

@@ -4,13 +4,47 @@
   "identity": {
     "mediaType": "series",
     "title": "Attack on Titan",
-    "aliases": [],
-    "ids": {}
+    "aliases": [
+      "Shingeki no Kyojin"
+    ],
+    "ids": {
+      "anidb": 9541,
+      "anilist": 16498,
+      "mal": 16498,
+      "tmdbTv": 1429,
+      "tvdb": 267440
+    }
   },
   "numbering": {
     "scope": "regular",
     "basis": "absolute",
-    "startsAt": 1
+    "startsAt": 1,
+    "providerMappings": {
+      "tmdb": {
+        "mediaId": 1429,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 25,
+              "absoluteStart": 1
+            }
+          ]
+        }
+      },
+      "tvdb": {
+        "mediaId": 267440,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 25,
+              "absoluteStart": 1
+            }
+          ]
+        }
+      }
+    }
   },
   "classification": {
     "sourceId": "skipthefiller",

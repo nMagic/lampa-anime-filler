@@ -5,12 +5,84 @@
     "mediaType": "series",
     "title": "Ranma ½",
     "aliases": [],
-    "ids": {}
+    "ids": {
+      "mal": 210,
+      "tmdbTv": 57706,
+      "tvdb": 76932
+    }
   },
   "numbering": {
     "scope": "regular",
     "basis": "absolute",
-    "startsAt": 1
+    "startsAt": 1,
+    "providerMappings": {
+      "tmdb": {
+        "mediaId": 57706,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 161,
+              "absoluteStart": 1
+            }
+          ]
+        }
+      },
+      "tvdb": {
+        "mediaId": 76932,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 18,
+              "absoluteStart": 1
+            }
+          ],
+          "2": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 22,
+              "absoluteStart": 19
+            }
+          ],
+          "3": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 24,
+              "absoluteStart": 41
+            }
+          ],
+          "4": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 24,
+              "absoluteStart": 65
+            }
+          ],
+          "5": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 24,
+              "absoluteStart": 89
+            }
+          ],
+          "6": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 24,
+              "absoluteStart": 113
+            }
+          ],
+          "7": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 25,
+              "absoluteStart": 137
+            }
+          ]
+        }
+      }
+    }
   },
   "classification": {
     "sourceId": "skipthefiller",

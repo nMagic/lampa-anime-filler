@@ -4,21 +4,22 @@
   "identity": {
     "mediaType": "series",
     "title": "One Piece",
-    "aliases": [
-      "Ван-Пис",
-      "ワンピース"
-    ],
+    "aliases": [],
     "ids": {
-      "tmdbTv": 37854
+      "anidb": 69,
+      "anilist": 21,
+      "mal": 21,
+      "tmdbTv": 37854,
+      "tvdb": 81797
     }
   },
   "numbering": {
     "scope": "regular",
     "basis": "absolute",
     "startsAt": 1,
-    "sourceMappings": {
-      "online_mod": {
-        "system": "tmdb",
+    "providerMappings": {
+      "tmdb": {
+        "mediaId": 37854,
         "seasons": {
           "1": [
             {
@@ -169,9 +170,185 @@
           ],
           "22": [
             {
+              "episodeStart": 2,
+              "episodeEnd": 67,
+              "absoluteStart": 1090
+            },
+            {
               "episodeStart": 1089,
-              "episodeEnd": 1173,
+              "episodeEnd": 1089,
               "absoluteStart": 1089
+            }
+          ]
+        }
+      },
+      "tvdb": {
+        "mediaId": 81797,
+        "seasons": {
+          "1": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 8,
+              "absoluteStart": 1
+            }
+          ],
+          "2": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 22,
+              "absoluteStart": 9
+            }
+          ],
+          "3": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 17,
+              "absoluteStart": 31
+            }
+          ],
+          "4": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 13,
+              "absoluteStart": 48
+            }
+          ],
+          "5": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 9,
+              "absoluteStart": 61
+            }
+          ],
+          "6": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 22,
+              "absoluteStart": 70
+            }
+          ],
+          "7": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 39,
+              "absoluteStart": 92
+            }
+          ],
+          "8": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 13,
+              "absoluteStart": 131
+            }
+          ],
+          "9": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 52,
+              "absoluteStart": 144
+            }
+          ],
+          "10": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 31,
+              "absoluteStart": 196
+            }
+          ],
+          "11": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 99,
+              "absoluteStart": 227
+            }
+          ],
+          "12": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 56,
+              "absoluteStart": 326
+            }
+          ],
+          "13": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 100,
+              "absoluteStart": 382
+            }
+          ],
+          "14": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 35,
+              "absoluteStart": 482
+            }
+          ],
+          "15": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 25,
+              "absoluteStart": 517
+            },
+            {
+              "episodeStart": 26,
+              "episodeEnd": 62,
+              "absoluteStart": 543
+            }
+          ],
+          "16": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 49,
+              "absoluteStart": 580
+            }
+          ],
+          "17": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 118,
+              "absoluteStart": 629
+            }
+          ],
+          "18": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 33,
+              "absoluteStart": 747
+            }
+          ],
+          "19": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 98,
+              "absoluteStart": 780
+            }
+          ],
+          "20": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 14,
+              "absoluteStart": 878
+            }
+          ],
+          "21": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 194,
+              "absoluteStart": 892
+            }
+          ],
+          "22": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 70,
+              "absoluteStart": 1086
+            }
+          ],
+          "23": [
+            {
+              "episodeStart": 1,
+              "episodeEnd": 1,
+              "absoluteStart": 1156
             }
           ]
         }
