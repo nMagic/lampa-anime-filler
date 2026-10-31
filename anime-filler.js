@@ -11,11 +11,13 @@
     var KODIK_SETTINGS_COMPONENT = 'online_mod_kodik'
     var initialized = false
     var templateMetadata = typeof WeakMap === 'function' ? new WeakMap() : null
+    var activityGenerations = typeof WeakMap === 'function' ? new WeakMap() : null
     var observer = null
     var observedActivity = null
     var observedRoot = null
     var scanTimer = null
     var generation = 0
+    var generationCounter = 0
 
     var state = {
         onlineModDetected: false,
@@ -135,8 +137,22 @@
         )
     }
 
-    function showDiagnostics() {
+    function refreshDiagnosticAvailability() {
         refreshDetection()
+        if (state.activityActive) return
+
+        if (state.onlineModDetected) {
+            state.status = 'inactive'
+            state.reason = 'online_mod_inactive'
+        }
+        else {
+            state.status = 'online_mod_missing'
+            state.reason = 'online_mod_missing'
+        }
+    }
+
+    function showDiagnostics() {
+        refreshDiagnosticAvailability()
 
         var body = $('<div></div>')
         var card = state.card
@@ -501,9 +517,14 @@
         state.reason = 'kodik_confirmed'
     }
 
-    function beginActivity(activityObject) {
+    function beginActivity(activityObject, isNewActivity) {
         disconnectObserver()
-        generation += 1
+        if (isNewActivity || !activityGenerations || !activityGenerations.has(activityObject)) {
+            generationCounter += 1
+            generation = generationCounter
+            if (activityGenerations) activityGenerations.set(activityObject, generation)
+        }
+        else generation = activityGenerations.get(activityObject)
         observedActivity = activityObject
         observedRoot = activityRoot(activityObject)
         state.activityActive = true
@@ -541,14 +562,15 @@
         if (!event || !event.object) return
 
         if (event.component === ONLINE_MOD_COMPONENT) {
-            if (event.type === 'init') beginActivity(event.object)
+            if (event.type === 'init') beginActivity(event.object, true)
             else if (event.type === 'start' || event.type === 'archive') {
-                if (observedActivity !== event.object) beginActivity(event.object)
+                if (observedActivity !== event.object) beginActivity(event.object, false)
                 state.activityActive = true
                 queueScan()
             }
-            else if (event.type === 'destroy' && observedActivity === event.object) {
-                leaveActivity('inactive', 'online_mod_inactive')
+            else if (event.type === 'destroy') {
+                if (activityGenerations) activityGenerations.delete(event.object)
+                if (observedActivity === event.object) leaveActivity('inactive', 'online_mod_inactive')
             }
         }
         else if (event.type === 'start' && observedActivity) {
@@ -559,7 +581,9 @@
     function handleStorageChange(event) {
         if (!observedActivity || !event || event.name !== 'online_mod_balanser') return
 
-        generation += 1
+        generationCounter += 1
+        generation = generationCounter
+        if (activityGenerations) activityGenerations.set(observedActivity, generation)
         state.sourceCandidate = available(event.value) ? String(event.value) : ''
         clearEpisodeSnapshot(
             state.sourceCandidate === 'kodik' ? 'waiting_for_list' : (state.sourceCandidate ? 'not_kodik' : 'source_unknown'),
@@ -579,7 +603,7 @@
         refreshDetection()
         var active = Lampa.Activity && Lampa.Activity.active && Lampa.Activity.active()
         if (active && active.component === ONLINE_MOD_COMPONENT) {
-            beginActivity(active)
+            beginActivity(active, false)
             state.activityActive = true
             queueScan()
         }

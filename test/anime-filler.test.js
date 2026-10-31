@@ -209,6 +209,22 @@ function createHarness(options) {
         emit('activity', { component: 'online_mod', type: 'start', object: activity })
     }
 
+    function returnActivity(activity) {
+        activeActivity = activity
+        emit('activity', { component: 'online_mod', type: 'start', object: activity })
+        emit('activity', { component: 'online_mod', type: 'archive', object: activity })
+    }
+
+    function recreateActivity(activity) {
+        emit('activity', { component: 'online_mod', type: 'destroy', object: activity })
+        var root = new Element('activity')
+        activity.root = root
+        activity.activity = { render: function () { return root } }
+        emit('activity', { component: 'online_mod', type: 'init', object: activity })
+        activeActivity = activity
+        emit('activity', { component: 'online_mod', type: 'start', object: activity })
+    }
+
     function leaveActivity(activity, destroy) {
         if (destroy) emit('activity', { component: 'online_mod', type: 'destroy', object: activity })
         else {
@@ -247,12 +263,16 @@ function createHarness(options) {
         emit: emit,
         makeActivity: makeActivity,
         startActivity: startActivity,
+        returnActivity: returnActivity,
+        recreateActivity: recreateActivity,
         leaveActivity: leaveActivity,
         addEpisode: addEpisode,
         openParam: openParam,
         templateThis: function () { return templateThis },
         run: function () { vm.runInContext(source, context, { filename: pluginPath }) },
-        setActive: function (activity) { activeActivity = activity }
+        setActive: function (activity) { activeActivity = activity },
+        setOnlineModAvailable: function (value) { onlineModAvailable = value },
+        setKodikModuleAvailable: function (value) { kodikModuleAvailable = value }
     }
 }
 
@@ -592,6 +612,46 @@ test('opening diagnostics over Online_Mod preserves the current snapshot', async
     assert.equal(FakeMutationObserver.instances[0].disconnected, false)
 })
 
+test('returning through activity history reuses the existing confirmed DOM metadata', async function () {
+    var harness = createHarness()
+    harness.run()
+    var activity = harness.makeActivity()
+    harness.startActivity(activity)
+    harness.addEpisode(activity, { episode: 15 })
+    await flush()
+    assert.match(diagnosticsText(harness), /Статус: ready/)
+
+    harness.leaveActivity(activity, false)
+    assert.match(diagnosticsText(harness), /Статус: inactive/)
+
+    harness.returnActivity(activity)
+    await flush()
+    var text = diagnosticsText(harness)
+    assert.match(text, /Статус: ready/)
+    assert.match(text, /Номера эпизодов: 15/)
+})
+
+test('a recreated archived activity requires metadata from its new DOM generation', async function () {
+    var harness = createHarness()
+    harness.run()
+    var activity = harness.makeActivity()
+    harness.startActivity(activity)
+    harness.addEpisode(activity, { episode: 15 })
+    await flush()
+
+    harness.leaveActivity(activity, false)
+    harness.recreateActivity(activity)
+    await flush()
+    assert.match(diagnosticsText(harness), /Статус: empty_visible_list/)
+
+    harness.addEpisode(activity, { episode: 16 })
+    await flush()
+    var text = diagnosticsText(harness)
+    assert.match(text, /Статус: ready/)
+    assert.match(text, /Номера эпизодов: 16/)
+    assert.doesNotMatch(text, /Номера эпизодов: 15/)
+})
+
 test('leaving Online_Mod clears current card and episodes without a last snapshot', async function () {
     var harness = createHarness()
     harness.run()
@@ -644,6 +704,20 @@ test('reports missing Online_Mod and unavailable observer capabilities safely', 
     degraded.startActivity(activity)
     await flush()
     assert.match(diagnosticsText(degraded), /Статус: observer_unavailable/)
+})
+
+test('refreshes a stale missing status when Online_Mod registers later', function () {
+    var harness = createHarness({ onlineModAvailable: false, kodikModuleAvailable: false })
+    harness.run()
+    assert.match(diagnosticsText(harness), /Статус: online_mod_missing/)
+
+    harness.setOnlineModAvailable(true)
+    harness.setKodikModuleAvailable(true)
+    var text = diagnosticsText(harness)
+    assert.match(text, /Online_Mod обнаружен: да/)
+    assert.match(text, /Модуль Kodik обнаружен: да/)
+    assert.match(text, /Статус: inactive/)
+    assert.doesNotMatch(text, /online_mod_missing/)
 })
 
 test('reports empty, uninstrumented and unavailable activity DOM states', async function () {
