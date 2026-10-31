@@ -342,7 +342,7 @@ test('accepts only confirmed Kodik episode hosts and protocol forms', async func
 
     harness.addEpisode(activity, { episode: 3, link: '//kodik.info/seria/3/a/720p' })
     harness.addEpisode(activity, { episode: 1, link: 'http://kodik.cc/seria/1/b/720p' })
-    harness.addEpisode(activity, { episode: 2, link: 'https://kodikplayer.com/seria/2/c/1080p?ref=x' })
+    harness.addEpisode(activity, { episode: 2, link: 'https://kodikplayer.com/seria/2/c/1080p' })
     await flush()
 
     var text = diagnosticsText(harness)
@@ -357,7 +357,7 @@ test('rejects unknown hosts without substring matching and exposes only hostname
     var activity = harness.makeActivity()
     harness.startActivity(activity)
     harness.addEpisode(activity, {
-        link: 'https://kodik.info.example.invalid/seria/1/secret/720p?token=do-not-show'
+        link: 'https://kodik.info.example.invalid/seria/1/secret/720p'
     })
     await flush()
 
@@ -366,7 +366,7 @@ test('rejects unknown hosts without substring matching and exposes only hostname
     assert.match(text, /Строк с точными номерами: 1/)
     assert.match(text, /Строк Kodik подтверждено: 0/)
     assert.match(text, /Hostname неподтверждённой ссылки: kodik\.info\.example\.invalid/)
-    assert.doesNotMatch(text, /secret|token=|do-not-show/)
+    assert.doesNotMatch(text, /secret/)
 })
 
 test('rejects unconfirmed paths, relative links and subdomains', async function () {
@@ -374,7 +374,8 @@ test('rejects unconfirmed paths, relative links and subdomains', async function 
         'https://kodik.info/serial/1/hash/720p',
         '/seria/1/hash/720p',
         'https://cdn.kodik.info/seria/1/hash/720p',
-        'https://kodik.info:444/seria/1/hash/720p'
+        'https://kodik.info:444/seria/1/hash/720p',
+        'https://kodik.info/seria/1/hash/720p?token=unknown'
     ]
 
     for (var i = 0; i < cases.length; i++) {
