@@ -276,7 +276,7 @@
         var result = { confirmed: false, reason: 'missing_link', hostname: '' }
         if (typeof link !== 'string' || !link.trim()) return result
 
-        var match = link.trim().match(/^(https?:)?\/\/([^\/?#]+)(\/[^?#]*)?(?:[?#].*)?$/i)
+        var match = link.trim().match(/^(https?:)?\/\/([^\/?#]+)(\/[^?#]*)?$/i)
         if (!match) {
             result.reason = 'unsupported_link_form'
             return result
