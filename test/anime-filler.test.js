@@ -293,7 +293,7 @@ test('initializes immediately and preserves the stage 0 settings behavior', func
 
     var modal = harness.openParam('anime_filler_about')
     assert.equal(modal.title, 'Anime Filler')
-    assert.match(modal.html.allText(), /Версия: 0\.3\.0/)
+    assert.match(modal.html.allText(), /Версия: 0\.3\.1/)
     modal.buttons[0].onSelect()
     assert.deepEqual(harness.calls.order, ['modal.close', 'controller.toggle:settings_component'])
 })
@@ -744,5 +744,5 @@ test('reports empty, uninstrumented and unavailable activity DOM states', async 
 })
 
 test('stores the plugin version once and changes only the approved source files', function () {
-    assert.equal((source.match(/0\.3\.0/g) || []).length, 1)
+    assert.equal((source.match(/0\.3\.1/g) || []).length, 1)
 })

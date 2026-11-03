@@ -21,6 +21,7 @@ const instrumented = plugin.replace("    if (!window[READY_FLAG]) startPlugin()"
 
 function harness(options = {}) {
     const pending = [], timers = new Map(), storage = options.storage || {}, writes = [], modals = [], events = {}, params = []
+    const memory = {}
     let timerId = 0, language = options.language || 'ru', translations = {}, active = null
     function node() { return { texts: [], append(n) { this.texts.push(n); return this }, text(t) { this.value = t; return this }, allText() { return [this.value || '', ...this.texts.map(n => n.allText())].join('\n') } } }
     function XHR() { pending.push(this) }
@@ -30,12 +31,31 @@ function harness(options = {}) {
     XHR.prototype.respond = function (text, status = 200) { this.status = status; this.responseText = text; this.onload() }
     const lampa = {
         Lang: { add(v) { Object.assign(translations, v) }, translate(k) { return translations[k] ? translations[k][language] : k } },
-        Storage: { get(k, d) { if (options.readError) throw Error('storage'); return k in storage ? storage[k] : d }, set(k, v) { if (options.writeError) throw Error('quota'); if (!options.silentWriteError) storage[k] = v; writes.push([k, v]) }, field() {}, listener: { follow() {} } },
+        Storage: {
+            // Lampa's Storage.get auto-parses JSON and memoizes values; value()
+            // reads persisted localStorage independently of that memoized copy.
+            get(k, d) {
+                if (options.readError) throw Error('storage')
+                let v = options.lampaStorage && k in memory ? memory[k] : k in storage ? storage[k] : d
+                if (options.lampaStorage && typeof v === 'string' && /^[\[{]/.test(v)) { try { v = JSON.parse(v) } catch (ignored) {} }
+                if (options.lampaStorage) memory[k] = v
+                return v
+            },
+            set(k, v, nolisten, callerror) {
+                if (options.writeError) throw Error('quota')
+                if (options.lampaStorage) memory[k] = v
+                if (!options.silentWriteError) storage[k] = v
+                if (options.quotaCallback && callerror) callerror(Error('quota'))
+                writes.push([k, v])
+            },
+            field() {}, listener: { follow() {} }
+        },
         SettingsApi: { addComponent() {}, addParam(p) { params.push(p) }, getComponent() {} },
         Component: { get() {} }, Listener: { follow(k, f) { events[k] = f } },
         Template: { get() {} }, Activity: { active() { return active } },
         Modal: { open(p) { modals.push(p) } }, Controller: { toggle() {} }
     }
+    if (options.directStorageRead) lampa.Storage.value = function (k, d) { return k in storage ? storage[k] : d }
     const context = vm.createContext({ window: {}, Lampa: lampa, $: node,
         XMLHttpRequest: options.noXHR ? undefined : XHR,
         setTimeout(f) { const id = ++timerId; timers.set(id, f); return id }, clearTimeout(id) { timers.delete(id) },
@@ -245,4 +265,39 @@ test('classification diagnostics lists separate areas without aggregating their 
     assert.equal((text.match(/Canon \/ Filler \/ Mixed:/g) || []).length, 4)
     assert.match(text, /mal:60636/); assert.match(text, /Возможных соответствий: 5/)
     assert.match(text, /multiple_areas/)
+})
+
+test('Lampa Storage auto-parsed JSON saves without false error and reloads offline', () => {
+    for (const directStorageRead of [false, true]) {
+        const first = harness({ lampaStorage: true, directStorageRead }); first.load(); first.finish()
+        assert.equal(first.api.dataState.error, '')
+        const next = harness({ lampaStorage: true, directStorageRead, storage: copy(first.storage), noXHR: true }); next.load()
+        assert.equal(next.api.dataState.status, 'ready'); assert.equal(next.api.dataState.origin, 'cache')
+        assert.equal(next.api.dataState.error, ''); assert.equal(next.pending.length, 0)
+        assert.equal(next.setCard(tv(46260)).records[0].mal, 20)
+    }
+})
+
+test('Lampa memoized get cannot hide a silent failure of physical persistence', () => {
+    const h = harness({ lampaStorage: true, directStorageRead: true, silentWriteError: true })
+    h.load(); h.finish()
+    assert.equal(h.api.dataState.status, 'ready'); assert.equal(h.api.dataState.error, 'cache_write_failed')
+    assert.equal(h.setCard(tv(46260)).status, 'confirmed_id')
+    assert.equal(h.storage[h.api.cacheKey], undefined)
+})
+
+test('Storage quota callback is respected even when get returns the in-memory value', () => {
+    const h = harness({ lampaStorage: true, quotaCallback: true })
+    h.load(); h.finish()
+    assert.equal(h.api.dataState.error, 'cache_write_failed')
+    assert.equal(h.api.dataState.status, 'ready')
+})
+
+test('already decoded object cache is accepted and corruption is still rejected', () => {
+    const h = harness({ lampaStorage: true }); h.load(); h.finish()
+    const saved = JSON.parse(h.storage[h.api.cacheKey])
+    const good = harness({ noXHR: true }); good.storage[good.api.cacheKey] = saved; good.load()
+    assert.equal(good.api.dataState.origin, 'cache'); assert.equal(good.api.dataState.error, '')
+    const bad = harness({ noXHR: true }); bad.storage[bad.api.cacheKey] = { ...saved, raw: saved.raw + 'broken' }; bad.load()
+    assert.equal(bad.api.dataState.dataset, null); assert.equal(bad.api.dataState.status, 'unavailable')
 })

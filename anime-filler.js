@@ -2,7 +2,7 @@
     'use strict'
 
     var PLUGIN_NAME = 'Anime Filler'
-    var PLUGIN_VERSION = '0.3.0'
+    var PLUGIN_VERSION = '0.3.1'
     var COMPONENT_ID = 'anime_filler'
     var ABOUT_PARAM_ID = 'anime_filler_about'
     var DIAGNOSTICS_PARAM_ID = 'anime_filler_diagnostics'
@@ -44,7 +44,7 @@
 
     // A preview is a self-contained immutable publication. Compatible schema-1 datasets
     // can be refreshed independently through its manifest in a future stable channel.
-    var DATA_BASE = 'https://nmagic.github.io/lampa-anime-filler/previews/stage-2-4307753703a7/data/'
+    var DATA_BASE = 'https://nmagic.github.io/lampa-anime-filler/previews/stage-2-4307753703a7-cachefix-1/data/'
     var DATA_CACHE_KEY = 'anime_filler_data_v1_' + DATA_BASE
     var DATA_CHECK_INTERVAL = 12 * 60 * 60 * 1000
     var dataState = { status: 'idle', origin: '', version: '', sourceDate: '', validation: '', error: '', dataset: null }
@@ -181,11 +181,24 @@
         dataState.validation = 'sha256_schema_valid'; dataState.error = ''
     }
 
+    function cacheEnvelope(value) {
+        // Storage.get() decodes JSON in Lampa, while some compatible hosts
+        // return the serialized string. Accept either representation.
+        if (typeof value === 'string') value = JSON.parse(value)
+        if (!plain(value)) throw dataError('cache_invalid')
+        return value
+    }
+
     function saveDataCache() {
         try {
             var value = JSON.stringify({ manifest: dataManifest, raw: dataRaw, checked: dataChecked })
-            Lampa.Storage.set(DATA_CACHE_KEY, value)
-            if (Lampa.Storage.get(DATA_CACHE_KEY, '') !== value) throw dataError('cache_write_failed')
+            var writeFailed = false
+            Lampa.Storage.set(DATA_CACHE_KEY, value, true, function () { writeFailed = true })
+            // get() may return its in-memory copy even if persistence failed.
+            // value() bypasses that copy in Lampa and reads localStorage directly.
+            var saved = typeof Lampa.Storage.value === 'function' ?
+                Lampa.Storage.value(DATA_CACHE_KEY, '') : Lampa.Storage.get(DATA_CACHE_KEY, '')
+            if (writeFailed || JSON.stringify(cacheEnvelope(saved)) !== value) throw dataError('cache_write_failed')
         } catch (error) { dataState.error = 'cache_write_failed' }
     }
 
@@ -195,7 +208,7 @@
             try {
                 var saved = Lampa.Storage.get(DATA_CACHE_KEY, '')
                 if (saved) {
-                    saved = JSON.parse(saved)
+                    saved = cacheEnvelope(saved)
                     var manifest = parseManifest(JSON.stringify(saved.manifest))
                     acceptDataset(saved.raw, manifest, validateDataset(saved.raw, manifest), 'cache')
                     dataChecked = typeof saved.checked === 'number' && isFinite(saved.checked) && saved.checked <= Date.now() ? saved.checked : 0
