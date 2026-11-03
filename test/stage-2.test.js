@@ -53,7 +53,7 @@ function harness(options = {}) {
         SettingsApi: { addComponent() {}, addParam(p) { params.push(p) }, getComponent() {} },
         Component: { get() {} }, Listener: { follow(k, f) { events[k] = f } },
         Template: { get() {} }, Activity: { active() { return active } },
-        Modal: { open(p) { modals.push(p) } }, Controller: { toggle() {} }
+        Modal: { open(p) { modals.push(p) }, close() {} }, Controller: { toggle() {} }
     }
     if (options.directStorageRead) lampa.Storage.value = function (k, d) { return k in storage ? storage[k] : d }
     const context = vm.createContext({ window: {}, Lampa: lampa, $: node,
@@ -70,7 +70,7 @@ function harness(options = {}) {
         ready() { api.dataState.dataset = JSON.parse(raw) },
         load() { api.load() },
         finish() { this.request().respond(JSON.stringify(manifest)); this.request().respond(raw) },
-        diagnostic() { api.diagnostics(); return modals.at(-1).html.allText() },
+        diagnostic(detailed = true) { api.diagnostics(detailed); return modals.at(-1).html.allText() },
         start(card) { active = { component: 'online_mod', movie: card, activity: { render() { return null } } }; api.begin(active, true); return active },
         language(value) { language = value }
     }
@@ -106,6 +106,10 @@ test('generator validates IDs, conflicts and produces byte-identical output', ()
     assert.equal(a.raw, b.raw); assert.equal(serialize(a.manifest), serialize(b.manifest))
     assert.equal(a.manifest.sha256, hash(a.raw)); assert.equal(a.manifest.bytes, Buffer.byteLength(a.raw))
     assert.equal(a.coverage.counts.works, 1)
+    assert.equal(a.coverage.records[0].research, 'fixture')
+    assert.deepEqual(a.coverage.records[0].citations, [{ id: 'source', url: null }])
+    assert.match(a.coverage.records[0].identityEvidence, /exact primary key/)
+    assert.ok(a.coverage.size.savedBytes > 0)
     assert.equal(build(files, [{ ...catalog[0], mal_id: -20 }], mappings, lock).coverage.counts.works, 0)
     assert.equal(build(files, [{ ...catalog[0], anilist_id: 99 }], mappings, lock).coverage.records[0].result, 'identifier_conflict')
     assert.equal(build({ broken: {} }, catalog, mappings, lock).coverage.records[0].result, 'invalid_structure')
@@ -178,7 +182,7 @@ test('real remakes, separate adaptations and unsupported records do not collapse
         assert.ok(['classification_missing','multiple_areas'].includes(r.reason))
     }
     const fma = dataset.records.find(r => r.mal === 121)
-    assert.ok(fma.counts.filler > 0); assert.match(fma.research, /2003/)
+    assert.ok(fma.counts.filler > 0); assert.equal(fma.title, 'Fullmetal Alchemist')
 })
 test('initial network load commits validated data and cache only after full validation', () => {
     const h = harness(); h.load(); assert.equal(h.api.dataState.status, 'loading'); assert.equal(h.writes.length, 0)
@@ -300,4 +304,54 @@ test('already decoded object cache is accepted and corruption is still rejected'
     assert.equal(good.api.dataState.origin, 'cache'); assert.equal(good.api.dataState.error, '')
     const bad = harness({ noXHR: true }); bad.storage[bad.api.cacheKey] = { ...saved, raw: saved.raw + 'broken' }; bad.load()
     assert.equal(bad.api.dataState.dataset, null); assert.equal(bad.api.dataState.status, 'unavailable')
+})
+
+test('compact dataset omits audit fields and keeps coverage totals', () => {
+    for (const record of dataset.records) {
+        for (const key of ['research', 'citations', 'identityEvidence']) assert.equal(Object.hasOwn(record, key), false)
+    }
+    for (const [key, value] of Object.entries({ works: 132, episodes: 8475, mappedWorks: 130, tmdbCards: 117, kodikConfirmed: 0 })) {
+        assert.equal(dataset.counts[key], value)
+    }
+    assert.ok(manifest.bytes < 229458)
+})
+
+test('diagnostic mode buttons preserve the snapshot and separate ambiguous areas', () => {
+    const h = harness({ lampaStorage: true, directStorageRead: true })
+    h.api.init()
+    h.start(tv(30984)); h.finish()
+    const snapshot = h.api.result()
+    const writes = h.writes.length
+    for (const lang of ['ru', 'en']) {
+        h.language(lang)
+        const summary = h.diagnostic(false)
+        assert.match(summary, /multiple_areas/)
+        assert.doesNotMatch(summary, /Canon \/ Filler \/ Mixed|AniBridge|CC BY-NC-SA/)
+        assert.ok(!summary.includes(manifest.sha256))
+        const modal = h.modals.at(-1)
+        assert.equal(modal.buttons[0].name, lang === 'ru' ? 'Подробно' : 'Details')
+        modal.buttons[0].onSelect()
+        const detail = h.modals.at(-1)
+        assert.ok(detail.html.allText().includes(manifest.sha256))
+        assert.match(detail.html.allText(), /AniBridge/)
+        assert.equal(detail.buttons[0].name, lang === 'ru' ? 'Кратко' : 'Summary')
+        detail.buttons[0].onSelect()
+        assert.equal(h.modals.at(-1).html.allText(), summary)
+        h.modals.at(-1).onBack()
+    }
+    assert.equal(h.api.result(), snapshot)
+    assert.equal(h.pending.length, 0)
+    assert.equal(h.writes.length, writes)
+})
+
+test('summary distinguishes verified persistence, in-memory data and write failure', () => {
+    for (const [options, expected] of [
+        [{ directStorageRead: true }, /Кеш: сохранён/],
+        [{}, /Кеш: сохранение не подтверждено/],
+        [{ silentWriteError: true }, /cache_write_failed/]
+    ]) {
+        const h = harness(options)
+        h.api.init(); h.start(tv(46260)); h.finish()
+        assert.match(h.diagnostic(false), expected)
+    }
 })

@@ -2,7 +2,7 @@
     'use strict'
 
     var PLUGIN_NAME = 'Anime Filler'
-    var PLUGIN_VERSION = '0.3.1'
+    var PLUGIN_VERSION = '0.3.2'
     var COMPONENT_ID = 'anime_filler'
     var ABOUT_PARAM_ID = 'anime_filler_about'
     var DIAGNOSTICS_PARAM_ID = 'anime_filler_diagnostics'
@@ -44,10 +44,10 @@
 
     // A preview is a self-contained immutable publication. Compatible schema-1 datasets
     // can be refreshed independently through its manifest in a future stable channel.
-    var DATA_BASE = 'https://nmagic.github.io/lampa-anime-filler/previews/stage-2-4307753703a7-cachefix-1/data/'
+    var DATA_BASE = 'https://nmagic.github.io/lampa-anime-filler/previews/stage-2-14885244fe8c-optimization/data/'
     var DATA_CACHE_KEY = 'anime_filler_data_v1_' + DATA_BASE
     var DATA_CHECK_INTERVAL = 12 * 60 * 60 * 1000
-    var dataState = { status: 'idle', origin: '', version: '', sourceDate: '', validation: '', error: '', dataset: null }
+    var dataState = { status: 'idle', cache: '', origin: '', version: '', sourceDate: '', validation: '', error: '', dataset: null }
     var classification = { status: 'no_card', reason: 'no_card', records: [], targets: [], links: [], candidates: 0, tmdb: '', media: '' }
     var dataBusy = false
     var dataChecked = 0
@@ -175,6 +175,7 @@
     }
 
     function acceptDataset(raw, manifest, data, origin) {
+        dataState.cache = origin === 'cache' ? 'loaded' : ''
         dataRaw = raw; dataManifest = manifest
         dataState.dataset = data; dataState.status = 'ready'; dataState.origin = origin
         dataState.version = manifest.version; dataState.sourceDate = manifest.sourceDate
@@ -199,7 +200,11 @@
             var saved = typeof Lampa.Storage.value === 'function' ?
                 Lampa.Storage.value(DATA_CACHE_KEY, '') : Lampa.Storage.get(DATA_CACHE_KEY, '')
             if (writeFailed || JSON.stringify(cacheEnvelope(saved)) !== value) throw dataError('cache_write_failed')
-        } catch (error) { dataState.error = 'cache_write_failed' }
+            dataState.cache = typeof Lampa.Storage.value === 'function' ? 'saved' : 'unverified'
+        } catch (error) {
+            dataState.cache = 'failed'
+            dataState.error = 'cache_write_failed'
+        }
     }
 
     function loadClassifications() {
@@ -295,30 +300,36 @@
         result.candidates = 1; result.status = 'confirmed_id'; result.reason = 'numbering_unverified'
     }
 
-    function appendClassificationDiagnostics(body) {
+    function appendClassificationDiagnostics(body, detailed) {
         appendDiagnostic(body, translate('anime_filler_classifications'), 'AniFillerPedia')
         appendDiagnostic(body, translate('anime_filler_data_state'), dataState.status)
-        appendDiagnostic(body, translate('anime_filler_data_version'), displayValue(dataState.version))
-        appendDiagnostic(body, translate('anime_filler_data_date'), displayValue(dataState.sourceDate))
+        if (detailed) appendDiagnostic(body, translate('anime_filler_data_version'), displayValue(dataState.version))
+        if (detailed) appendDiagnostic(body, translate('anime_filler_data_date'), displayValue(dataState.sourceDate))
         appendDiagnostic(body, translate('anime_filler_data_origin'), displayValue(dataState.origin))
         appendDiagnostic(body, translate('anime_filler_validation'), dataState.validation ? reasonText(dataState.validation) : displayValue(''))
         appendDiagnostic(body, translate('anime_filler_data_error'), dataState.error ? reasonText(dataState.error) : translate('anime_filler_no'))
+        appendDiagnostic(body, translate('anime_filler_cache_status'), dataState.cache ? translate('anime_filler_cache_' + dataState.cache) : displayValue(''))
         var counts = dataState.dataset && dataState.dataset.counts
-        appendDiagnostic(body, translate('anime_filler_data_count'), counts ? counts.works + ' / ' + counts.episodes : displayValue(''))
+        if (detailed) appendDiagnostic(body, translate('anime_filler_data_count'), counts ? counts.works + ' / ' + counts.episodes : displayValue(''))
         appendDiagnostic(body, 'TMDB / TV/Movie', displayValue(classification.tmdb) + ' / ' + displayValue(classification.media))
-        appendDiagnostic(body, 'MAL / AniList', displayValue(classification.targets.join(', ')))
-        appendDiagnostic(body, translate('anime_filler_matches'), String(classification.candidates))
+        appendDiagnostic(body, 'MAL / AniList', displayValue((detailed ? classification.targets : classification.targets.slice(0, 4)).join(', ') + (!detailed && classification.targets.length > 4 ? ' …' : '')))
+        if (detailed) appendDiagnostic(body, translate('anime_filler_matches'), String(classification.candidates))
         appendDiagnostic(body, translate('anime_filler_identity'), classification.status + ' — ' + reasonText(classification.reason))
-        classification.records.forEach(function (record) {
+        if (detailed || classification.records.length === 1) classification.records.forEach(function (record) {
             appendDiagnostic(body, translate('anime_filler_source_work'), record.title + ' [' + record.id + ']')
             appendDiagnostic(body, translate('anime_filler_class_count'), String(record.counts.canon + record.counts.filler + record.counts.mixed))
             appendDiagnostic(body, 'Canon / Filler / Mixed', record.counts.canon + ' / ' + record.counts.filler + ' / ' + record.counts.mixed)
-            appendDiagnostic(body, translate('anime_filler_integrity'), record.integrity + (record.issues.length ? ' — ' + record.issues.map(function (issue) { var parts = issue.split(':'); return reasonText('integrity_' + parts[0]) + (parts.length > 1 ? ' [' + parts.slice(1).join(':') + ']' : '') }).join('; ') : ''))
-            appendDiagnostic(body, translate('anime_filler_numbering'), record.numbering.file + ' [' + record.numbering.min + '–' + record.numbering.max + ']')
+            if (detailed) appendDiagnostic(body, translate('anime_filler_integrity'), record.integrity + (record.issues.length ? ' — ' + record.issues.map(function (issue) { var parts = issue.split(':'); return reasonText('integrity_' + parts[0]) + (parts.length > 1 ? ' [' + parts.slice(1).join(':') + ']' : '') }).join('; ') : ''))
+            if (detailed) appendDiagnostic(body, translate('anime_filler_numbering'), record.numbering.file + ' [' + record.numbering.min + '–' + record.numbering.max + ']')
         })
         appendDiagnostic(body, translate('anime_filler_numbering_kodik'), translate('anime_filler_no') + ' — ' + reasonText('numbering_unverified'))
-        classification.links.forEach(function (edge) { appendDiagnostic(body, 'AniBridge', edge.source + ' → ' + edge.target + ' ' + JSON.stringify(edge.ranges)) })
-        if (dataState.dataset) appendDiagnostic(body, translate('anime_filler_attribution'), dataState.dataset.notices.attribution + ' ' + dataState.dataset.notices.license)
+        if (detailed) classification.links.forEach(function (edge) {
+            appendDiagnostic(body, 'AniBridge', edge.source + ' → ' + edge.target)
+            Object.keys(edge.ranges).forEach(function (range) {
+                appendDiagnostic(body, range, displayValue(edge.ranges[range]))
+            })
+        })
+        if (detailed && dataState.dataset) appendDiagnostic(body, translate('anime_filler_attribution'), dataState.dataset.notices.attribution + ' ' + dataState.dataset.notices.license)
     }
 
     function translate(key) {
@@ -353,7 +364,7 @@
     }
 
     function appendDiagnostic(body, label, value) {
-        body.append($('<div></div>').text(label + ': ' + value))
+        body.append($('<div style="max-width:100%;overflow-wrap:break-word;word-wrap:break-word"></div>').text(label + ': ' + value))
     }
 
     function available(value) {
@@ -430,8 +441,8 @@
         }
     }
 
-    function showDiagnostics() {
-        refreshDiagnosticAvailability()
+    function showDiagnostics(detailed) {
+        detailed = detailed === true
 
         var body = $('<div></div>')
         var card = state.card
@@ -439,36 +450,50 @@
         appendDiagnostic(body, translate('anime_filler_version'), PLUGIN_VERSION)
         appendDiagnostic(body, translate('anime_filler_online_mod'), translate(state.onlineModDetected ? 'anime_filler_yes' : 'anime_filler_no'))
         appendDiagnostic(body, translate('anime_filler_kodik_module'), translate(state.kodikDetected ? 'anime_filler_yes' : 'anime_filler_no'))
-        appendDiagnostic(body, translate('anime_filler_activity'), state.activityActive ? 'Online_Mod' : translate('anime_filler_inactive'))
-        appendDiagnostic(body, translate('anime_filler_candidate'), displayValue(state.sourceCandidate))
+        if (detailed) appendDiagnostic(body, translate('anime_filler_activity'), state.activityActive ? 'Online_Mod' : translate('anime_filler_inactive'))
+        if (detailed) appendDiagnostic(body, translate('anime_filler_candidate'), displayValue(state.sourceCandidate))
         appendDiagnostic(body, translate('anime_filler_confirmed_source'), displayValue(state.sourceConfirmed))
         appendDiagnostic(body, translate('anime_filler_card'), displayValue(card && card.title))
-        appendDiagnostic(body, translate('anime_filler_card_ids'), cardIdentifiers(card))
+        if (detailed) appendDiagnostic(body, translate('anime_filler_card_ids'), cardIdentifiers(card))
         appendDiagnostic(body, translate('anime_filler_season'), displayValue(state.season))
         appendDiagnostic(body, translate('anime_filler_voice'), displayValue(state.voice))
         appendDiagnostic(body, translate('anime_filler_episode_count'), String(state.episodes.length))
-        appendDiagnostic(body, translate('anime_filler_episodes'), displayEpisodes(state.episodes))
-        appendDiagnostic(body, translate('anime_filler_exact_rows'), String(state.exactRows))
+        if (detailed) appendDiagnostic(body, translate('anime_filler_episodes'), displayEpisodes(state.episodes))
+        if (detailed) appendDiagnostic(body, translate('anime_filler_exact_rows'), String(state.exactRows))
         appendDiagnostic(body, translate('anime_filler_confirmed_rows'), String(state.confirmedRows))
         appendDiagnostic(body, translate('anime_filler_status'), state.status)
-        appendDiagnostic(body, translate('anime_filler_reason'), reasonText(state.reason))
+        if (detailed) appendDiagnostic(body, translate('anime_filler_reason'), reasonText(state.reason))
         if (state.unconfirmedHostname) {
             appendDiagnostic(body, translate('anime_filler_hostname'), state.unconfirmedHostname)
         }
 
-        appendClassificationDiagnostics(body)
+        appendClassificationDiagnostics(body, detailed)
 
         Lampa.Modal.open({
             title: translate('anime_filler_diagnostics'),
             html: body,
             size: 'small',
-            buttons: [{ name: translate('anime_filler_close'), onSelect: closeInfo }],
+            buttons_position: 'outside',
+            buttons: [{
+                name: translate(detailed ? 'anime_filler_summary' : 'anime_filler_details'),
+                onSelect: function () {
+                    Lampa.Modal.close()
+                    showDiagnostics(!detailed)
+                }
+            }, { name: translate('anime_filler_close'), onSelect: closeInfo }],
             onBack: closeInfo
         })
     }
 
     function registerTranslations() {
         Lampa.Lang.add({
+            anime_filler_details: { ru: 'Подробно', en: 'Details' },
+            anime_filler_summary: { ru: 'Кратко', en: 'Summary' },
+            anime_filler_cache_status: { ru: 'Кеш', en: 'Cache' },
+            anime_filler_cache_loaded: { ru: 'прочитан', en: 'read' },
+            anime_filler_cache_saved: { ru: 'сохранён', en: 'saved' },
+            anime_filler_cache_unverified: { ru: 'сохранение не подтверждено', en: 'persistence unverified' },
+            anime_filler_cache_failed: { ru: 'ошибка сохранения, данные в памяти', en: 'write failed, data in memory' },
             anime_filler_classifications: {"ru": "Классификации", "en": "Classifications"},
             anime_filler_data_state: {"ru": "Состояние набора", "en": "Dataset state"},
             anime_filler_data_version: {"ru": "Версия набора", "en": "Dataset version"},
@@ -590,7 +615,7 @@
             component: COMPONENT_ID,
             param: { name: DIAGNOSTICS_PARAM_ID, type: 'button' },
             field: { name: translate('anime_filler_diagnostics') },
-            onChange: showDiagnostics
+            onChange: function () { refreshDiagnosticAvailability(); showDiagnostics(false) }
         })
     }
 

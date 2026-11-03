@@ -48,11 +48,13 @@ function build(files, catalog, mappings, lock) {
         const data = files[file]
         let parsed
         try { parsed = parseEpisodes(data) } catch (e) { coverage.push({ file, result: 'invalid_structure' }); continue }
-        const row = { file, title: data.series_title, sourceEpisodes: data.episodes.length, issues: parsed.issues }
+        const row = { file, title: data.series_title, sourceEpisodes: data.episodes.length, issues: parsed.issues, research: data.research_status, citations: data.citation_sources }
         // Exact upstream primary-key join (load_episodes.py::find_series_id), never a fuzzy title match.
         const candidates = catalog.filter(c => object(c) && c.title === data.series_title)
         const supplement = lock.identities[file]
         let ids = supplement || (candidates.length === 1 ? candidates[0] : null)
+        row.identityEvidence = supplement ? supplement.evidence : candidates.length === 1 ? 'series-candidates.json exact primary key; load_episodes.py::find_series_id' : null
+        row.candidateIds = (supplement ? [supplement] : candidates).map(candidate => ({ mal: candidate.mal_id, anilist: candidate.anilist_id }))
         if (!ids) { coverage.push({ ...row, result: 'no_confirmed_identifier' }); continue }
         let mal = ids.mal_id, anilist = ids.anilist_id
         if ((mal != null && !positive(mal)) || (anilist != null && !positive(anilist)) || (!mal && !anilist)) { coverage.push({ ...row, result: 'no_confirmed_identifier' }); continue }
@@ -61,6 +63,7 @@ function build(files, catalog, mappings, lock) {
             const ms = Object.keys(mappings['anilist:' + anilist] || {}).filter(k => /^mal:\d+$/.test(k))
             if (ms.length === 1) mal = Number(ms[0].split(':')[1])
         }
+        row.checkedIds = { mal, anilist }
         if (mal && anilist && !Object.prototype.hasOwnProperty.call(mappings['mal:' + mal] || {}, 'anilist:' + anilist)) {
             coverage.push({ ...row, result: 'identifier_conflict' }); continue
         }
@@ -80,10 +83,7 @@ function build(files, catalog, mappings, lock) {
             id: file.replace('-episodes.json', ''), title: data.series_title,
             mal: mal || null, anilist: anilist || null, ranges: ranges(parsed.episodes), counts,
             integrity: parsed.issues.length ? 'issues' : 'valid', issues: parsed.issues,
-            numbering: { kind: 'source_entry', file, min: parsed.episodes[0][0], max: parsed.episodes[parsed.episodes.length - 1][0], kodikConfirmed: false },
-            identityEvidence: supplement ? supplement.evidence : 'series-candidates.json exact primary key; load_episodes.py::find_series_id',
-            research: data.research_status,
-            citations: data.citation_sources
+            numbering: { kind: 'source_entry', file, min: parsed.episodes[0][0], max: parsed.episodes[parsed.episodes.length - 1][0], kodikConfirmed: false }
         }
         records.push(record)
         coverage.push({ ...row, result: 'accepted', mal: record.mal, anilist: record.anilist, classifications: parsed.episodes.length, counts })
@@ -119,7 +119,13 @@ function build(files, catalog, mappings, lock) {
     const dataset = { schema: 1, source: 'AniFillerPedia', upstream: lock.upstream, notices: lock.notices, records, tmdb, identifiers, counts }
     const raw = serialize(dataset), sha256 = hash(raw)
     const manifest = { schema: 1, version: sha256, file: 'dataset.' + sha256 + '.json', sha256, bytes: Buffer.byteLength(raw), sourceDate: lock.upstream.afp.date, counts }
-    return { raw, manifest, coverage: { counts, records: coverage } }
+    const previousRecords = records.map((record) => {
+        const { research, citations, identityEvidence } = coverage.find(row => row.file === record.numbering.file)
+        return { ...record, research, citations, identityEvidence }
+    })
+    const previousBytes = Buffer.byteLength(serialize({ ...dataset, records: previousRecords }))
+    const size = { previousBytes, runtimeBytes: manifest.bytes, savedBytes: previousBytes - manifest.bytes }
+    return { raw, manifest, coverage: { counts, upstream: lock.upstream, size, records: coverage } }
 }
 
 if (require.main === module) {
