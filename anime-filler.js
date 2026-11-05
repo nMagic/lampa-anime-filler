@@ -2,7 +2,7 @@
     'use strict'
 
     var PLUGIN_NAME = 'Anime Filler'
-    var PLUGIN_VERSION = '0.3.2'
+    var PLUGIN_VERSION = '0.3.3'
     var COMPONENT_ID = 'anime_filler'
     var ABOUT_PARAM_ID = 'anime_filler_about'
     var DIAGNOSTICS_PARAM_ID = 'anime_filler_diagnostics'
@@ -18,6 +18,11 @@
     var scanTimer = null
     var generation = 0
     var generationCounter = 0
+    // Diagnostic only. Native Lampa events, never HTTP/callback replacements.
+    var probeRequests = typeof WeakMap === 'function' ? new WeakMap() : null
+    var probeActivities = typeof WeakMap === 'function' ? new WeakMap() : null
+    var probe = null
+    var probeEpoch = 0
 
     var state = {
         onlineModDetected: false,
@@ -468,6 +473,7 @@
         }
 
         appendClassificationDiagnostics(body, detailed)
+        if (detailed) appendProbeDiagnostics(body)
 
         Lampa.Modal.open({
             title: translate('anime_filler_diagnostics'),
@@ -487,6 +493,19 @@
 
     function registerTranslations() {
         Lampa.Lang.add({
+            anime_filler_probe: { ru: 'Эксперимент метаданных Kodik', en: 'Kodik metadata experiment' },
+            anime_filler_probe_source: { ru: 'Источник метаданных', en: 'Metadata source' },
+            anime_filler_probe_version: { ru: 'Online_Mod (исследован, не определён на устройстве)', en: 'Online_Mod (researched, not detected on device)' },
+            anime_filler_probe_response: { ru: 'Ответ / материалов', en: 'Response / materials' },
+            anime_filler_probe_material: { ru: 'Выбранный материал Kodik', en: 'Selected Kodik material' },
+            anime_filler_probe_title: { ru: 'Название материала / исходное', en: 'Material title / original' },
+            anime_filler_probe_voice: { ru: 'ID / название перевода', en: 'Translation ID / title' },
+            anime_filler_probe_shiki: { ru: 'Исходный Shikimori ID', en: 'Raw Shikimori ID' },
+            anime_filler_probe_mal: { ru: 'Связь с MAL (только кандидат)', en: 'MAL link (candidate only)' },
+            anime_filler_probe_rows: { ru: 'Строк связано / текущий сезон', en: 'Rows joined / current season' },
+            anime_filler_probe_keys: { ru: 'Исходные ключи эпизодов', en: 'Raw episode keys' },
+            anime_filler_probe_seasons: { ru: 'Сезоны материала: ключ / число серий', en: 'Material seasons: key / episode count' },
+            anime_filler_probe_numbering: { ru: 'Схема и нумерация эпизодов не подтверждены', en: 'Episode numbering and scheme remain unverified' },
             anime_filler_details: { ru: 'Подробно', en: 'Details' },
             anime_filler_summary: { ru: 'Кратко', en: 'Summary' },
             anime_filler_cache_status: { ru: 'Кеш', en: 'Cache' },
@@ -681,6 +700,197 @@
             Math.floor(element.episode) === element.episode)
     }
 
+    function probeBegin(activity) {
+        if (probe) probe.epoch = ++probeEpoch
+        if (!probeActivities || !probeRequests) { probe = null; return }
+        var saved = probeActivities.get(activity)
+        probe = saved && saved.generation === generation ? saved : {
+            generation: generation, sequence: 0, response: null, status: 'waiting_request'
+        }
+        probe.epoch = ++probeEpoch
+        probeActivities.set(activity, probe)
+    }
+
+    function probeText(value) {
+        if (typeof value !== 'string') return ''
+        // Only metadata fields reach the modal; never URLs or raw request data.
+        if (value.length > 200 || /https?:|\/\/|[\u0000-\u001f\u007f]/i.test(value)) return ''
+        return value
+    }
+
+    function probeId(value, material) {
+        var text = typeof value === 'string' || typeof value === 'number' ? String(value) : ''
+        return (material ? /^(serial|movie)-[1-9][0-9]*$/ : /^[a-z]*[1-9][0-9]*$/).test(text) && text.length <= 32 ? text : ''
+    }
+
+    function probeRequestAllowed(params) {
+        if (!plain(params) || typeof params.url !== 'string' || params.post_data ||
+            (params.type && params.type !== 'GET') || (params.dataType && params.dataType !== 'json')) return false
+        // Intentionally no proxy decoding, substring hosts or token extraction.
+        var url = params.url.match(/^https:\/\/kodik-api\.com\/search\?([^#]*)$/)
+        if (!url) return false
+        var flags = url[1].split('&').filter(function (part) { return /^with_episodes=/.test(part) })
+        return flags.length === 1 && flags[0] === 'with_episodes=true'
+    }
+
+    function probeBefore(event) {
+        try {
+            if (!probe || !observedActivity || state.sourceCandidate !== 'kodik' || !event || !probeRequestAllowed(event.params)) return
+            probe.sequence += 1
+            probe.response = null
+            probe.status = 'waiting_response'
+            probeRequests.set(event.params, { context: probe, epoch: probe.epoch, sequence: probe.sequence })
+        } catch (ignored) { /* An observer must never interrupt event dispatch. */ }
+    }
+
+    function probeTicket(event) {
+        if (!probeRequests || !probe || !event || !plain(event.params)) return null
+        var ticket = probeRequests.get(event.params)
+        return ticket && ticket.context === probe && ticket.epoch === probe.epoch &&
+            ticket.sequence === probe.sequence && probe.generation === generation &&
+            state.sourceCandidate === 'kodik' ? ticket : null
+    }
+
+    function probeProject(data) {
+        if (!plain(data) || !Array.isArray(data.results) || data.results.length > 100) return null
+        var result = { materials: [], byLink: Object.create(null), rows: 0 }
+        var limit = false
+        data.results.forEach(function (item) {
+            if (limit || !plain(item) || !plain(item.seasons) || !plain(item.translation)) return
+            var material = {
+                id: probeId(item.id, true), shikimori: probeId(item.shikimori_id, false),
+                translation: positiveId(item.translation.id), voice: probeText(item.translation.title),
+                title: probeText(item.title), original: probeText(item.title_orig || item.title), seasons: []
+            }
+            var seasons = Object.keys(item.seasons)
+            if (seasons.length > 100) { limit = true; return }
+            seasons.forEach(function (key) {
+                if (limit) return
+                var season = item.seasons[key]
+                if (!/^[0-9]{1,8}$/.test(key) || !plain(season) || !plain(season.episodes)) return
+                var keys = Object.keys(season.episodes)
+                result.rows += keys.length
+                if (result.rows > 25000) { limit = true; return }
+                var area = { key: key, keys: keys.slice() }
+                material.seasons.push(area)
+                keys.forEach(function (rawEpisode) {
+                    var link = season.episodes[rawEpisode]
+                    if (!/^[0-9a-z.-]{1,24}$/i.test(rawEpisode) || !inspectKodikLink(link).confirmed) return
+                    link = link.trim()
+                    if (!own(result.byLink, link)) result.byLink[link] = []
+                    result.byLink[link].push({ material: material, area: area, rawEpisode: rawEpisode })
+                })
+            })
+            result.materials.push(material)
+        })
+        return limit ? null : result
+    }
+
+    function probeResponse(event) {
+        var ticket = null
+        try {
+            ticket = probeTicket(event)
+            if (!ticket) return
+            probe.response = probeProject(event.data)
+            probe.status = probe.response ? 'response_observed' : 'invalid_or_oversized_response'
+            queueScan()
+        } catch (ignored) {
+            if (ticket && probe === ticket.context) { probe.response = null; probe.status = 'invalid_response' }
+        }
+    }
+
+    function probeError(event) {
+        try {
+            if (!probeTicket(event)) return
+            probe.response = null
+            probe.status = 'request_error'
+            queueScan()
+        } catch (ignored) {}
+    }
+
+    function probeCapture(element) {
+        try {
+            if (!probe || !probe.response || !probeRequests || typeof element.link !== 'string') return null
+            var response = probe.response
+            var matches = response.byLink[element.link.trim()] || []
+            matches = matches.filter(function (entry) {
+                return entry.area.key === String(element.season) && parseInt(entry.rawEpisode) === element.episode &&
+                    entry.material.voice === String(element.translate_voice || '') &&
+                    entry.material.original === element.orig_title
+            })
+            return { context: probe, response: response, matches: matches }
+        } catch (ignored) { return null }
+    }
+
+    function probeCurrent() {
+        var result = { status: probe ? probe.status : 'unavailable', selected: null, area: null, rows: 0 }
+        if (!probe || !probe.response) return result
+        result.status = 'list_not_confirmed'
+        if (state.status !== 'ready' || !isCurrentActivity() || probe.generation !== generation) return result
+        var nodes = listNodes(), common = null, entries = []
+        result.status = 'row_not_joined'
+        for (var i = 0; i < nodes.length; i++) {
+            var metadata = templateMetadata.get(nodes[i])
+            var capture = metadata && metadata.probe
+            if (!metadata || metadata.generation !== generation || !capture || capture.context !== probe ||
+                capture.response !== probe.response || !capture.matches.length) return result
+            var materials = capture.matches.map(function (entry) { return entry.material })
+            common = common === null ? materials : common.filter(function (material) { return materials.indexOf(material) !== -1 })
+            entries.push(capture.matches)
+        }
+        common = (common || []).filter(function (material, index, all) { return all.indexOf(material) === index })
+        result.status = 'ambiguous_material_or_translation'
+        if (common.length !== 1 || !common[0].translation) return result
+        var selected = common[0], rawKeys = Object.create(null), rawCount = 0, area = null
+        for (i = 0; i < entries.length; i++) {
+            var matched = entries[i].filter(function (entry) { return entry.material === selected })
+            if (matched.length !== 1 || (area && area !== matched[0].area)) return result
+            area = matched[0].area
+            if (own(rawKeys, matched[0].rawEpisode)) return result
+            rawKeys[matched[0].rawEpisode] = true
+            rawCount += 1
+        }
+        result.status = 'incomplete_list'
+        if (!area || rawCount !== area.keys.length) return result
+        result.status = selected.id ? 'list_bound' : 'material_id_missing'
+        result.selected = selected; result.area = area; result.rows = rawCount
+        return result
+    }
+
+    function probeMal(selected) {
+        if (!selected.shikimori) return 'shikimori_missing_or_invalid'
+        var candidate = positiveId(selected.shikimori)
+        if (!candidate) return 'prefixed_namespace_unverified: ' + selected.shikimori
+        var id = 'mal:' + candidate
+        if (!dataState.dataset) return id + ' — namespace_unverified; data_unavailable'
+        if (classification.reason === 'identifier_conflict' || classification.reason === 'invalid_identifier') return id + ' — card_identifier_conflict'
+        var targets = classification.targets.map(function (target) {
+            return own(dataState.dataset.identifiers, target) ? dataState.dataset.identifiers[target] : target
+        })
+        if (targets.length && targets.indexOf(id) === -1) return id + ' — candidate_conflicts_with_card'
+        return id + ' — ' + (targets.indexOf(id) !== -1 ? 'candidate_consistent_with_card' : 'card_scope_unavailable') + '; namespace_unverified'
+    }
+
+    function appendProbeDiagnostics(body) {
+        var current = probeCurrent()
+        appendDiagnostic(body, translate('anime_filler_probe'), current.status)
+        appendDiagnostic(body, translate('anime_filler_probe_source'), 'Lampa.Listener: request_before / request_secuses; direct HTTPS API only')
+        appendDiagnostic(body, translate('anime_filler_probe_version'), '25.10.2026 / cde2cf057e6634df43553fe8deeaef5030f95945')
+        appendDiagnostic(body, translate('anime_filler_probe_response'), probe && probe.response ? '#' + probe.sequence + ' / ' + probe.response.materials.length : 'waiting for observed API events')
+        if (!current.selected) return
+        var selected = current.selected
+        appendDiagnostic(body, translate('anime_filler_probe_material'), displayValue(selected.id))
+        appendDiagnostic(body, translate('anime_filler_probe_title'), selected.title + ' / ' + selected.original)
+        appendDiagnostic(body, translate('anime_filler_probe_voice'), selected.translation + ' / ' + selected.voice)
+        appendDiagnostic(body, translate('anime_filler_probe_shiki'), displayValue(selected.shikimori))
+        appendDiagnostic(body, translate('anime_filler_probe_mal'), probeMal(selected))
+        appendDiagnostic(body, translate('anime_filler_probe_rows'), current.rows + ' / ' + current.area.key)
+        var keys = current.area.keys.slice().sort(function (a, b) { return parseFloat(a) - parseFloat(b) || (a < b ? -1 : a > b ? 1 : 0) })
+        appendDiagnostic(body, translate('anime_filler_probe_keys'), keys.length <= 8 ? keys.join(', ') : keys.slice(0, 4).join(', ') + ' … ' + keys.slice(-4).join(', '))
+        appendDiagnostic(body, translate('anime_filler_probe_seasons'), selected.seasons.slice(0, 8).map(function (area) { return area.key + ' / ' + area.keys.length }).join('; ') + (selected.seasons.length > 8 ? ' …' : ''))
+        appendDiagnostic(body, translate('anime_filler_probe_numbering'), 'unverified')
+    }
+
     function rememberTemplateResult(result, element) {
         if (!templateMetadata || !exactEpisode(element)) return
         var root = resultRoot(result)
@@ -694,7 +904,8 @@
             generation: generation,
             sourceConfirmed: source.confirmed,
             sourceReason: source.reason,
-            sourceHostname: source.hostname
+            sourceHostname: source.hostname,
+            probe: probeCapture(element)
         })
     }
 
@@ -889,6 +1100,7 @@
         state.card = copyCard(activityObject)
         loadClassifications()
         state.sourceCandidate = resolveSourceCandidate(activityObject)
+        probeBegin(activityObject)
         clearEpisodeSnapshot(
             state.sourceCandidate === 'kodik' ? 'waiting_for_list' : (state.sourceCandidate ? 'not_kodik' : 'source_unknown'),
             state.sourceCandidate === 'kodik' ? 'list_not_ready' : (state.sourceCandidate ? 'source_not_kodik' : 'missing_source_candidate')
@@ -909,6 +1121,8 @@
 
     function leaveActivity(status, reason) {
         disconnectObserver()
+        if (probe) probe.epoch = ++probeEpoch
+        probe = null
         observedActivity = null
         observedRoot = null
         state.activityActive = false
@@ -945,6 +1159,7 @@
         generation = generationCounter
         if (activityGenerations) activityGenerations.set(observedActivity, generation)
         state.sourceCandidate = available(event.value) ? String(event.value) : ''
+        probeBegin(observedActivity)
         clearEpisodeSnapshot(
             state.sourceCandidate === 'kodik' ? 'waiting_for_list' : (state.sourceCandidate ? 'not_kodik' : 'source_unknown'),
             state.sourceCandidate === 'kodik' ? 'list_not_ready' : (state.sourceCandidate ? 'source_not_kodik' : 'missing_source_candidate')
@@ -955,6 +1170,9 @@
     function installRuntimeObservers() {
         installTemplateObserver()
         Lampa.Listener.follow('activity', handleActivity)
+        Lampa.Listener.follow('request_before', probeBefore)
+        Lampa.Listener.follow('request_secuses', probeResponse)
+        Lampa.Listener.follow('request_error', probeError)
 
         if (Lampa.Storage && Lampa.Storage.listener && Lampa.Storage.listener.follow) {
             Lampa.Storage.listener.follow('change', handleStorageChange)
