@@ -507,6 +507,7 @@
             anime_filler_mapper_gates: { ru: 'Проверки G0–G8', en: 'G0–G8 gates' },
             anime_filler_mapper_request: { ru: 'Форма запроса (без URL)', en: 'Request shape (no URL)' },
             anime_filler_mapper_structure: { ru: 'Структура материала', en: 'Material structure' },
+            anime_filler_mapper_raw: { ru: 'Исходные ключи (точные диапазоны)', en: 'Raw keys (exact ranges)' },
             anime_filler_mapper_missing: { ru: 'Отсутствующие исходные номера', en: 'Missing raw numbers' },
             anime_filler_probe: { ru: 'Эксперимент метаданных Kodik', en: 'Kodik metadata experiment' },
             anime_filler_probe_source: { ru: 'Источник метаданных', en: 'Metadata source' },
@@ -809,6 +810,24 @@
         return result
     }
 
+    function mapperRawDisplay(keys) {
+        var numbers = [], other = [], ranges = [], start = null, last = null
+        keys.forEach(function (raw) {
+            var id = positiveId(raw)
+            if (id && String(Number(id)) === raw) numbers.push(Number(id))
+            else other.push('raw[' + raw + ']')
+        })
+        numbers.sort(function (a, b) { return a - b })
+        function endRange() { if (start !== null) ranges.push(start === last ? String(start) : start + '–' + last) }
+        numbers.forEach(function (n) {
+            if (last === null || n !== last + 1) { endRange(); start = n }
+            last = n
+        })
+        endRange()
+        var parts = ranges.concat(other)
+        return parts.slice(0, 500).join(', ') + (parts.length > 500 ? ' … [truncated]' : '')
+    }
+
     function mapperOrdinaryTitle(area) {
         if (!positiveId(area.key) || String(Number(area.key)) !== area.key || !area.titleValid) return false
         var title = area.title.trim().toLowerCase().replace(/\s+/g, ' '), key = area.key
@@ -940,6 +959,7 @@
                 selected.seasons.filter(function (s) { return s.keys.length }).length + ' / title=' + (mappingContext.area.titleValid ? mappingContext.area.title || '(empty)' : 'invalid'))
         }
         if (m.stats) {
+            appendDiagnostic(body, translate('anime_filler_mapper_raw'), mapperRawDisplay(mappingContext.area.keys))
             appendDiagnostic(body, 'Raw count / min / max', m.stats.count + ' / ' + m.stats.min + ' / ' + m.stats.max)
             // All missing keys up to the projection bound; diagnostic output stays bounded.
             appendDiagnostic(body, translate('anime_filler_mapper_missing'), m.stats.missing.length + ': ' +

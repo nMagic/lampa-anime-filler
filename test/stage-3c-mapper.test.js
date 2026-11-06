@@ -226,3 +226,12 @@ test('new season in the same response is evaluated afresh without reusing row re
     const next=rows(s.h,s.a,second,'2');await flush();assert.equal(old.mapping,null)
     assert.equal(row(s,next,4).category,'mixed');assert.equal(s.api.context().area.key,'2')
 })
+
+
+test('diagnostics retain every raw key via exact ranges and include noncanonical keys rather than just endpoints',async()=>{
+    const s=setup(),m=material(1735,{missing:[26,27,53]});await bind(s,m)
+    let text=diagnosticsText(s.h);assert.match(text,/Исходные ключи \(точные диапазоны\): 1–25, 28–52, 54–500/)
+    assert.match(text,/Отсутствующие исходные номера: 3: 26, 27, 53/)
+    m.seasons['1'].episodes['12.5']='//kodik.info/seria/999/synthetic/720p';await bind(s,m)
+    text=diagnosticsText(s.h);assert.match(text,/raw\[12\.5\]/);assert.equal(s.api.summary().classified,0)
+})
