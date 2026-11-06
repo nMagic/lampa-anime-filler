@@ -2,7 +2,7 @@
     'use strict'
 
     var PLUGIN_NAME = 'Anime Filler'
-    var PLUGIN_VERSION = '0.3.3'
+    var PLUGIN_VERSION = '0.3.4'
     var COMPONENT_ID = 'anime_filler'
     var ABOUT_PARAM_ID = 'anime_filler_about'
     var DIAGNOSTICS_PARAM_ID = 'anime_filler_diagnostics'
@@ -180,6 +180,8 @@
     }
 
     function acceptDataset(raw, manifest, data, origin) {
+        clearMapping()
+        if (observedActivity && observedRoot) queueScan()
         dataState.cache = origin === 'cache' ? 'loaded' : ''
         dataRaw = raw; dataManifest = manifest
         dataState.dataset = data; dataState.status = 'ready'; dataState.origin = origin
@@ -474,6 +476,7 @@
 
         appendClassificationDiagnostics(body, detailed)
         if (detailed) appendProbeDiagnostics(body)
+        appendMapperDiagnostics(body, detailed)
 
         Lampa.Modal.open({
             title: translate('anime_filler_diagnostics'),
@@ -493,6 +496,18 @@
 
     function registerTranslations() {
         Lampa.Lang.add({
+            anime_filler_mapper: { ru: 'Диагностический mapper', en: 'Diagnostic mapper' },
+            anime_filler_mapper_counts: { ru: 'Сопоставлено / категории / AFP unknown', en: 'Mapped / categories / AFP unknown' },
+            anime_filler_mapper_policy: { ru: 'Политика / аудит', en: 'Policy / audit' },
+            anime_filler_mapper_grade: { ru: 'Достоверность / стадия / правило', en: 'Grade / stage / rule' },
+            anime_filler_mapper_basis: { ru: 'Основание mapper', en: 'Mapper basis' },
+            anime_filler_mapper_engineering: { ru: 'policy_mapped — инженерное сопоставление; не независимое подтверждение содержания каждого видео', en: 'policy_mapped is an engineering policy, not independent verification of every video' },
+            anime_filler_mapper_total: { ru: 'Независимый total / источник', en: 'Independent total / source' },
+            anime_filler_mapper_card: { ru: 'Сверка карточки', en: 'Card check' },
+            anime_filler_mapper_gates: { ru: 'Проверки G0–G8', en: 'G0–G8 gates' },
+            anime_filler_mapper_request: { ru: 'Форма запроса (без URL)', en: 'Request shape (no URL)' },
+            anime_filler_mapper_structure: { ru: 'Структура материала', en: 'Material structure' },
+            anime_filler_mapper_missing: { ru: 'Отсутствующие исходные номера', en: 'Missing raw numbers' },
             anime_filler_probe: { ru: 'Эксперимент метаданных Kodik', en: 'Kodik metadata experiment' },
             anime_filler_probe_source: { ru: 'Источник метаданных', en: 'Metadata source' },
             anime_filler_probe_version: { ru: 'Online_Mod (исследован, не определён на устройстве)', en: 'Online_Mod (researched, not detected on device)' },
@@ -639,6 +654,7 @@
     }
 
     function clearEpisodeSnapshot(status, reason) {
+        clearMapping()
         state.sourceConfirmed = ''
         state.season = ''
         state.voice = ''
@@ -700,6 +716,252 @@
             Math.floor(element.episode) === element.episode)
     }
 
+    // direct-local-v1: diagnostic only. No network, persistence or playback.
+    // Totals/kind/status: Shikimori GraphQL id/malId audit, 2026-11-06 16:08Z.
+    // Exact source responses + AFP-local evidence: test/fixtures/stage-3c-catalog-audit.json.
+    // This finite namespace certificate applies ONLY to the pinned dataset version.
+    var MAPPER_POLICY = 'direct-local-v1'
+    var MAPPER_AUDIT = 'shikimori-2026-11-06-v1'
+    var MAPPER_DATA_VERSION = '14885244fe8c06b2957092e194d4f4e56dd366db9e1c7b3084430efffaf552cf'
+    var MAPPER_CATALOG_SOURCE = 'Shikimori GraphQL id/malId/episodes/kind/status; 2026-11-06 16:08Z'
+    // All entries below were individually returned as TV/released by that audit.
+    // Array: independent total, exact AFP source file stem (null = no record), sparse rule.
+    var MAPPER_FACTS = {
+        '20': [220, 'naruto', false], '1735': [500, 'naruto-shippuden', true],
+        '269': [366, 'bleach', true], '41467': [13, 'bleach-tybw', false],
+        '53998': [13, 'bleach-tybw-part-2', false], '56784': [14, 'bleach-tybw-part-3', false],
+        '60636': [10, null, false], '121': [51, 'fullmetal-alchemist', false],
+        '5114': [64, 'fullmetal-alchemist-brotherhood', false],
+        '740': [43, 'sailor-moon-r', false], '5262': [51, 'shugo-chara-doki', false],
+        '36474': [24, 'sword-art-online-alicization', false], '35788': [12, 'shokugeki-san-no-sara', false]
+    }
+    var mappingContext = null
+    var mapping = null
+
+    function clearMapping() {
+        if (mappingContext) mappingContext.bindings.forEach(function (binding) { binding.metadata.mapping = null })
+        mappingContext = null
+        mapping = null
+    }
+
+    function probeCounter(value) {
+        if (value === null || typeof value === 'undefined') return null
+        return positiveId(value) ? Number(value) : -1
+    }
+
+    function probeRequestShape(params) {
+        var shape = { filtered: false, representation: 'links', valid: true }
+        var count = 0
+        try {
+            params.url.slice(params.url.indexOf('?') + 1).split('&').forEach(function (part) {
+                var at = part.indexOf('='), key = decodeURIComponent((at < 0 ? part : part.slice(0, at)).replace(/\+/g, ' '))
+                if (/^(season|episode)(\[.*\])?$/i.test(key)) shape.filtered = true
+                if (key === 'with_episodes_data') {
+                    count += 1
+                    var value = at < 0 ? '' : part.slice(at + 1)
+                    if (value === 'true') shape.representation = 'expanded'
+                    else if (value !== 'false') shape.valid = false
+                }
+            })
+        } catch (ignored) { shape.valid = false }
+        if (count > 1) shape.valid = false
+        return shape
+    }
+
+    function mapperCanonical(id) {
+        var data = dataState.dataset
+        return data && own(data.identifiers, id) ? data.identifiers[id] : id
+    }
+
+    function mapperCardCheck(area) {
+        var card = state.card || {}, direct = []
+        if (positiveId(card.mal_id)) direct.push('mal:' + positiveId(card.mal_id))
+        if (positiveId(card.anilist_id)) {
+            var al = mapperCanonical('anilist:' + positiveId(card.anilist_id))
+            if (/^mal:/.test(al)) direct.push(al)
+        }
+        if (direct.some(function (id) { return id !== area })) return 'identifier_conflict'
+        if (direct.length) return 'direct_consistent'
+        if (classification.targets.length) return classification.targets.some(function (id) {
+            return mapperCanonical(id) === area
+        }) ? 'consistent_with_saved_index' : 'not_in_saved_index'
+        return 'unavailable'
+    }
+
+    function mapperKeyStats(keys, total) {
+        var result = { count: keys.length, min: null, max: null, missing: [], reason: '', canonical: true }
+        var seen = Object.create(null)
+        keys.forEach(function (raw) {
+            var id = positiveId(raw), n = Number(id)
+            if (!id || typeof raw !== 'string' || String(n) !== raw) {
+                result.canonical = false; result.reason = result.reason || 'noncanonical_episode_key'
+                // Report parseInt collisions as well as invalid keys, never use them for mapping.
+                n = parseInt(raw)
+            }
+            if (isFinite(n)) {
+                if (own(seen, n)) result.reason = 'numeric_collision'
+                seen[n] = true
+                result.min = result.min === null ? n : Math.min(result.min, n)
+                result.max = result.max === null ? n : Math.max(result.max, n)
+            }
+        })
+        if (total > 0 && total <= 25000) for (var i = 1; i <= total; i++) if (!own(seen, i)) result.missing.push(i)
+        return result
+    }
+
+    function mapperOrdinaryTitle(area) {
+        if (!positiveId(area.key) || String(Number(area.key)) !== area.key || !area.titleValid) return false
+        var title = area.title.trim().toLowerCase().replace(/\s+/g, ' '), key = area.key
+        return !title || title === key || title === 'season ' + key || title === 'сезон ' + key || title === key + ' сезон'
+    }
+
+    function mapperGate(result, name, condition, reason, stage, status) {
+        result.gates.push({ gate: name, status: condition ? 'passed' : 'failed', reason: condition ? '' : reason })
+        if (condition) return true
+        result.failedGate = name; result.reason = reason; result.stage = stage
+        result.status = status || 'insufficient'
+        result.numberingGrade = result.status === 'ambiguous' || result.status === 'conflict' ? result.status : 'unverified'
+        return false
+    }
+
+    function evaluateMapping(current) {
+        var result = { stage: 'identity', status: 'insufficient', reason: '', failedGate: '',
+            numberingGrade: 'unverified', canonicalArea: null, record: null, recordAbsent: false,
+            rule: '', gates: [], total: null, stats: null, cardCheck: 'unavailable',
+            mapped: 0, classified: 0, unknown: 0, conflicts: 0 }
+        var g0status = /ambiguous/.test(current.status) ? 'ambiguous' : 'insufficient'
+        if (!mapperGate(result, 'G0', current.status === 'list_bound', current.status, 'identity', g0status)) return result
+        var selected = current.selected, data = dataState.dataset, id = positiveId(selected.shikimori)
+        var area = id ? 'mal:' + id : ''
+        var audited = data && dataState.version === MAPPER_DATA_VERSION && Object.keys(data.identifiers).some(function (key) {
+            return data.identifiers[key] === area
+        })
+        var identityReason = !data ? 'data_unavailable' : dataState.version !== MAPPER_DATA_VERSION ? 'identity_audit_required' :
+            !id ? 'shikimori_missing_or_invalid' : 'identity_outside_audit'
+        if (!mapperGate(result, 'G1', Boolean(id && audited), identityReason, 'identity')) return result
+        result.canonicalArea = area
+        var records = data.records.filter(function (record) {
+            return 'mal:' + record.mal === area || mapperCanonical('anilist:' + record.anilist) === area
+        })
+        result.record = records.length === 1 ? records[0] : null
+        result.recordAbsent = !records.length
+        var facts = own(MAPPER_FACTS, id) ? MAPPER_FACTS[id] : null
+        result.total = facts && positiveId(facts[0]) ? facts[0] : null
+        result.stats = mapperKeyStats(current.area.keys, result.total)
+        result.cardCheck = mapperCardCheck(area)
+        if (!mapperGate(result, 'G2', selected.type === 'anime-serial' && Boolean(facts),
+            selected.type !== 'anime-serial' ? 'unsupported_material_type' : 'catalog_policy_unavailable', 'numbering')) return result
+        var shape = probe.response.requestShape
+        if (!mapperGate(result, 'G3', selected.structureComplete && selected.seasons.filter(function (s) { return s.keys.length }).length === 1 &&
+            shape && shape.valid && !shape.filtered && shape.representation === 'links' && current.area.representation === 'links',
+            !selected.structureComplete ? 'structure_incomplete' : !shape || !shape.valid ? 'request_shape_unknown' :
+            shape.filtered ? 'filtered_scope' : shape.representation !== 'links' || current.area.representation !== 'links' ? 'unsupported_episode_representation' : 'multiple_nonempty_areas', 'numbering')) return result
+        if (!mapperGate(result, 'G4', selected.seasons.every(mapperOrdinaryTitle), 'special_or_unreviewed_scope', 'numbering')) return result
+        var stats = result.stats
+        if (!mapperGate(result, 'G5', stats.canonical && !stats.reason && !current.area.duplicateLinks && current.bindings.every(function (binding) {
+            return Number(binding.entry.rawEpisode) === binding.metadata.episode
+        }), stats.reason || (current.area.duplicateLinks ? 'duplicate_episode_link' : 'episode_binding_mismatch'), 'numbering',
+        stats.reason === 'numeric_collision' || current.area.duplicateLinks ? 'conflict' : 'insufficient')) return result
+        if (!mapperGate(result, 'G6', Boolean(result.total && result.total <= 25000 && (!records.length ||
+            (records.length === 1 && result.record.id === facts[1]))), records.length > 1 ? 'multiple_afp_records' :
+            !result.total ? 'catalog_total_unavailable' : 'afp_local_relation_unreviewed', 'numbering', records.length > 1 ? 'ambiguous' : 'insufficient')) return result
+        if (!mapperGate(result, 'G7', result.cardCheck !== 'identifier_conflict', 'identifier_conflict', 'identity', 'conflict')) return result
+        var counterOK = (selected.episodesCount === null || selected.episodesCount === stats.count || selected.episodesCount === result.total) &&
+            (selected.lastEpisode === null || selected.lastEpisode === stats.max)
+        var rangesOK = !result.record || result.record.ranges.every(function (range) { return range[0] >= 1 && range[1] <= result.total })
+        if (!mapperGate(result, 'G8', counterOK && rangesOK, !counterOK ? 'counter_inconsistent' : 'afp_scope_inconsistent', 'numbering')) return result
+        if (stats.min !== 1 || stats.max !== result.total) { result.stage = 'numbering'; result.failedGate = facts[2] ? 'R2' : 'R1'; result.reason = 'numbering_boundary_mismatch'; return result }
+        if (!stats.missing.length && stats.count === result.total) result.rule = 'R1'
+        else if (facts[2] && stats.count < result.total && 20 * stats.missing.length <= result.total) result.rule = 'R2'
+        else { result.stage = 'numbering'; result.failedGate = facts[2] ? 'R2' : 'R1'; result.reason = facts[2] ? 'sparse_limit_exceeded' : 'sparse_area_unapproved'; return result }
+        result.stage = 'classification'; result.status = 'resolved'; result.reason = 'policy_mapped'; result.numberingGrade = 'policy_mapped'
+        return result
+    }
+
+    function refreshMapping() {
+        clearMapping()
+        try {
+            var current = probeCurrent(), summary = evaluateMapping(current)
+            mapping = summary
+            if (current.status !== 'list_bound') return
+            var context = { activity: observedActivity, root: observedRoot, generation: generation,
+                probe: probe, epoch: probe.epoch, response: probe.response, sequence: probe.sequence,
+                dataset: dataState.dataset, version: dataState.version, bindings: current.bindings, selected: current.selected, area: current.area }
+            mappingContext = context
+            current.bindings.forEach(function (binding) {
+                var row = { context: context, stage: summary.stage, status: summary.status, reason: summary.reason,
+                    failedGate: summary.failedGate, numberingGrade: summary.numberingGrade, canonicalArea: summary.canonicalArea,
+                    recordId: summary.record && summary.record.id || null, malEpisode: null, afpEpisode: null, category: null,
+                    policyRevision: MAPPER_POLICY, auditRevision: MAPPER_AUDIT, rule: summary.rule,
+                    displayReady: false, fillerReady: false, skipEligible: false }
+                if (summary.numberingGrade === 'policy_mapped') {
+                    row.malEpisode = Number(binding.entry.rawEpisode)
+                    summary.mapped += 1
+                    if (!summary.record) { row.status = 'unknown'; row.reason = 'classification_missing' }
+                    else {
+                        row.afpEpisode = row.malEpisode
+                        var hits = summary.record.ranges.filter(function (range) { return range[0] <= row.afpEpisode && row.afpEpisode <= range[1] })
+                        if (hits.length > 1) { row.status = 'conflict'; row.reason = 'overlapping_classifications'; summary.conflicts += 1 }
+                        else if (!hits.length) { row.status = 'unknown'; row.reason = row.afpEpisode > summary.record.numbering.max ? 'classification_outside_snapshot' : 'classification_gap' }
+                        else { row.category = hits[0][2]; summary.classified += 1 }
+                    }
+                    if (row.status === 'unknown') summary.unknown += 1
+                }
+                binding.metadata.mapping = row
+            })
+            if (summary.conflicts) { summary.status = 'conflict'; summary.reason = 'classification_conflict' }
+            else if (summary.unknown && !summary.classified) { summary.status = 'unknown'; summary.reason = summary.recordAbsent ? 'classification_missing' : 'classification_unavailable' }
+        } catch (ignored) { clearMapping(); mapping = { stage: 'numbering', status: 'insufficient', reason: 'mapper_metadata_error', gates: [], mapped: 0, classified: 0, unknown: 0 } }
+    }
+
+    function appendMapperDiagnostics(body, detailed) {
+        refreshMapping()
+        var m = mapping, selected = mappingContext && mappingContext.selected
+        appendDiagnostic(body, translate('anime_filler_mapper'), m.status + ' / ' + m.reason)
+        appendDiagnostic(body, translate('anime_filler_mapper_counts'), m.mapped + ' / ' + m.classified + ' / ' + m.unknown)
+        if (!detailed) return
+        appendDiagnostic(body, translate('anime_filler_mapper_policy'), MAPPER_POLICY + ' / ' + MAPPER_AUDIT)
+        appendDiagnostic(body, translate('anime_filler_mapper_grade'), (m.numberingGrade || 'unverified') + ' / ' + m.stage + ' / ' + (m.rule || 'none') + (m.failedGate ? ' / failedGate=' + m.failedGate : ''))
+        appendDiagnostic(body, translate('anime_filler_mapper_basis'), translate('anime_filler_mapper_engineering'))
+        appendDiagnostic(body, 'MAL / AFP', (m.canonicalArea || 'unverified') + ' / ' + (m.record ? m.record.id : m.recordAbsent ? 'classification_missing' : 'unverified'))
+        appendDiagnostic(body, translate('anime_filler_mapper_total'), (m.total === null || typeof m.total === 'undefined' ? 'unavailable' : m.total) + ' / ' + MAPPER_CATALOG_SOURCE)
+        appendDiagnostic(body, translate('anime_filler_mapper_card'), m.cardCheck || 'unavailable')
+        appendDiagnostic(body, translate('anime_filler_mapper_gates'), ['G0','G1','G2','G3','G4','G5','G6','G7','G8'].map(function (name) {
+            var check = (m.gates || []).filter(function (g) { return g.gate === name })[0]
+            return name + '=' + (check ? check.status + (check.reason ? '(' + check.reason + ')' : '') : 'not_evaluated')
+        }).join('; '))
+        var shape = probe && probe.response && probe.response.requestShape
+        appendDiagnostic(body, translate('anime_filler_mapper_request'), shape ? shape.representation + ' / filtered=' + shape.filtered + ' / valid=' + shape.valid : 'unavailable')
+        if (probe && probe.response) appendDiagnostic(body, 'Projection skipped areas / non-link areas', probe.response.skippedAreas + ' / ' + probe.response.nonLinkAreas)
+        if (selected) {
+            appendDiagnostic(body, 'Kodik type / episodes_count / last_episode', (selected.type || 'unavailable') + ' / ' +
+                (selected.episodesCount === null ? 'unavailable' : selected.episodesCount) + ' / ' + (selected.lastEpisode === null ? 'unavailable' : selected.lastEpisode))
+            appendDiagnostic(body, translate('anime_filler_mapper_structure'), 'complete=' + selected.structureComplete + ' / nonempty=' +
+                selected.seasons.filter(function (s) { return s.keys.length }).length + ' / title=' + (mappingContext.area.titleValid ? mappingContext.area.title || '(empty)' : 'invalid'))
+        }
+        if (m.stats) {
+            appendDiagnostic(body, 'Raw count / min / max', m.stats.count + ' / ' + m.stats.min + ' / ' + m.stats.max)
+            // All missing keys up to the projection bound; diagnostic output stays bounded.
+            appendDiagnostic(body, translate('anime_filler_mapper_missing'), m.stats.missing.length + ': ' +
+                (m.stats.missing.length <= 500 ? m.stats.missing.join(', ') : m.stats.missing.slice(0, 500).join(', ') + ' … [truncated]'))
+        }
+        appendDiagnostic(body, 'displayReady / fillerReady / skipEligible', 'false / false / false')
+        if (!mappingContext) return
+        var examples = [], bindings = mappingContext.bindings
+        function example(binding) { if (binding && examples.indexOf(binding) === -1 && examples.length < 8) examples.push(binding) }
+        example(bindings[0]); example(bindings[bindings.length - 1])
+        ;['canon', 'filler', 'mixed', null].forEach(function (category) {
+            example(bindings.filter(function (b) { return b.metadata.mapping.category === category })[0])
+        })
+        example(bindings[Math.floor(bindings.length / 3)]); example(bindings[Math.floor(2 * bindings.length / 3)])
+        examples.forEach(function (binding) {
+            var row = binding.metadata.mapping
+            appendDiagnostic(body, 'raw → MAL-local → AFP-local → category', binding.entry.rawEpisode + ' → ' +
+                (row.malEpisode === null ? '?' : row.malEpisode) + ' → ' + (row.afpEpisode === null ? '?' : row.afpEpisode) + ' → ' +
+                (row.category || 'null') + ' [' + row.status + ': ' + row.reason + ']')
+        })
+    }
+
     function probeBegin(activity) {
         if (probe) probe.epoch = ++probeEpoch
         if (!probeActivities || !probeRequests) { probe = null; return }
@@ -736,10 +998,11 @@
     function probeBefore(event) {
         try {
             if (!probe || !observedActivity || state.sourceCandidate !== 'kodik' || !event || !probeRequestAllowed(event.params)) return
+            clearMapping()
             probe.sequence += 1
             probe.response = null
             probe.status = 'waiting_response'
-            probeRequests.set(event.params, { context: probe, epoch: probe.epoch, sequence: probe.sequence })
+            probeRequests.set(event.params, { context: probe, epoch: probe.epoch, sequence: probe.sequence, shape: probeRequestShape(event.params) })
         } catch (ignored) { /* An observer must never interrupt event dispatch. */ }
     }
 
@@ -751,35 +1014,45 @@
             state.sourceCandidate === 'kodik' ? ticket : null
     }
 
-    function probeProject(data) {
+    function probeProject(data, requestShape) {
         if (!plain(data) || !Array.isArray(data.results) || data.results.length > 100) return null
-        var result = { materials: [], byLink: Object.create(null), rows: 0 }
+        var result = { materials: [], byLink: Object.create(null), rows: 0, requestShape: requestShape, skippedAreas: 0, nonLinkAreas: 0 }
         var limit = false
         data.results.forEach(function (item) {
             if (limit || !plain(item) || !plain(item.seasons) || !plain(item.translation)) return
             var material = {
                 id: probeId(item.id, true), shikimori: probeId(item.shikimori_id, false),
                 translation: positiveId(item.translation.id), voice: probeText(item.translation.title),
-                title: probeText(item.title), original: probeText(item.title_orig || item.title), seasons: []
+                title: probeText(item.title), original: probeText(item.title_orig || item.title), seasons: [],
+                type: probeText(item.type), episodesCount: probeCounter(item.episodes_count),
+                lastEpisode: probeCounter(item.last_episode), structureComplete: true
             }
             var seasons = Object.keys(item.seasons)
             if (seasons.length > 100) { limit = true; return }
             seasons.forEach(function (key) {
                 if (limit) return
                 var season = item.seasons[key]
-                if (!/^[0-9]{1,8}$/.test(key) || !plain(season) || !plain(season.episodes)) return
+                if (!/^[0-9]{1,8}$/.test(key) || !plain(season) || !plain(season.episodes)) { material.structureComplete = false; result.skippedAreas += 1; return }
                 var keys = Object.keys(season.episodes)
                 result.rows += keys.length
                 if (result.rows > 25000) { limit = true; return }
-                var area = { key: key, keys: keys.slice() }
+                var title = season.title, cleanTitle = probeText(title)
+                var area = { key: key, keys: keys.slice(), title: cleanTitle,
+                    titleValid: title === null || typeof title === 'undefined' || (typeof title === 'string' && title === cleanTitle),
+                    representation: 'links', duplicateLinks: false }
+                var seenLinks = Object.create(null)
                 material.seasons.push(area)
                 keys.forEach(function (rawEpisode) {
                     var link = season.episodes[rawEpisode]
+                    if (typeof link !== 'string') area.representation = 'unsupported'
                     if (!/^[0-9a-z.-]{1,24}$/i.test(rawEpisode) || !inspectKodikLink(link).confirmed) return
                     link = link.trim()
+                    if (own(seenLinks, link)) area.duplicateLinks = true
+                    seenLinks[link] = true
                     if (!own(result.byLink, link)) result.byLink[link] = []
                     result.byLink[link].push({ material: material, area: area, rawEpisode: rawEpisode })
                 })
+                if (area.representation !== 'links') result.nonLinkAreas += 1
             })
             result.materials.push(material)
         })
@@ -791,7 +1064,8 @@
         try {
             ticket = probeTicket(event)
             if (!ticket) return
-            probe.response = probeProject(event.data)
+            clearMapping()
+            probe.response = probeProject(event.data, ticket.shape)
             probe.status = probe.response ? 'response_observed' : 'invalid_or_oversized_response'
             queueScan()
         } catch (ignored) {
@@ -803,6 +1077,7 @@
         try {
             if (!probeTicket(event)) return
             probe.response = null
+            clearMapping()
             probe.status = 'request_error'
             queueScan()
         } catch (ignored) {}
@@ -841,7 +1116,7 @@
         common = (common || []).filter(function (material, index, all) { return all.indexOf(material) === index })
         result.status = 'ambiguous_material_or_translation'
         if (common.length !== 1 || !common[0].translation) return result
-        var selected = common[0], rawKeys = Object.create(null), rawCount = 0, area = null
+        var selected = common[0], rawKeys = Object.create(null), rawCount = 0, area = null, bindings = []
         for (i = 0; i < entries.length; i++) {
             var matched = entries[i].filter(function (entry) { return entry.material === selected })
             if (matched.length !== 1 || (area && area !== matched[0].area)) return result
@@ -849,11 +1124,12 @@
             if (own(rawKeys, matched[0].rawEpisode)) return result
             rawKeys[matched[0].rawEpisode] = true
             rawCount += 1
+            bindings.push({ node: nodes[i], metadata: templateMetadata.get(nodes[i]), entry: matched[0] })
         }
         result.status = 'incomplete_list'
         if (!area || rawCount !== area.keys.length) return result
         result.status = selected.id ? 'list_bound' : 'material_id_missing'
-        result.selected = selected; result.area = area; result.rows = rawCount
+        result.selected = selected; result.area = area; result.rows = rawCount; result.bindings = bindings
         return result
     }
 
@@ -979,6 +1255,7 @@
         scanTimer = setTimeout(function () {
             scanTimer = null
             scanCurrentList()
+            refreshMapping()
         }, 0)
     }
 
@@ -1121,6 +1398,7 @@
 
     function leaveActivity(status, reason) {
         disconnectObserver()
+        clearMapping()
         if (probe) probe.epoch = ++probeEpoch
         probe = null
         observedActivity = null
