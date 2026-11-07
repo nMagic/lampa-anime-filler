@@ -2,7 +2,7 @@
     'use strict'
 
     var PLUGIN_NAME = 'Anime Filler'
-    var PLUGIN_VERSION = '0.3.4'
+    var PLUGIN_VERSION = '0.3.5'
     var COMPONENT_ID = 'anime_filler'
     var ABOUT_PARAM_ID = 'anime_filler_about'
     var DIAGNOSTICS_PARAM_ID = 'anime_filler_diagnostics'
@@ -180,13 +180,12 @@
     }
 
     function acceptDataset(raw, manifest, data, origin) {
-        clearMapping()
-        if (observedActivity && observedRoot) queueScan()
         dataState.cache = origin === 'cache' ? 'loaded' : ''
         dataRaw = raw; dataManifest = manifest
         dataState.dataset = data; dataState.status = 'ready'; dataState.origin = origin
         dataState.version = manifest.version; dataState.sourceDate = manifest.sourceDate
         dataState.validation = 'sha256_schema_valid'; dataState.error = ''
+        invalidateLabels()
     }
 
     function cacheEnvelope(value) {
@@ -237,6 +236,7 @@
             dataState.status = dataState.dataset ? 'ready' : 'unavailable'
             dataState.error = error.dataCode || 'invalid_dataset'
             resolveClassifications()
+            invalidateLabels()
         }
         fetchDataText(DATA_BASE + 'manifest.json', function (error, raw) {
             if (error) { failure(error); return }
@@ -244,8 +244,17 @@
             try { next = parseManifest(raw) } catch (problem) { failure(problem); return }
             if (dataState.dataset && next.version === dataState.version) {
                 try { validateDataset(dataRaw, next) } catch (problem) { failure(problem); return }
+                var recovering = Boolean(dataState.error)
                 dataChecked = Date.now(); dataBusy = false; dataState.status = 'ready'; dataState.error = ''
-                saveDataCache(); resolveClassifications(); return
+                saveDataCache(); resolveClassifications()
+                if (recovering) invalidateLabels()
+                return
+            }
+            // Keep the verified cache for the resolver, but withhold episode labels
+            // as soon as the manifest identifies a different snapshot.
+            if (dataState.dataset) {
+                dataState.error = 'dataset_version_changed'
+                invalidateLabels()
             }
             fetchDataText(DATA_BASE + next.file, function (error, bytes) {
                 if (error) { failure(error); return }
@@ -450,6 +459,7 @@
 
     function showDiagnostics(detailed) {
         detailed = detailed === true
+        refreshCurrentList()
 
         var body = $('<div></div>')
         var card = state.card
@@ -477,6 +487,7 @@
         appendClassificationDiagnostics(body, detailed)
         if (detailed) appendProbeDiagnostics(body)
         appendMapperDiagnostics(body, detailed)
+        appendLabelDiagnostics(body, detailed)
 
         Lampa.Modal.open({
             title: translate('anime_filler_diagnostics'),
@@ -496,6 +507,14 @@
 
     function registerTranslations() {
         Lampa.Lang.add({
+            anime_filler_label_canon: { ru: 'Canon', en: 'Canon' },
+            anime_filler_label_filler: { ru: 'Filler', en: 'Filler' },
+            anime_filler_label_mixed: { ru: 'Mixed', en: 'Mixed' },
+            anime_filler_label_unknown: { ru: 'Неизвестно', en: 'Unknown' },
+            anime_filler_labels_status: { ru: 'Маркировка эпизодов', en: 'Episode labels' },
+            anime_filler_labels_counts: { ru: 'Canon / Filler / Mixed / Неизвестно / без метки', en: 'Canon / Filler / Mixed / Unknown / unlabelled' },
+            anime_filler_labels_reasons: { ru: 'Причины «Неизвестно»', en: 'Unknown reasons' },
+            anime_filler_labels_context: { ru: 'Актуальность сопоставления', en: 'Mapping context freshness' },
             anime_filler_mapper: { ru: 'Диагностический mapper', en: 'Diagnostic mapper' },
             anime_filler_mapper_counts: { ru: 'Сопоставлено / категории / AFP unknown', en: 'Mapped / categories / AFP unknown' },
             anime_filler_mapper_policy: { ru: 'Политика / аудит', en: 'Policy / audit' },
@@ -717,7 +736,7 @@
             Math.floor(element.episode) === element.episode)
     }
 
-    // direct-local-v1: diagnostic only. No network, persistence or playback.
+    // direct-local-v1: no network, persistence or playback.
     // Totals/kind/status: Shikimori GraphQL id/malId audit, 2026-11-06 16:08Z.
     // Exact source responses + AFP-local evidence: test/fixtures/stage-3c-catalog-audit.json.
     // This finite namespace certificate applies ONLY to the pinned dataset version.
@@ -934,7 +953,6 @@
     }
 
     function appendMapperDiagnostics(body, detailed) {
-        refreshMapping()
         var m = mapping, selected = mappingContext && mappingContext.selected
         appendDiagnostic(body, translate('anime_filler_mapper'), m.status + ' / ' + m.reason)
         appendDiagnostic(body, translate('anime_filler_mapper_counts'), m.mapped + ' / ' + m.classified + ' / ' + m.unknown)
@@ -965,7 +983,8 @@
             appendDiagnostic(body, translate('anime_filler_mapper_missing'), m.stats.missing.length + ': ' +
                 (m.stats.missing.length <= 500 ? m.stats.missing.join(', ') : m.stats.missing.slice(0, 500).join(', ') + ' … [truncated]'))
         }
-        appendDiagnostic(body, 'displayReady / fillerReady / skipEligible', 'false / false / false')
+        appendDiagnostic(body, 'displayReady / fillerReady / skipEligible',
+            Boolean(labelState.canon || labelState.filler || labelState.mixed) + ' / ' + Boolean(labelState.filler) + ' / false')
         if (!mappingContext) return
         var examples = [], bindings = mappingContext.bindings
         function example(binding) { if (binding && examples.indexOf(binding) === -1 && examples.length < 8) examples.push(binding) }
@@ -1018,11 +1037,11 @@
     function probeBefore(event) {
         try {
             if (!probe || !observedActivity || state.sourceCandidate !== 'kodik' || !event || !probeRequestAllowed(event.params)) return
-            clearMapping()
             probe.sequence += 1
             probe.response = null
             probe.status = 'waiting_response'
             probeRequests.set(event.params, { context: probe, epoch: probe.epoch, sequence: probe.sequence, shape: probeRequestShape(event.params) })
+            invalidateLabels()
         } catch (ignored) { /* An observer must never interrupt event dispatch. */ }
     }
 
@@ -1084,12 +1103,14 @@
         try {
             ticket = probeTicket(event)
             if (!ticket) return
-            clearMapping()
             probe.response = probeProject(event.data, ticket.shape)
             probe.status = probe.response ? 'response_observed' : 'invalid_or_oversized_response'
-            queueScan()
+            invalidateLabels()
         } catch (ignored) {
-            if (ticket && probe === ticket.context) { probe.response = null; probe.status = 'invalid_response' }
+            if (ticket && probe === ticket.context) {
+                probe.response = null; probe.status = 'invalid_response'
+                invalidateLabels()
+            }
         }
     }
 
@@ -1097,9 +1118,8 @@
         try {
             if (!probeTicket(event)) return
             probe.response = null
-            clearMapping()
             probe.status = 'request_error'
-            queueScan()
+            invalidateLabels()
         } catch (ignored) {}
     }
 
@@ -1274,8 +1294,7 @@
         if (scanTimer !== null) return
         scanTimer = setTimeout(function () {
             scanTimer = null
-            scanCurrentList()
-            refreshMapping()
+            refreshCurrentList()
         }, 0)
     }
 
@@ -1287,6 +1306,180 @@
     function listNodes() {
         if (!observedRoot || !observedRoot.querySelectorAll) return []
         return Array.prototype.slice.call(observedRoot.querySelectorAll('.online'))
+    }
+
+    var LABEL_CLASS = 'anime-filler-episode-label'
+    var LABEL_CATEGORIES = ['canon', 'filler', 'mixed']
+    var LABEL_STYLES = '.online .online__quality .' + LABEL_CLASS + '{display:inline-block;vertical-align:baseline;' +
+        'margin-left:.5em;padding:.1em .45em;border-radius:.35em;font-size:.9em;line-height:1.3;' +
+        'font-weight:600;white-space:nowrap;pointer-events:none;color:#fff;background:#535960}' +
+        '.online .online__quality .' + LABEL_CLASS + '--canon{background:#286344}' +
+        '.online .online__quality .' + LABEL_CLASS + '--filler{background:#a33c32}' +
+        '.online .online__quality .' + LABEL_CLASS + '--mixed{color:#231806;background:#e8ad43}'
+    var labelsByRow = templateMetadata ? new WeakMap() : null
+    var ownedLabelNodes = templateMetadata ? new WeakMap() : null
+    var labelStyle = null
+    var labelledRows = []
+    var labelState = emptyLabelState()
+
+    function emptyLabelState() {
+        return { status: 'inactive', context: 'unavailable', canon: 0, filler: 0, mixed: 0, unknown: 0,
+            unlabelled: 0, reasons: Object.create(null) }
+    }
+
+    function removeEpisodeLabel(entry) {
+        labelsByRow.delete(entry.row)
+        if (entry.badge.parentNode) entry.badge.parentNode.removeChild(entry.badge)
+    }
+
+    function clearEpisodeLabels() {
+        labelledRows.forEach(removeEpisodeLabel)
+        labelledRows = []
+        labelState = emptyLabelState()
+    }
+
+    function invalidateLabels() {
+        clearMapping()
+        if (labelledRows.length) renderEpisodeLabels()
+        if (observedActivity && observedRoot) queueScan()
+    }
+
+    function freshMappingContext() {
+        var current = mappingContext
+        if (!current || !probe || state.sourceConfirmed !== 'kodik' ||
+            current.activity !== observedActivity || current.root !== observedRoot || current.generation !== generation ||
+            current.probe !== probe || current.epoch !== probe.epoch || current.response !== probe.response ||
+            current.sequence !== probe.sequence || current.dataset !== dataState.dataset ||
+            current.version !== dataState.version) return null
+        return current
+    }
+
+    function labelMappingRefusal(current) {
+        if (!dataState.dataset || (dataState.error && dataState.error !== 'cache_write_failed')) {
+            return 'dataset_unavailable' + (dataState.error ? ' (' + dataState.error + ')' : '')
+        }
+        if (dataState.version !== MAPPER_DATA_VERSION) return 'dataset_unavailable (identity_audit_required)'
+        if (!current) {
+            if (mapping && mapping.reason === 'list_not_confirmed' && state.reason !== 'kodik_confirmed') {
+                return mapping.reason + ' (' + state.reason + ')'
+            }
+            if (mapping) return mapping.reason
+            return state.status === 'ready' ? probe && probe.status || 'mapping_pending' : state.reason
+        }
+        if (mapping.reason === 'catalog_policy_unavailable' || mapping.reason === 'identity_outside_audit') return 'unsupported_area (' + mapping.reason + ')'
+        if (mapping.reason === 'identifier_conflict') return 'identity_conflict (identifier_conflict)'
+        if (mapping.numberingGrade !== 'policy_mapped' || (mapping.rule !== 'R1' && mapping.rule !== 'R2')) {
+            return mapping.stage === 'numbering' ? 'numbering_unverified (' + mapping.reason + ')' : mapping.reason
+        }
+        if (mapping.conflicts) return 'classification_conflict (overlapping_classifications)'
+        if (mapping.record && mapping.record.integrity !== 'valid') return 'record_integrity_issues'
+        return ''
+    }
+
+    function renderEpisodeLabels() {
+        if (!templateMetadata || !observedRoot || state.sourceCandidate !== 'kodik' || !isCurrentActivity()) {
+            clearEpisodeLabels()
+            return
+        }
+
+        var next = [], pass = {}, result = emptyLabelState(), current = freshMappingContext(), refusal = labelMappingRefusal(current)
+        result.context = current ? 'list_bound' : mappingContext ? 'stale' : 'unbound'
+        listNodes().forEach(function (node) {
+            var metadata = templateMetadata.get(node)
+            if (!metadata || metadata.generation !== generation || !metadata.sourceConfirmed) return
+            var row = metadata.mapping
+            var category = !refusal && row && row.context === current && LABEL_CATEGORIES.indexOf(row.category) !== -1 ?
+                row.category : 'unknown'
+            if (category === 'unknown') {
+                var reason = refusal || row && row.reason || 'row_not_joined'
+                result.reasons[reason] = (result.reasons[reason] || 0) + 1
+            }
+
+            var target = node.querySelectorAll('.online__quality')[0], doc = node.ownerDocument
+            if (!target || !doc || !doc.head) {
+                result.unlabelled += 1
+                return
+            }
+            if (!labelStyle || labelStyle.ownerDocument !== doc || !labelStyle.parentNode) {
+                labelStyle = doc.createElement('style')
+                labelStyle.textContent = LABEL_STYLES
+                doc.head.appendChild(labelStyle)
+            }
+            var entry = labelsByRow.get(node)
+            if (!entry) {
+                entry = { row: node, badge: doc.createElement('span') }
+                labelsByRow.set(node, entry)
+                ownedLabelNodes.set(entry.badge, entry)
+            }
+            var text = translate('anime_filler_label_' + category)
+            var className = LABEL_CLASS + ' ' + LABEL_CLASS + '--' + category
+            if (entry.badge.className !== className) entry.badge.className = className
+            if (entry.badge.textContent !== text) entry.badge.textContent = text
+            if (entry.badge.parentNode !== target) target.appendChild(entry.badge)
+            entry.pass = pass
+            next.push(entry)
+            result[category] += 1
+            if (category !== 'unknown') {
+                row.displayReady = true
+                row.fillerReady = category === 'filler'
+            }
+        })
+        labelledRows.forEach(function (entry) { if (entry.pass !== pass) removeEpisodeLabel(entry) })
+        labelledRows = next
+        result.status = next.length ? 'active' : result.unlabelled ? 'target_unavailable' : 'waiting_for_kodik_rows'
+        labelState = result
+    }
+
+    function appendLabelDiagnostics(body, detailed) {
+        var l = labelState
+        appendDiagnostic(body, translate('anime_filler_labels_status'), l.status)
+        if (detailed || l.status === 'active') appendDiagnostic(body, translate('anime_filler_labels_counts'),
+            [l.canon, l.filler, l.mixed, l.unknown, l.unlabelled].join(' / '))
+        if (!detailed) return
+        appendDiagnostic(body, translate('anime_filler_labels_context'), l.context + ' / ' +
+            (mapping && mapping.numberingGrade || 'unverified') + ' / ' + MAPPER_POLICY + ' / AniFillerPedia')
+        appendDiagnostic(body, translate('anime_filler_labels_reasons'), Object.keys(l.reasons).sort().map(function (reason) {
+            return reason + ': ' + l.reasons[reason]
+        }).join(', ') || '—')
+    }
+
+    function labelMutation(record) {
+        if (ownedLabelNodes.has(record.target)) return true
+        var added = record.addedNodes || [], removed = record.removedNodes || []
+        return added.length + removed.length > 0 && Array.prototype.every.call(added, function (node) {
+            return ownedLabelNodes.has(node)
+        }) && Array.prototype.every.call(removed, function (node) {
+            var entry = ownedLabelNodes.get(node)
+            // A host removal of a still-managed badge should be repaired.
+            return entry && labelsByRow.get(entry.row) !== entry
+        })
+    }
+
+    function observeList() {
+        if (!observedRoot || !templateMetadata || typeof MutationObserver !== 'function') return
+        observer = new MutationObserver(function (records) {
+            if (records.every(labelMutation)) return
+            // Run in the mutation microtask, before retained rows can paint a
+            // category that no longer belongs to a fully joined list.
+            if (scanTimer !== null) { clearTimeout(scanTimer); scanTimer = null }
+            refreshCurrentList()
+        })
+        observer.observe(observedRoot, { childList: true, subtree: true })
+    }
+
+    function refreshCurrentList() {
+        if (observedActivity && isCurrentActivity()) {
+            var root = activityRoot(observedActivity)
+            if (root !== observedRoot) {
+                disconnectObserver()
+                clearEpisodeLabels()
+                observedRoot = root
+                observeList()
+            }
+        }
+        scanCurrentList()
+        refreshMapping()
+        renderEpisodeLabels()
     }
 
     function scanCurrentList() {
@@ -1385,6 +1578,7 @@
 
     function beginActivity(activityObject, isNewActivity) {
         disconnectObserver()
+        clearEpisodeLabels()
         if (isNewActivity || !activityGenerations || !activityGenerations.has(activityObject)) {
             generationCounter += 1
             generation = generationCounter
@@ -1412,12 +1606,12 @@
             return
         }
 
-        observer = new MutationObserver(queueScan)
-        observer.observe(observedRoot, { childList: true, subtree: true })
+        observeList()
     }
 
     function leaveActivity(status, reason) {
         disconnectObserver()
+        clearEpisodeLabels()
         clearMapping()
         if (probe) probe.epoch = ++probeEpoch
         probe = null
@@ -1453,6 +1647,7 @@
     function handleStorageChange(event) {
         if (!observedActivity || !event || event.name !== 'online_mod_balanser') return
 
+        clearEpisodeLabels()
         generationCounter += 1
         generation = generationCounter
         if (activityGenerations) activityGenerations.set(observedActivity, generation)

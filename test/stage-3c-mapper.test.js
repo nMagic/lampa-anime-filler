@@ -19,6 +19,7 @@ const instrumented = plugin.replace('    if (!window[READY_FLAG]) startPlugin()'
     window.mapperTest = { summary: function () { return mapping }, metadata: function (node) { return templateMetadata.get(node) },
       context: function () { return mappingContext }, facts: MAPPER_FACTS, stats: mapperKeyStats,
       refresh: refreshMapping, dataState: dataState, classify: resolveClassifications,
+      rescan: refreshCurrentList, load: loadClassifications, labels: function () { return labelState },
       ready: function () { var m = parseManifest(${JSON.stringify(JSON.stringify(manifest))});
         acceptDataset(${JSON.stringify(raw)}, m, validateDataset(${JSON.stringify(raw)}, m), 'test'); resolveClassifications() } }
     if (!window[READY_FLAG]) startPlugin()`)
@@ -33,8 +34,8 @@ function material(id = 20, options = {}) {
     return { id:materialId, shikimori_id:String(id), type:'anime-serial', title:'Synthetic material', title_orig:'Synthetic',
         translation:{id:translation,title:'Synthetic voice '+translation}, seasons:{[season]:{episodes}}, ...changes }
 }
-function setup(card = {title:'Synthetic card'}, ready = true) {
-    const h = createHarness(); vm.runInContext(instrumented, h.context)
+function setup(card = {title:'Synthetic card'}, ready = true, options) {
+    const h = createHarness(options); vm.runInContext(instrumented, h.context)
     const api = h.context.window.mapperTest
     const a = h.makeActivity(card); h.startActivity(a)
     if (ready) api.ready()
@@ -74,7 +75,7 @@ test('synthetic Naruto full list uses real AFP26 filler and AFP53 mixed without 
     assert.equal(s.api.summary().rule,'R1');assert.equal(s.api.summary().mapped,220)
     assert.equal(row(s,r,26).category,'filler');assert.equal(row(s,r,53).category,'mixed')
     assert.equal(row(s,r,53).numberingGrade,'policy_mapped')
-    assert.equal(row(s,r,26).displayReady,false);assert.equal(row(s,r,26).fillerReady,false);assert.equal(row(s,r,26).skipEligible,false)
+    assert.equal(row(s,r,26).displayReady,true);assert.equal(row(s,r,26).fillerReady,true);assert.equal(row(s,r,26).skipEligible,false)
     assert.equal(s.api.summary().gates.length,9)
     assert.ok(s.api.summary().gates.every(g=>g.status==='passed'))
     assert.deepEqual(s.h.calls.params.map(p=>p.param.name),['anime_filler_about','anime_filler_diagnostics'])
@@ -196,7 +197,7 @@ test('diagnostics are bounded, have gates and provenance, and add no HTTP/storag
     s.h.lampa.Player={play(){throw Error('unexpected player')},playlist(){throw Error('unexpected playlist')}}
     const writes=s.h.calls.storageSets.length,r=await bind(s,m),children=s.a.root.children.slice()
     const text=diagnosticsText(s.h);assert.match(text,/G0=passed/);assert.match(text,/G8=passed/)
-    assert.match(text,/policy_mapped/);assert.match(text,/Shikimori GraphQL/);assert.match(text,/false \/ false \/ false/)
+    assert.match(text,/policy_mapped/);assert.match(text,/Shikimori GraphQL/);assert.match(text,/true \/ true \/ false/)
     assert.doesNotMatch(text,/SYNTHETIC_PRIVATE|kodik-api\.com\/search|\/seria\//)
     assert.equal(s.h.calls.storageSets.length,writes);assert.equal(JSON.stringify(m),original)
     assert.deepEqual(s.a.root.children,children)
@@ -234,4 +235,323 @@ test('diagnostics retain every raw key via exact ranges and include noncanonical
     assert.match(text,/Отсутствующие исходные номера: 3: 26, 27, 53/)
     m.seasons['1'].episodes['12.5']='//kodik.info/seria/999/synthetic/720p';await bind(s,m)
     text=diagnosticsText(s.h);assert.match(text,/raw\[12\.5\]/);assert.equal(s.api.summary().classified,0)
+})
+
+// Stage 3E exercises the rendered DOM in addition to the diagnostic mapper above.
+const labelClass = '.anime-filler-episode-label'
+const badge = entry => entry.node.querySelectorAll(labelClass)[0]
+const label = (entries, n) => badge(entries.find(entry => entry.element.episode === n))?.textContent
+function allLabels(entries, value) {
+    assert.ok(entries.length)
+    for (const entry of entries) {
+        const badges = entry.node.querySelectorAll(labelClass)
+        assert.equal(badges.length, value ? 1 : 0)
+        if (value) assert.equal(badges[0].textContent, value)
+    }
+}
+
+test('3E renders all Naruto categories and reports actual visible counts and policy', async () => {
+    const s = setup(), r = await bind(s, material())
+    assert.deepEqual([label(r, 1), label(r, 26), label(r, 53)], ['Canon', 'Filler', 'Mixed'])
+    assert.match(badge(r[25]).className, /--filler$/)
+    const text = diagnosticsText(s.h)
+    assert.match(text, /Маркировка эпизодов: active/)
+    assert.match(text, /Canon \/ Filler \/ Mixed \/ Неизвестно \/ без метки: 74 \/ 90 \/ 56 \/ 0 \/ 0/)
+    assert.match(text, /list_bound \/ policy_mapped \/ direct-local-v1 \/ AniFillerPedia/)
+    const { attribution, license } = JSON.parse(raw).notices
+    assert.ok(text.includes('Источник и лицензия: ' + attribution + ' ' + license))
+    assert.doesNotMatch(text.replace(license, ''), /https?:\/\/|SYNTHETIC_PRIVATE|cookie/i)
+})
+
+test('3E renders Shippuden and Bleach R2 by original number across holes', async () => {
+    for (const [id, missing, expected] of [
+        [1735, [58, 72], [[57, 'Filler'], [59, 'Filler'], [71, 'Filler'], [73, 'Canon']]],
+        [269, [177], [[176, 'Filler'], [178, 'Filler'], [190, 'Mixed']]]
+    ]) {
+        const s = setup(), r = await bind(s, material(id, { missing }))
+        assert.equal(s.api.summary().rule, 'R2')
+        for (const [n, value] of expected) {
+            assert.equal(label(r, n), value)
+            assert.equal(row(s, r, n).afpEpisode, n)
+        }
+        assert.equal(r.length, totals[id] - missing.length)
+    }
+})
+
+test('3E renders both Brotherhood translations and removes badges from detached rows', async () => {
+    const s = setup()
+    const first = material(5114, { season: '2' })
+    const second = material(5114, { season: '2', translation: 610, materialId: 'serial-730002' })
+    const old = await bind(s, first, { materials: [first, second] })
+    assert.deepEqual([label(old, 1), label(old, 4), label(old, 27)], ['Canon', 'Mixed', 'Filler'])
+    const next = rows(s.h, s.a, second)
+    await flush()
+    allLabels(old, undefined)
+    assert.deepEqual([label(next, 1), label(next, 4), label(next, 27)], ['Canon', 'Mixed', 'Filler'])
+    assert.equal(s.api.context().selected.translation, '610')
+})
+
+test('3E renders TYBW Parts 1–3 by local area and Part 4 as English Unknown', async () => {
+    const s = setup(undefined, true, { lang: 'en' })
+    for (const id of [41467, 53998, 56784, 60636]) {
+        const r = await bind(s, material(id, { season: id === 60636 ? '4' : '2' }))
+        assert.equal(s.api.summary().canonicalArea, 'mal:' + id)
+        assert.equal(row(s, r, 1).malEpisode, 1)
+        allLabels(r, id === 60636 ? 'Unknown' : 'Canon')
+    }
+    assert.match(diagnosticsText(s.h), /Unknown reasons: classification_missing: 10/)
+})
+
+test('3E applies the same policy to the remaining catalogue facts and preserves the Doki gap', async () => {
+    const s = setup()
+    for (const [id, n, expected] of [[121, 4, 'Filler'], [740, 16, 'Mixed'], [36474, 24, 'Canon'], [35788, 12, 'Canon']]) {
+        const r = await bind(s, material(id))
+        assert.equal(label(r, n), expected)
+    }
+    const r = await bind(s, material(5262))
+    assert.deepEqual([label(r, 21), label(r, 22), label(r, 23)], ['Filler', 'Неизвестно', 'Canon'])
+    assert.equal(s.api.labels().unknown, 1)
+    assert.equal(s.api.labels().reasons.classification_gap, 1)
+})
+
+test('3E distinguishes unsupported areas even when AFP knows the title', async () => {
+    const s = setup()
+    const m = material(20, { shikimori_id: '21', seasons: { '1': { episodes: { 1: '//kodik.info/seria/1/test/720p' } } } })
+    assert.ok(s.api.dataState.dataset.records.some(record => record.mal === 21))
+    allLabels(await bind(s, m), 'Неизвестно')
+    assert.match(diagnosticsText(s.h), /unsupported_area \(/)
+})
+
+test('3E shows Unknown for missing AFP record or a row outside the classification snapshot', async () => {
+    const s = setup(), rs = s.api.dataState.dataset.records
+    rs.splice(rs.findIndex(record => record.mal === 20), 1)
+    allLabels(await bind(s, material()), 'Неизвестно')
+    assert.equal(s.api.labels().reasons.classification_missing, 220)
+    s.api.ready()
+    const record = s.api.dataState.dataset.records.find(item => item.mal === 20)
+    record.ranges.pop()
+    record.numbering.max = record.ranges.at(-1)[1]
+    const r = await bind(s, material())
+    assert.equal(label(r, 1), 'Canon')
+    assert.equal(label(r, 220), 'Неизвестно')
+    assert.ok(s.api.labels().reasons.classification_outside_snapshot > 0)
+})
+
+test('3E emits Unknown when any G0–G8 or R1/R2 guard refuses a recognized list', async () => {
+    const scenarios = [
+        { gate: 'G0', reason: 'waiting_request', noResponse: true },
+        { gate: 'G1', reason: 'shikimori_missing_or_invalid', changes: { shikimori_id: undefined } },
+        { gate: 'G2', reason: 'unsupported_material_type', changes: { type: 'serial' } },
+        { gate: 'G3', reason: 'filtered_scope', suffix: '&season=1' },
+        { gate: 'G4', reason: 'special_or_unreviewed_scope', alter: m => { m.seasons['1'].title = 'Special' } },
+        { gate: 'G5', reason: 'numeric_collision', alter: m => { m.seasons['1'].episodes['01'] = '//kodik.info/seria/9/test/720p' } },
+        { gate: 'G6', reason: 'afp_local_relation_unreviewed', alter: (m, s) => { s.api.dataState.dataset.records.find(r => r.mal === 20).id = 'other' } },
+        { gate: 'G7', reason: 'identity_conflict', card: { mal_id: 121 } },
+        { gate: 'G8', reason: 'counter_inconsistent', changes: { episodes_count: 9 } },
+        { gate: 'R1', reason: 'sparse_area_unapproved', changes: { missing: [2] } },
+        { gate: 'R2', reason: 'numbering_boundary_mismatch', id: 1735, changes: { missing: [500] } }
+    ]
+    for (const scenario of scenarios) {
+        const s = setup(scenario.card), m = material(scenario.id, scenario.changes)
+        if (scenario.alter) scenario.alter(m, s)
+        const r = scenario.noResponse ? rows(s.h, s.a, m) : await bind(s, m, { suffix: scenario.suffix })
+        await flush()
+        assert.equal(s.api.summary().failedGate, scenario.gate)
+        allLabels(r, 'Неизвестно')
+        assert.ok(Object.keys(s.api.labels().reasons).some(reason => reason.includes(scenario.reason)), scenario.gate)
+    }
+})
+
+test('3E withholds categories on record integrity errors and ambiguous joins', async () => {
+    const s = setup(), m = material()
+    const record = s.api.dataState.dataset.records.find(r => r.mal === 20)
+    record.integrity = 'issues'
+    allLabels(await bind(s, m), 'Неизвестно')
+    assert.equal(s.api.labels().reasons.record_integrity_issues, 220)
+    const ambiguous = material(20, { materialId: 'serial-730002' })
+    allLabels(await bind(s, m, { materials: [m, ambiguous] }), 'Неизвестно')
+    assert.equal(s.api.labels().reasons.ambiguous_material_or_translation, 220)
+})
+
+test('3E replaces Unknown with each category after validated dataset load', async () => {
+    const s = setup(undefined, false)
+    const r = await bind(s, material())
+    allLabels(r, 'Неизвестно')
+    assert.equal(s.api.labels().reasons['dataset_unavailable (transport_unavailable)'], 220)
+    const requests = datasetTransport(s)
+    s.api.load()
+    requests.shift().respond(JSON.stringify(manifest))
+    requests.shift().respond(raw)
+    await flush()
+    assert.deepEqual([label(r, 1), label(r, 26), label(r, 53)], ['Canon', 'Filler', 'Mixed'])
+})
+
+function datasetTransport(s) {
+    let now = Date.now() + 120000
+    const requests = []
+    s.h.context.Date = { now: () => now }
+    s.h.context.XMLHttpRequest = function () {
+        this.open = (method, url) => { this.url = url; assert.equal(method, 'GET') }
+        this.send = () => requests.push(this)
+        this.respond = text => { this.status = 200; this.responseText = text; this.onload() }
+    }
+    requests.advance = () => { now += 120000 }
+    return requests
+}
+
+test('3E immediately withholds old categories after a new manifest or a hash failure, then recovers', async () => {
+    const s = setup(), r = await bind(s, material())
+    const requests = datasetTransport(s), digest = 'a'.repeat(64)
+    assert.equal(label(r, 1), 'Canon')
+    s.api.load()
+    requests.shift().respond(JSON.stringify({ ...manifest, version: digest, sha256: digest, file: 'dataset.' + digest + '.json' }))
+    allLabels(r, 'Неизвестно')
+    assert.equal(s.api.labels().reasons['dataset_unavailable (dataset_version_changed)'], 220)
+    requests.shift().respond(raw)
+    allLabels(r, 'Неизвестно')
+    assert.equal(s.api.labels().reasons['dataset_unavailable (hash_mismatch)'], 220)
+    assert.ok(s.api.dataState.dataset, 'verified cache remains available to the card resolver')
+    requests.advance()
+    s.api.load()
+    requests.shift().respond(JSON.stringify(manifest))
+    await flush()
+    assert.deepEqual([label(r, 1), label(r, 26), label(r, 53)], ['Canon', 'Filler', 'Mixed'])
+    assert.equal(requests.length, 0)
+    s.api.dataState.version = digest
+    s.api.rescan()
+    allLabels(r, 'Неизвестно')
+})
+
+test('3E invalidates a previous join on request, ignores stale replies and recomputes the newest material', async () => {
+    const s = setup(), a = material(121), b = material(5114, { materialId: 'serial-730002' })
+    const old = await bind(s, a)
+    assert.equal(label(old, 4), 'Filler')
+    const stale = before(s.h)
+    allLabels(old, 'Неизвестно')
+    const current = before(s.h)
+    respond(s.h, stale, [a])
+    await flush()
+    allLabels(old, 'Неизвестно')
+    respond(s.h, current, [b])
+    const next = rows(s.h, s.a, b)
+    await flush()
+    allLabels(old, undefined)
+    assert.equal(label(next, 4), 'Mixed')
+    respond(s.h, stale, [a])
+    await flush()
+    assert.equal(label(next, 4), 'Mixed')
+})
+
+test('3E recomputes seasons and invalidates retained rows as soon as the full-list join is lost', async () => {
+    const s = setup()
+    const a = material(121, { season: '1' })
+    const b = material(5114, { season: '2', materialId: 'serial-730003' })
+    const old = await bind(s, a, { materials: [a, b] })
+    assert.equal(label(old, 4), 'Filler')
+    const next = rows(s.h, s.a, b)
+    await Promise.resolve() // native observer delivery precedes a paint or timer
+    allLabels(old, undefined)
+    assert.equal(label(next, 4), 'Mixed')
+    s.a.root.removeChild(next[0].node)
+    await Promise.resolve()
+    allLabels(next.slice(1), 'Неизвестно')
+    assert.equal(s.api.labels().reasons.incomplete_list, 63)
+})
+
+test('3E cleans up on card changes, history, balancer switches and activity root replacement', async () => {
+    const s = setup(), m = material(5114)
+    const originalActivity = s.a, old = await bind(s, m)
+    s.a = s.h.makeActivity({ title: 'Different card' })
+    s.h.startActivity(s.a)
+    allLabels(old, undefined)
+    const other = await bind(s, material(121))
+    assert.equal(label(other, 4), 'Filler')
+    s.h.returnActivity(originalActivity)
+    s.a = originalActivity
+    await flush()
+    allLabels(other, undefined)
+    assert.equal(label(old, 4), 'Mixed')
+    s.h.lampa.Storage.set('online_mod_balanser', 'another-provider')
+    allLabels(old, undefined)
+    const foreign = s.h.addEpisode(s.a, { link: '//another.invalid/seria/1/a/720p' })
+    await flush()
+    assert.equal(badge(foreign), undefined)
+    s.h.lampa.Storage.set('online_mod_balanser', 'kodik')
+    const current = await bind(s, m)
+    const previousRoot = s.a.root
+    s.a.root = s.h.document.createElement('section')
+    s.a.activity.render = () => s.a.root
+    const rebuilt = rows(s.h, s.a, m)
+    s.h.returnActivity(s.a)
+    await flush()
+    allLabels(current, undefined)
+    assert.equal(previousRoot.querySelectorAll(labelClass).length, 0)
+    assert.equal(label(rebuilt, 4), 'Mixed')
+    s.h.leaveActivity(s.a, true)
+    allLabels(rebuilt, undefined)
+})
+
+test('3E decorations are idempotent, observe no feedback loop and repair host removal', async () => {
+    const s = setup(), r = await bind(s, material(5114)), instance = s.h.observer()
+    assert.ok(instance.deliveries >= 2, 'the observer receives both host and badge mutations')
+    const deliveries = instance.deliveries, previous = r.map(badge)
+    s.api.rescan()
+    s.api.rescan()
+    await flush()
+    assert.equal(instance.deliveries, deliveries)
+    assert.deepEqual(r.map(badge), previous)
+    assert.equal(s.a.root.querySelectorAll(labelClass).length, r.length)
+    assert.equal(s.h.document.head.children.length, 1)
+    previous[0].parentNode.removeChild(previous[0])
+    await flush()
+    assert.equal(badge(r[0]), previous[0])
+    assert.equal(instance.deliveries, deliveries + 2)
+    await flush()
+    assert.equal(instance.deliveries, deliveries + 2)
+})
+
+test('3E leaves focus, callbacks and HTTP/Player/Storage intact and ignores non-episode rows', async () => {
+    const s = setup(), m = material(5114)
+    let http = 0, player = 0
+    s.h.context.XMLHttpRequest = function () { http += 1 }
+    s.h.lampa.Player = { play: () => { player += 1 }, playlist: () => { player += 1 } }
+    const storageWrites = s.h.calls.storageSets.length
+    respond(s.h, before(s.h), [m])
+    const r = rows(s.h, s.a, m)
+    const selected = r[3], selections = []
+    const callback = () => selections.push(selected.element.link)
+    selected.node.callback = callback
+    s.h.document.activeElement = selected.node
+    await flush()
+    assert.equal(badge(selected).tagName, 'SPAN')
+    assert.equal(badge(selected).tabIndex, undefined)
+    assert.match(s.h.document.head.children[0].textContent, /pointer-events:none/)
+    assert.equal(s.h.document.activeElement, selected.node)
+    assert.equal(selected.node.className, 'online selector')
+    assert.equal(selected.node.callback, callback)
+    selected.node.callback()
+    assert.deepEqual(selections, [selected.before.link])
+    assert.deepEqual(selected.element, selected.before)
+
+    const movie = s.h.addEpisode(s.a, { episode: undefined, season: undefined })
+    const foreign = s.h.addEpisode(s.a, { link: '//another.invalid/seria/1/a/720p' })
+    const button = s.h.document.createElement('button')
+    button.className = 'online selector'
+    s.a.root.appendChild(button)
+    await flush()
+    allLabels([movie, foreign, { node: button }], undefined)
+    assert.equal(label(r, 4), 'Неизвестно')
+    assert.match(diagnosticsText(s.h), /list_not_confirmed \(unknown_link_hostname\)/)
+    assert.equal(http, 0)
+    assert.equal(player, 0)
+    assert.equal(s.h.calls.storageSets.length, storageWrites)
+})
+
+test('3E counts recognized episodes without a supported decoration target', async () => {
+    const s = setup(), r = await bind(s, material(5114)), one = r[0].node
+    one.clear()
+    await flush()
+    assert.equal(badge(r[0]), undefined)
+    assert.equal(s.api.labels().unlabelled, 1)
+    assert.equal(s.a.root.querySelectorAll(labelClass).length, r.length - 1)
 })
