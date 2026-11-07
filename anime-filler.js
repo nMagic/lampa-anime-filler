@@ -345,7 +345,7 @@
                 appendDiagnostic(body, range, displayValue(edge.ranges[range]))
             })
         })
-        if (detailed && dataState.dataset) appendDiagnostic(body, translate('anime_filler_attribution'), dataState.dataset.notices.attribution)
+        if (detailed && dataState.dataset) appendDiagnostic(body, translate('anime_filler_attribution'), dataState.dataset.notices.attribution + ' ' + dataState.dataset.notices.license)
     }
 
     function translate(key) {

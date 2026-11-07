@@ -258,7 +258,9 @@ test('3E renders all Naruto categories and reports actual visible counts and pol
     assert.match(text, /Маркировка эпизодов: active/)
     assert.match(text, /Canon \/ Filler \/ Mixed \/ Неизвестно \/ без метки: 74 \/ 90 \/ 56 \/ 0 \/ 0/)
     assert.match(text, /list_bound \/ policy_mapped \/ direct-local-v1 \/ AniFillerPedia/)
-    assert.doesNotMatch(text, /https?:\/\/|SYNTHETIC_PRIVATE|cookie/i)
+    const { attribution, license } = JSON.parse(raw).notices
+    assert.ok(text.includes('Источник и лицензия: ' + attribution + ' ' + license))
+    assert.doesNotMatch(text.replace(license, ''), /https?:\/\/|SYNTHETIC_PRIVATE|cookie/i)
 })
 
 test('3E renders Shippuden and Bleach R2 by original number across holes', async () => {
