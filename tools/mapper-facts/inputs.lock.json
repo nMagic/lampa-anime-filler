@@ -1,0 +1,91 @@
+{
+  "schema": 1,
+  "auditRevision": "stage-4b-shikimori-2026-11-07-v1",
+  "datasetVersion": "14885244fe8c06b2957092e194d4f4e56dd366db9e1c7b3084430efffaf552cf",
+  "files": {
+    "data/manifest.json": "b7bb72b1da208b1a2c7fd2c179159045c5be5a045bcf16b52b2a8160ad46d4d1",
+    "data/dataset.14885244fe8c06b2957092e194d4f4e56dd366db9e1c7b3084430efffaf552cf.json": "14885244fe8c06b2957092e194d4f4e56dd366db9e1c7b3084430efffaf552cf",
+    "data/inputs.lock.json": "8539dfa376b2261df23f2b974783ba5c53ce8afd306ce9e9d0c859d3f5a65e83",
+    "test/fixtures/stage-3c-catalog-audit.json": "bb96d9b6c7f850aef362035d2c13b514bfde9d8c5f3d25a6abc4d6c3835fe608",
+    "tools/mapper-facts/catalog.json": "4c4f770eaf113959511dab8ae4d0eb2d4efbe2b7cddfff69b03fd1ac3539f5dc"
+  },
+  "provenance": {
+    "stage4aMatrixSha256": "fe7680a462461294c4a0ba0d1afb945dbf91b06f0eadd7498ff34859a945c886",
+    "stage4aMatrixLibraryId": "libfile_d174ef575bcc819189d9ebcffb6270e7",
+    "shikimori": [
+      {
+        "file": "0.json",
+        "endpoint": "https://shikimori.io/api/graphql",
+        "observedAt": "2026-11-07T13:49:06.217628+00:00",
+        "responseSha256": "6ae2c4a87f3d5e0a0ec3a78460b58e740024d65c763f1e236c443e6cba82cf90"
+      },
+      {
+        "file": "1.json",
+        "endpoint": "https://shikimori.io/api/graphql",
+        "observedAt": "2026-11-07T13:49:12.438789+00:00",
+        "responseSha256": "13c93467b9cb91070f3f392c9f54a1a4a213cd1b8fcc6df791496a30ed4970f3"
+      },
+      {
+        "file": "2.json",
+        "endpoint": "https://shikimori.io/api/graphql",
+        "observedAt": "2026-11-07T13:49:18.695928+00:00",
+        "responseSha256": "b35bfa68e2c8bc055e39ca5d4346c1b883a070c15b1edbebc285740e58f26911"
+      },
+      {
+        "file": "3.json",
+        "endpoint": "https://shikimori.io/api/graphql",
+        "observedAt": "2026-11-07T13:49:25.027769+00:00",
+        "responseSha256": "8c012eeba42a6d6856cb6cab4b3d4800424b87e61080250487a135a4620a2b84"
+      },
+      {
+        "file": "4.json",
+        "endpoint": "https://shikimori.io/api/graphql",
+        "observedAt": "2026-11-07T13:49:31.273754+00:00",
+        "responseSha256": "4ebe722b970a09374f0f1922e950c2a3f982289f669f868c3accbf5100fe60d9"
+      }
+    ],
+    "originalAniBridge": {
+      "id": 704952081,
+      "sha256": "a3d856dfc2e605b802d1ffbf18be44de3dfd1fdccc972dbbf39b9acbfc19940f",
+      "downloadStatus": "http_404"
+    },
+    "secondaryAniBridge": {
+      "id": 720059470,
+      "sha256": "ddda7b1129080c64209a9c89c979e7687a5073d382f4a8d9bf72d8970f7a6bab",
+      "generatedOn": "2026-11-07T08:06:52Z",
+      "url": "https://github.com/anibridge/anibridge-mappings/releases/download/v3/mappings.json",
+      "provenanceAssetId": 720059474,
+      "provenanceSha256": "fd686d911e2dc2e10eab9bc8f545dcb7214ec09af0d057f68ffdb143b422cfab",
+      "provenanceUrl": "https://github.com/anibridge/anibridge-mappings/releases/download/v3/provenance.zip",
+      "edgeEvidence": "Metadata inference only. Matches the pinned dataset identity projection, no episode attestation.",
+      "license": "https://github.com/anibridge/anibridge-mappings/blob/b217b8d8f227382d14194a30eb80d60303c04255/LICENSE"
+    },
+    "manami": {
+      "release": "2026-27",
+      "sha256": "395be786fb2f98f1fca9e963911b9332110098a080e7e2569902bbc5641d1a41",
+      "sharedWithAfpCandidateIndex": true,
+      "url": "https://github.com/manami-project/anime-offline-database/releases/download/2026-27/anime-offline-database-minified.json",
+      "license": "https://github.com/manami-project/anime-offline-database/blob/2026-27/LICENSE"
+    },
+    "afp": {
+      "commit": "eb8a8930b99c1d44745a97fe8e38880c024328df",
+      "notices": "Pinned dataset notices and original data/inputs.lock.json",
+      "license": "https://github.com/Napandee/AniFillerPedia/blob/eb8a8930b99c1d44745a97fe8e38880c024328df/DATA_LICENSE"
+    }
+  },
+  "legacyTupleSource": {
+    "20": "[220, 'naruto', false]",
+    "1735": "[500, 'naruto-shippuden', true]",
+    "269": "[366, 'bleach', true]",
+    "41467": "[13, 'bleach-tybw', false]",
+    "53998": "[13, 'bleach-tybw-part-2', false]",
+    "56784": "[14, 'bleach-tybw-part-3', false]",
+    "60636": "[10, null, false]",
+    "121": "[51, 'fullmetal-alchemist', false]",
+    "5114": "[64, 'fullmetal-alchemist-brotherhood', false]",
+    "740": "[43, 'sailor-moon-r', false]",
+    "5262": "[51, 'shugo-chara-doki', false]",
+    "36474": "[24, 'sword-art-online-alicization', false]",
+    "35788": "[12, 'shokugeki-san-no-sara', false]"
+  }
+}

@@ -17,7 +17,7 @@ const audit = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/stage-3c
 // Test-only access through VM instrumentation. The shipping file exposes no API.
 const instrumented = plugin.replace('    if (!window[READY_FLAG]) startPlugin()', `
     window.mapperTest = { summary: function () { return mapping }, metadata: function (node) { return templateMetadata.get(node) },
-      context: function () { return mappingContext }, facts: MAPPER_FACTS, stats: mapperKeyStats,
+      context: function () { return mappingContext }, facts: MAPPER_FACTS, ongoing: MAPPER_ONGOING, stats: mapperKeyStats,
       refresh: refreshMapping, dataState: dataState, classify: resolveClassifications,
       rescan: refreshCurrentList, load: loadClassifications, labels: function () { return labelState },
       ready: function () { var m = parseManifest(${JSON.stringify(JSON.stringify(manifest))});
@@ -65,7 +65,8 @@ test('real catalogue audit independently agrees with all 13 embedded facts and a
     for(const f of audit.facts){assert.equal(f.id,f.malId);assert.equal(f.kind,'tv');assert.equal(f.status,'released');assert.equal(facts[f.id][0],f.episodes)}
     assert.deepEqual([...new Set(Object.values(dataset.identifiers))].map(x=>Number(x.split(':')[1])).sort((a,b)=>a-b),audit.verifiedCanonicalMalIds)
     assert.equal(audit.verifiedCanonicalMalIds.length,153)
-    for(const [id,f] of Object.entries(facts)){
+    for(const {id} of audit.facts){
+        const f = facts[id]
         const rs=dataset.records.filter(r=>r.mal===Number(id));assert.equal(rs.length,f[1]===null?0:1)
         if(rs.length)assert.equal(rs[0].numbering.file,f[1]+'-episodes.json')
     }
@@ -316,8 +317,8 @@ test('3E applies the same policy to the remaining catalogue facts and preserves 
 
 test('3E distinguishes unsupported areas even when AFP knows the title', async () => {
     const s = setup()
-    const m = material(20, { shikimori_id: '21', seasons: { '1': { episodes: { 1: '//kodik.info/seria/1/test/720p' } } } })
-    assert.ok(s.api.dataState.dataset.records.some(record => record.mal === 21))
+    const m = material(20, { shikimori_id: '918', seasons: { '1': { episodes: { 1: '//kodik.info/seria/1/test/720p' } } } })
+    assert.ok(s.api.dataState.dataset.records.some(record => record.mal === 918))
     allLabels(await bind(s, m), 'Неизвестно')
     assert.match(diagnosticsText(s.h), /unsupported_area \(/)
 })
