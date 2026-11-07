@@ -2,7 +2,7 @@
     'use strict'
 
     var PLUGIN_NAME = 'Anime Filler'
-    var PLUGIN_VERSION = '0.3.5'
+    var PLUGIN_VERSION = '0.3.6'
     var COMPONENT_ID = 'anime_filler'
     var ABOUT_PARAM_ID = 'anime_filler_about'
     var DIAGNOSTICS_PARAM_ID = 'anime_filler_diagnostics'
@@ -522,6 +522,7 @@
             anime_filler_mapper_basis: { ru: 'Основание mapper', en: 'Mapper basis' },
             anime_filler_mapper_engineering: { ru: 'policy_mapped — инженерное сопоставление; не независимое подтверждение содержания каждого видео', en: 'policy_mapped is an engineering policy, not independent verification of every video' },
             anime_filler_mapper_total: { ru: 'Независимый total / источник', en: 'Independent total / source' },
+            anime_filler_mapper_afp_bounds: { ru: 'Границы классификаций AFP', en: 'AFP classification bounds' },
             anime_filler_mapper_card: { ru: 'Сверка карточки', en: 'Card check' },
             anime_filler_mapper_gates: { ru: 'Проверки G0–G8', en: 'G0–G8 gates' },
             anime_filler_mapper_request: { ru: 'Форма запроса (без URL)', en: 'Request shape (no URL)' },
@@ -736,25 +737,140 @@
             Math.floor(element.episode) === element.episode)
     }
 
-    // direct-local-v1: no network, persistence or playback.
-    // Totals/kind/status: Shikimori GraphQL id/malId audit, 2026-11-06 16:08Z.
-    // Exact source responses + AFP-local evidence: test/fixtures/stage-3c-catalog-audit.json.
-    // This finite namespace certificate applies ONLY to the pinned dataset version.
+    // R1 and R2 share the current Kodik binding and AFP integrity checks.
     var MAPPER_POLICY = 'direct-local-v1'
-    var MAPPER_AUDIT = 'shikimori-2026-11-06-v1'
+    var MAPPER_CATALOG_SOURCE = 'Shikimori GraphQL / AniBridge / AFP catalogue projection'
+    // BEGIN GENERATED MAPPER CATALOGUE
+    var MAPPER_AUDIT = 'stage-4b-shikimori-2026-11-07-v1'
     var MAPPER_DATA_VERSION = '14885244fe8c06b2957092e194d4f4e56dd366db9e1c7b3084430efffaf552cf'
-    var MAPPER_CATALOG_SOURCE = 'Shikimori GraphQL id/malId/episodes/kind/status; 2026-11-06 16:08Z'
-    // All entries below were individually returned as TV/released by that audit.
-    // Array: independent total, exact AFP source file stem (null = no record), sparse rule.
+    // [Independent total, exact AFP record or null, legacy sparse permission]
     var MAPPER_FACTS = {
-        '20': [220, 'naruto', false], '1735': [500, 'naruto-shippuden', true],
-        '269': [366, 'bleach', true], '41467': [13, 'bleach-tybw', false],
-        '53998': [13, 'bleach-tybw-part-2', false], '56784': [14, 'bleach-tybw-part-3', false],
-        '60636': [10, null, false], '121': [51, 'fullmetal-alchemist', false],
+        '19': [74, 'monster', false],
+        '20': [220, 'naruto', false],
+        '22': [178, 'tennis-no-oujisama', false],
+        '33': [25, 'berserk-1997', false],
+        '45': [94, 'rurouni-kenshin', false],
+        '121': [51, 'fullmetal-alchemist', false],
+        '135': [75, 'hikaru-no-go', false],
+        '170': [101, 'slam-dunk', false],
+        '185': [26, 'initial-d-first-stage', false],
+        '249': [167, 'inuyasha', false],
+        '263': [75, 'hajime-no-ippo', false],
+        '269': [366, 'bleach', true],
+        '282': [50, 'angel-heart', false],
+        '379': [26, 'excel-saga', false],
+        '384': [13, 'gantz', false],
+        '392': [112, 'yuu-yuu-hakusho', false],
+        '395': [13, 'gantz-2', false],
+        '407': [45, 'tantei-gakuen-q', false],
+        '530': [46, 'sailor-moon', false],
+        '532': [38, 'sailor-moon-s', false],
+        '740': [43, 'sailor-moon-r', false],
+        '813': [291, 'dragon-ball-z', false],
+        '853': [26, 'ouran-koukou-host-club', false],
+        '996': [34, 'sailor-moon-sailor-stars', false],
+        '1239': [39, 'sailor-moon-supers', false],
+        '1293': [195, 'urusei-yatsura', false],
+        '1492': [26, 'project-arms', false],
+        '1535': [37, 'death-note', false],
+        '1735': [500, 'naruto-shippuden', true],
+        '2923': [51, 'shugo-chara', false],
+        '2993': [13, 'rosario-to-vampire', false],
+        '3272': [137, 'kinnikuman', false],
+        '4214': [13, 'rosario-to-vampire-capu2', false],
+        '4898': [24, 'kuroshitsuji', false],
+        '5032': [13, 'cobra-the-animation', false],
         '5114': [64, 'fullmetal-alchemist-brotherhood', false],
-        '740': [43, 'sailor-moon-r', false], '5262': [51, 'shugo-chara-doki', false],
-        '36474': [24, 'sword-art-online-alicization', false], '35788': [12, 'shokugeki-san-no-sara', false]
+        '5262': [51, 'shugo-chara-doki', false],
+        '6213': [24, 'toaru-kagaku-no-railgun', false],
+        '6702': [175, 'fairy-tail', false],
+        '7082': [25, 'shugo-chara-party', false],
+        '9919': [25, 'ao-no-exorcist', false],
+        '10033': [147, 'toriko', false],
+        '12031': [38, 'kingdom', false],
+        '13663': [12, 'to-love-ru-darkness', false],
+        '14719': [26, 'jojo-no-kimyou-na-bouken-tv', false],
+        '16498': [25, 'shingeki-no-kyojin', false],
+        '16918': [11, 'gin-no-saji', false],
+        '18179': [38, 'yowamushi-pedal', false],
+        '20507': [12, 'noragami', false],
+        '20583': [25, 'haikyuu', false],
+        '22199': [24, 'akame-ga-kill', false],
+        '22535': [24, 'parasyte-the-maxim', false],
+        '23755': [24, 'nanatsu-no-taizai', false],
+        '24833': [22, 'ansatsu-kyoushitsu', false],
+        '25013': [24, 'akatsuki-no-yona', false],
+        '26243': [12, 'owari-no-seraph', false],
+        '28171': [24, 'shokugeki-no-souma', false],
+        '30276': [12, 'one-punch-man', false],
+        '30694': [131, 'dragon-ball-super', false],
+        '31741': [13, 'magi-sinbad-no-bouken-tv', false],
+        '31964': [13, 'boku-no-hero-academia', false],
+        '32182': [12, 'mob-psycho-100', false],
+        '32282': [13, 'shokugeki-ni-no-sara', false],
+        '32379': [12, 'berserk', false],
+        '33487': [12, 'masamune-kun-no-revenge', false],
+        '34566': [293, 'boruto', false],
+        '34572': [170, 'black-clover', false],
+        '34599': [13, 'made-in-abyss', false],
+        '35062': [24, 'mahoutsukai-no-yome', false],
+        '35557': [12, 'houseki-no-kuni', false],
+        '35788': [12, 'shokugeki-san-no-sara', false],
+        '35838': [12, 'shoujo-shuumatsu-ryokou', false],
+        '36474': [24, 'sword-art-online-alicization', false],
+        '36511': [12, 'tokyo-ghoul-re', false],
+        '37388': [12, 'souten-no-ken-regenesis-2', false],
+        '37430': [24, 'tensei-shitara-slime-datta-ken', false],
+        '37521': [24, 'vinland-saga', false],
+        '37999': [12, 'kaguya-sama', false],
+        '38000': [26, 'kimetsu-no-yaiba', false],
+        '38480': [12, 'toaru-kagaku-no-accelerator', false],
+        '38668': [12, 'dorohedoro', false],
+        '38671': [24, 'fire-force', false],
+        '38691': [24, 'dr-stone', false],
+        '38731': [52, 'diamond-no-ace-act-ii', false],
+        '39195': [12, 'beastars', false],
+        '39940': [12, 'shokugeki-shin-no-sara', false],
+        '40748': [24, 'jujutsu-kaisen', false],
+        '40834': [23, 'ousama-ranking', false],
+        '40902': [13, 'shokugeki-gou-no-sara', false],
+        '40906': [100, 'dragon-quest-dai-no-daibouken-2020', false],
+        '41025': [20, 'fumetsu-no-anata-e', false],
+        '41467': [13, 'bleach-tybw', false],
+        '42192': [25, 'edens-zero', false],
+        '42205': [52, 'shaman-king-2021', false],
+        '42249': [24, 'tokyo-revengers', false],
+        '42361': [12, 'ijiranaide-nagatoro-san', false],
+        '43439': [13, 'shadows-house', false],
+        '43969': [12, 'kanojo-mo-kanojo', false],
+        '44511': [12, 'chainsaw-man', false],
+        '46352': [12, 'blue-period', false],
+        '46569': [13, 'hell-s-paradise', false],
+        '47194': [25, 'summer-time-rendering', false],
+        '48736': [12, 'my-dress-up-darling', false],
+        '48926': [12, 'komi-san', false],
+        '49052': [24, 'aoashi', false],
+        '49596': [24, 'blue-lock', false],
+        '49782': [12, 'shadows-house-2nd-season', false],
+        '49785': [25, 'fairy-tail-100-nen-quest', false],
+        '50265': [12, 'spy-x-family', false],
+        '50613': [24, 'rurouni-kenshin-2023', false],
+        '50695': [12, 'mf-ghost', false],
+        '51673': [13, 'shaman-king-flowers', false],
+        '51794': [24, 'nanatsu-no-taizai-mokushiroku-no-yonkishi', false],
+        '52211': [12, 'mashle', false],
+        '52588': [12, 'kaijuu-8-gou', false],
+        '52741': [24, 'undead-unluck', false],
+        '53879': [13, 'kamonohashi-ron-no-kindan-suiri', false],
+        '53998': [13, 'bleach-tybw-part-2', false],
+        '54112': [12, 'zom-100', false],
+        '56784': [14, 'bleach-tybw-part-3', false],
+        '57334': [12, 'dandadan', false],
+        '59062': [24, 'gachiakuta', false],
+        '60593': [13, 'vigilante-boku-no-hero-academia-illegals', false],
+        '60636': [10, null, false]
     }
+    // END GENERATED MAPPER CATALOGUE
     var mappingContext = null
     var mapping = null
 
@@ -961,6 +1077,8 @@
         appendDiagnostic(body, translate('anime_filler_mapper_grade'), (m.numberingGrade || 'unverified') + ' / ' + m.stage + ' / ' + (m.rule || 'none') + (m.failedGate ? ' / failedGate=' + m.failedGate : ''))
         appendDiagnostic(body, translate('anime_filler_mapper_basis'), translate('anime_filler_mapper_engineering'))
         appendDiagnostic(body, 'MAL / AFP', (m.canonicalArea || 'unverified') + ' / ' + (m.record ? m.record.id : m.recordAbsent ? 'classification_missing' : 'unverified'))
+        appendDiagnostic(body, translate('anime_filler_mapper_afp_bounds'), m.record ?
+            m.record.numbering.min + '–' + m.record.numbering.max : 'unavailable')
         appendDiagnostic(body, translate('anime_filler_mapper_total'), (m.total === null || typeof m.total === 'undefined' ? 'unavailable' : m.total) + ' / ' + MAPPER_CATALOG_SOURCE)
         appendDiagnostic(body, translate('anime_filler_mapper_card'), m.cardCheck || 'unavailable')
         appendDiagnostic(body, translate('anime_filler_mapper_gates'), ['G0','G1','G2','G3','G4','G5','G6','G7','G8'].map(function (name) {
