@@ -14,17 +14,43 @@ function Element(className) {
     this.className = className || ''
     this.textValue = ''
     this.nodeType = 1
+    this.parentNode = null
+    this.ownerDocument = null
 }
 
 Element.prototype.append = function (child) {
     if (child && child[0]) child = child[0]
-    if (child) this.children.push(child)
+    if (child) this.appendChild(child)
     return this
 }
 
-Element.prototype.clear = function () {
-    this.children = []
+Element.prototype.appendChild = function (child) {
+    if (child.parentNode) child.parentNode.removeChild(child)
+    this.children.push(child)
+    child.parentNode = this
+    FakeMutationObserver.record(this, [child], [])
+    return child
 }
+
+Element.prototype.removeChild = function (child) {
+    var index = this.children.indexOf(child)
+    if (index !== -1) this.children.splice(index, 1)
+    child.parentNode = null
+    FakeMutationObserver.record(this, [], [child])
+    return child
+}
+
+Element.prototype.clear = function () {
+    this.children.slice().forEach(this.removeChild.bind(this))
+}
+
+Object.defineProperty(Element.prototype, 'textContent', {
+    get: function () { return this.textValue },
+    set: function (value) {
+        this.textValue = String(value)
+        FakeMutationObserver.record(this, [{}], [])
+    }
+})
 
 Element.prototype.text = function (value) {
     this.textValue = String(value)
@@ -69,6 +95,8 @@ function FakeMutationObserver(callback) {
     this.callback = callback
     this.root = null
     this.disconnected = false
+    this.records = []
+    this.deliveries = 0
     FakeMutationObserver.instances.push(this)
 }
 
@@ -85,6 +113,25 @@ FakeMutationObserver.prototype.disconnect = function () {
 
 FakeMutationObserver.prototype.trigger = function () {
     this.callback([{ type: 'childList' }])
+}
+
+FakeMutationObserver.record = function (target, addedNodes, removedNodes) {
+    FakeMutationObserver.instances.forEach(function (observer) {
+        if (observer.disconnected || !observer.root) return
+        var node = target
+        while (node && node !== observer.root) node = node.parentNode
+        if (!node) return
+        observer.records.push({ type: 'childList', target: target, addedNodes: addedNodes, removedNodes: removedNodes })
+        if (observer.records.length > 1) return
+        queueMicrotask(function () {
+            var records = observer.records
+            observer.records = []
+            if (!observer.disconnected) {
+                observer.deliveries += 1
+                observer.callback(records)
+            }
+        })
+    })
 }
 
 function flush() {
@@ -115,12 +162,28 @@ function createHarness(options) {
     var onlineModAvailable = options.onlineModAvailable !== false
     var kodikModuleAvailable = options.kodikModuleAvailable !== false
     var templateThis = null
+    var document = {
+        head: new Element(),
+        createElement: function (tag) {
+            var node = new Element()
+            node.ownerDocument = document
+            node.tagName = tag.toUpperCase()
+            return node
+        }
+    }
 
     function originalTemplateGet(name, element, third) {
         templateThis = this
         calls.template.push({ name: name, element: element, third: third, args: arguments })
         if (name === 'throws') throw new Error('template failure')
-        return wrap(new Element(name === 'online_mod' ? 'online selector' : 'other'))
+        var row = document.createElement('div')
+        row.className = name === 'online_mod' ? 'online selector' : 'other'
+        if (name === 'online_mod') {
+            var quality = document.createElement('div')
+            quality.className = 'online__quality'
+            row.appendChild(quality)
+        }
+        return wrap(row)
     }
 
     var lampa = {
@@ -132,7 +195,7 @@ function createHarness(options) {
         },
         Lang: {
             add: function (values) { Object.assign(translations, values) },
-            translate: function (key) { return translations[key] ? translations[key].ru : key }
+            translate: function (key) { return translations[key] ? translations[key][options.lang || 'ru'] : key }
         },
         SettingsApi: {
             addComponent: function (component) { calls.components.push(component) },
@@ -244,8 +307,6 @@ function createHarness(options) {
         var before = Object.assign({}, element)
         var result = lampa.Template.get.call(thisValue || lampa.Template, 'online_mod', element)
         activity.root.append(result[0])
-        var currentObserver = FakeMutationObserver.instances[FakeMutationObserver.instances.length - 1]
-        if (currentObserver) currentObserver.trigger()
         return { element: element, before: before, result: result, node: result[0] }
     }
 
@@ -259,6 +320,8 @@ function createHarness(options) {
         calls: calls,
         context: context,
         lampa: lampa,
+        document: document,
+        observer: function () { return FakeMutationObserver.instances[FakeMutationObserver.instances.length - 1] },
         storage: storage,
         emit: emit,
         makeActivity: makeActivity,
@@ -294,7 +357,7 @@ test('initializes immediately and preserves the stage 0 settings behavior', func
 
     var modal = harness.openParam('anime_filler_about')
     assert.equal(modal.title, 'Anime Filler')
-    assert.match(modal.html.allText(), /Версия: 0\.3\.4/)
+    assert.match(modal.html.allText(), /Версия: 0\.3\.5/)
     modal.buttons[0].onSelect()
     assert.deepEqual(harness.calls.order, ['modal.close', 'controller.toggle:settings_component'])
 })
@@ -745,5 +808,5 @@ test('reports empty, uninstrumented and unavailable activity DOM states', async 
 })
 
 test('stores the plugin version once and changes only the approved source files', function () {
-    assert.equal((source.match(/0\.3\.4/g) || []).length, 1)
+    assert.equal((source.match(/0\.3\.5/g) || []).length, 1)
 })
