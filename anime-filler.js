@@ -522,7 +522,6 @@
             anime_filler_mapper_basis: { ru: 'Основание mapper', en: 'Mapper basis' },
             anime_filler_mapper_engineering: { ru: 'policy_mapped — инженерное сопоставление; не независимое подтверждение содержания каждого видео', en: 'policy_mapped is an engineering policy, not independent verification of every video' },
             anime_filler_mapper_total: { ru: 'Независимый total / источник', en: 'Independent total / source' },
-            anime_filler_mapper_prefix: { ru: 'Префикс / альтернативная нумерация', en: 'Prefix / alternate numbering' },
             anime_filler_mapper_afp_bounds: { ru: 'Границы классификаций AFP', en: 'AFP classification bounds' },
             anime_filler_mapper_card: { ru: 'Сверка карточки', en: 'Card check' },
             anime_filler_mapper_gates: { ru: 'Проверки G0–G8', en: 'G0–G8 gates' },
@@ -738,7 +737,7 @@
             Math.floor(element.episode) === element.episode)
     }
 
-    // Numbering policies share the current Kodik binding and AFP integrity checks.
+    // R1 and R2 share the current Kodik binding and AFP integrity checks.
     var MAPPER_POLICY = 'direct-local-v1'
     var MAPPER_CATALOG_SOURCE = 'Shikimori GraphQL / AniBridge / AFP catalogue projection'
     // BEGIN GENERATED MAPPER CATALOGUE
@@ -871,10 +870,6 @@
         '60593': [13, 'vigilante-boku-no-hero-academia-illegals', false],
         '60636': [10, null, false]
     }
-    var MAPPER_ONGOING = {
-        '21': {"record":"one-piece","anilist":"21","alternateNumbering":false,"proofs":[]},
-        '235': {"record":"meitantei-conan","anilist":"235","alternateNumbering":true,"proofs":[]}
-    }
     // END GENERATED MAPPER CATALOGUE
     var mappingContext = null
     var mapping = null
@@ -891,17 +886,12 @@
     }
 
     function probeRequestShape(params) {
-        var shape = { filtered: false, prefixUnfiltered: true, representation: 'links', valid: true }
+        var shape = { filtered: false, representation: 'links', valid: true }
         var count = 0
-        var seen = Object.create(null)
         try {
             params.url.slice(params.url.indexOf('?') + 1).split('&').forEach(function (part) {
                 var at = part.indexOf('='), key = decodeURIComponent((at < 0 ? part : part.slice(0, at)).replace(/\+/g, ' '))
                 if (/^(season|episode)(\[.*\])?$/i.test(key)) shape.filtered = true
-                if (own(seen, key) || !/^(token|limit|with_episodes|with_episodes_data|id|shikimori_id|kinopoisk_id|imdb_id|worldart_link)$/.test(key)) {
-                    shape.prefixUnfiltered = false
-                }
-                seen[key] = true
                 if (key === 'with_episodes_data') {
                     count += 1
                     var value = at < 0 ? '' : part.slice(at + 1)
@@ -919,10 +909,8 @@
         return data && own(data.identifiers, id) ? data.identifiers[id] : id
     }
 
-    function mapperCardCheck(area, expectedAniList) {
+    function mapperCardCheck(area) {
         var card = state.card || {}, direct = []
-        if (expectedAniList && available(card.anilist_id) && positiveId(card.anilist_id) !== expectedAniList) return 'identifier_conflict'
-        if (expectedAniList && available(card.mal_id) && 'mal:' + positiveId(card.mal_id) !== area) return 'identifier_conflict'
         if (positiveId(card.mal_id)) direct.push('mal:' + positiveId(card.mal_id))
         if (positiveId(card.anilist_id)) {
             var al = mapperCanonical('anilist:' + positiveId(card.anilist_id))
@@ -990,30 +978,6 @@
         return false
     }
 
-    function mapperPrefix(result, current, fact) {
-        var stats = result.stats, selected = current.selected, season = current.area.key
-        if (!mapperGate(result, 'P1', stats.min === 1 && stats.max === stats.count,
-            'prefix_scope_incomplete', 'numbering')) return
-        var proofs = fact.proofs.filter(function (proof) {
-            return proof.material === selected.id && proof.translation === selected.translation && proof.season === season
-        })
-        if (!mapperGate(result, 'P1-evidence', proofs.length === 1,
-            proofs.length > 1 || fact.alternateNumbering ? 'prefix_identity_ambiguous' : 'prefix_numbering_unverified',
-            'numbering', proofs.length > 1 || fact.alternateNumbering ? 'ambiguous' : 'insufficient')) return
-        var proof = proofs[0]
-        if (!mapperGate(result, 'P1-boundary', Boolean(positiveId(proof.through)) && proof.through <= stats.count,
-            'prefix_scope_incomplete', 'numbering')) return
-        var links = []
-        current.bindings.forEach(function (binding) {
-            var number = Number(binding.entry.rawEpisode)
-            if (number <= proof.through) links[number - 1] = binding.entry.link
-        })
-        var digest = dataHash(JSON.stringify(['kodik-afp-prefix-v1', result.canonicalArea, selected.id, selected.translation, season, links]))
-        if (!mapperGate(result, 'P1-numbering', digest === proof.sha256, 'prefix_numbering_unverified', 'numbering')) return
-        result.rule = 'P1'
-        result.verifiedThrough = proof.through
-    }
-
     function evaluateMapping(current) {
         var result = { stage: 'identity', status: 'insufficient', reason: '', failedGate: '',
             numberingGrade: 'unverified', canonicalArea: null, record: null, recordAbsent: false,
@@ -1036,47 +1000,30 @@
         result.record = records.length === 1 ? records[0] : null
         result.recordAbsent = !records.length
         var facts = own(MAPPER_FACTS, id) ? MAPPER_FACTS[id] : null
-        var ongoing = !facts && own(MAPPER_ONGOING, id) ? MAPPER_ONGOING[id] : null
-        result.ongoing = Boolean(ongoing)
-        result.alternateNumbering = Boolean(ongoing && ongoing.alternateNumbering)
         result.total = facts && positiveId(facts[0]) ? facts[0] : null
         result.stats = mapperKeyStats(current.area.keys, result.total)
-        result.cardCheck = mapperCardCheck(area, ongoing && ongoing.anilist)
-        if (!mapperGate(result, 'G2', selected.type === 'anime-serial' && Boolean(facts || ongoing),
+        result.cardCheck = mapperCardCheck(area)
+        if (!mapperGate(result, 'G2', selected.type === 'anime-serial' && Boolean(facts),
             selected.type !== 'anime-serial' ? 'unsupported_material_type' : 'catalog_policy_unavailable', 'numbering')) return result
         var shape = probe.response.requestShape
         if (!mapperGate(result, 'G3', selected.structureComplete && selected.seasons.filter(function (s) { return s.keys.length }).length === 1 &&
             shape && shape.valid && !shape.filtered && shape.representation === 'links' && current.area.representation === 'links',
             !selected.structureComplete ? 'structure_incomplete' : !shape || !shape.valid ? 'request_shape_unknown' :
             shape.filtered ? 'filtered_scope' : shape.representation !== 'links' || current.area.representation !== 'links' ? 'unsupported_episode_representation' : 'multiple_nonempty_areas', 'numbering')) return result
-        if (ongoing && !shape.prefixUnfiltered) {
-            mapperGate(result, 'P1-request', false, 'prefix_scope_incomplete', 'numbering')
-            return result
-        }
         if (!mapperGate(result, 'G4', selected.seasons.every(mapperOrdinaryTitle), 'special_or_unreviewed_scope', 'numbering')) return result
         var stats = result.stats
         if (!mapperGate(result, 'G5', stats.canonical && !stats.reason && !current.area.duplicateLinks && current.bindings.every(function (binding) {
             return Number(binding.entry.rawEpisode) === binding.metadata.episode
         }), stats.reason || (current.area.duplicateLinks ? 'duplicate_episode_link' : 'episode_binding_mismatch'), 'numbering',
         stats.reason === 'numeric_collision' || current.area.duplicateLinks ? 'conflict' : 'insufficient')) return result
-        var scopeOK = ongoing ? result.record && result.record.id === ongoing.record && result.record.integrity === 'valid' &&
-            result.record.numbering.min === 1 : result.total && result.total <= 25000 && (!records.length ||
-            (records.length === 1 && result.record.id === facts[1]))
-        if (!mapperGate(result, 'G6', Boolean(scopeOK), records.length > 1 ? 'multiple_afp_records' :
-            !ongoing && !result.total ? 'catalog_total_unavailable' : 'afp_local_relation_unreviewed',
-            'numbering', records.length > 1 ? 'ambiguous' : 'insufficient')) return result
+        if (!mapperGate(result, 'G6', Boolean(result.total && result.total <= 25000 && (!records.length ||
+            (records.length === 1 && result.record.id === facts[1]))), records.length > 1 ? 'multiple_afp_records' :
+            !result.total ? 'catalog_total_unavailable' : 'afp_local_relation_unreviewed', 'numbering', records.length > 1 ? 'ambiguous' : 'insufficient')) return result
         if (!mapperGate(result, 'G7', result.cardCheck !== 'identifier_conflict', 'identifier_conflict', 'identity', 'conflict')) return result
         var counterOK = (selected.episodesCount === null || selected.episodesCount === stats.count || selected.episodesCount === result.total) &&
             (selected.lastEpisode === null || selected.lastEpisode === stats.max)
-        var rangeEnd = ongoing ? result.record.numbering.max : result.total
-        var rangesOK = !result.record || result.record.ranges.every(function (range) { return range[0] >= 1 && range[1] <= rangeEnd })
+        var rangesOK = !result.record || result.record.ranges.every(function (range) { return range[0] >= 1 && range[1] <= result.total })
         if (!mapperGate(result, 'G8', counterOK && rangesOK, !counterOK ? 'counter_inconsistent' : 'afp_scope_inconsistent', 'numbering')) return result
-        if (ongoing) {
-            mapperPrefix(result, current, ongoing)
-            if (result.rule !== 'P1') return result
-            result.stage = 'classification'; result.status = 'resolved'; result.reason = 'prefix_mapped'; result.numberingGrade = 'policy_mapped'
-            return result
-        }
         if (stats.min !== 1 || stats.max !== result.total) { result.stage = 'numbering'; result.failedGate = facts[2] ? 'R2' : 'R1'; result.reason = 'numbering_boundary_mismatch'; return result }
         if (!stats.missing.length && stats.count === result.total) result.rule = 'R1'
         else if (facts[2] && stats.count < result.total && 20 * stats.missing.length <= result.total) result.rule = 'R2'
@@ -1101,12 +1048,7 @@
                     recordId: summary.record && summary.record.id || null, malEpisode: null, afpEpisode: null, category: null,
                     policyRevision: MAPPER_POLICY, auditRevision: MAPPER_AUDIT, rule: summary.rule,
                     displayReady: false, fillerReady: false, skipEligible: false }
-                if (summary.rule === 'P1' && Number(binding.entry.rawEpisode) > summary.verifiedThrough) {
-                    row.status = 'unknown'
-                    row.reason = Number(binding.entry.rawEpisode) > summary.record.numbering.max ?
-                        'classification_outside_snapshot' : 'prefix_numbering_unverified'
-                    summary.unknown += 1
-                } else if (summary.numberingGrade === 'policy_mapped') {
+                if (summary.numberingGrade === 'policy_mapped') {
                     row.malEpisode = Number(binding.entry.rawEpisode)
                     summary.mapped += 1
                     if (!summary.record) { row.status = 'unknown'; row.reason = 'classification_missing' }
@@ -1137,20 +1079,12 @@
         appendDiagnostic(body, 'MAL / AFP', (m.canonicalArea || 'unverified') + ' / ' + (m.record ? m.record.id : m.recordAbsent ? 'classification_missing' : 'unverified'))
         appendDiagnostic(body, translate('anime_filler_mapper_afp_bounds'), m.record ?
             m.record.numbering.min + '–' + m.record.numbering.max : 'unavailable')
-        if (m.ongoing) appendDiagnostic(body, translate('anime_filler_mapper_prefix'),
-            (m.verifiedThrough ? '1–' + m.verifiedThrough : 'unverified') + ' / ' +
-            (m.alternateNumbering ? 'documented' : 'not_documented'))
         appendDiagnostic(body, translate('anime_filler_mapper_total'), (m.total === null || typeof m.total === 'undefined' ? 'unavailable' : m.total) + ' / ' + MAPPER_CATALOG_SOURCE)
         appendDiagnostic(body, translate('anime_filler_mapper_card'), m.cardCheck || 'unavailable')
         appendDiagnostic(body, translate('anime_filler_mapper_gates'), ['G0','G1','G2','G3','G4','G5','G6','G7','G8'].map(function (name) {
             var check = (m.gates || []).filter(function (g) { return g.gate === name })[0]
             return name + '=' + (check ? check.status + (check.reason ? '(' + check.reason + ')' : '') : 'not_evaluated')
         }).join('; '))
-        if (m.ongoing) appendDiagnostic(body, 'P1', (m.gates || []).filter(function (check) {
-            return /^P1/.test(check.gate)
-        }).map(function (check) {
-            return check.gate + '=' + check.status + (check.reason ? '(' + check.reason + ')' : '')
-        }).join('; ') || 'not_evaluated')
         var shape = probe && probe.response && probe.response.requestShape
         appendDiagnostic(body, translate('anime_filler_mapper_request'), shape ? shape.representation + ' / filtered=' + shape.filtered + ' / valid=' + shape.valid : 'unavailable')
         if (probe && probe.response) appendDiagnostic(body, 'Projection skipped areas / non-link areas', probe.response.skippedAreas + ' / ' + probe.response.nonLinkAreas)
@@ -1273,7 +1207,7 @@
                     if (own(seenLinks, link)) area.duplicateLinks = true
                     seenLinks[link] = true
                     if (!own(result.byLink, link)) result.byLink[link] = []
-                    result.byLink[link].push({ material: material, area: area, rawEpisode: rawEpisode, link: link })
+                    result.byLink[link].push({ material: material, area: area, rawEpisode: rawEpisode })
                 })
                 if (area.representation !== 'links') result.nonLinkAreas += 1
             })
@@ -1552,7 +1486,7 @@
         }
         if (mapping.reason === 'catalog_policy_unavailable' || mapping.reason === 'identity_outside_audit') return 'unsupported_area (' + mapping.reason + ')'
         if (mapping.reason === 'identifier_conflict') return 'identity_conflict (identifier_conflict)'
-        if (mapping.numberingGrade !== 'policy_mapped' || ['R1','R2','P1'].indexOf(mapping.rule) === -1) {
+        if (mapping.numberingGrade !== 'policy_mapped' || (mapping.rule !== 'R1' && mapping.rule !== 'R2')) {
             return mapping.stage === 'numbering' ? 'numbering_unverified (' + mapping.reason + ')' : mapping.reason
         }
         if (mapping.conflicts) return 'classification_conflict (overlapping_classifications)'

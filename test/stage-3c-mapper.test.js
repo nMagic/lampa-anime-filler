@@ -17,7 +17,7 @@ const audit = JSON.parse(fs.readFileSync(path.join(__dirname, 'fixtures/stage-3c
 // Test-only access through VM instrumentation. The shipping file exposes no API.
 const instrumented = plugin.replace('    if (!window[READY_FLAG]) startPlugin()', `
     window.mapperTest = { summary: function () { return mapping }, metadata: function (node) { return templateMetadata.get(node) },
-      context: function () { return mappingContext }, facts: MAPPER_FACTS, ongoing: MAPPER_ONGOING, stats: mapperKeyStats,
+      context: function () { return mappingContext }, facts: MAPPER_FACTS, stats: mapperKeyStats,
       refresh: refreshMapping, dataState: dataState, classify: resolveClassifications,
       rescan: refreshCurrentList, load: loadClassifications, labels: function () { return labelState },
       ready: function () { var m = parseManifest(${JSON.stringify(JSON.stringify(manifest))});

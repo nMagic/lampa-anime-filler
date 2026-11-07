@@ -14,8 +14,6 @@ const hash = bytes => createHash('sha256').update(bytes).digest('hex')
 const digest = value => typeof value === 'string' && /^[a-f0-9]{64}$/.test(value)
 const id = value => Number.isSafeInteger(value) && value > 0
 const bound = value => id(value) && value <= 25000
-const canonicalId = value => typeof value === 'string' && id(Number(value)) && String(Number(value)) === value
-const compareText = (a,b) => a < b ? -1 : a > b ? 1 : 0
 const kinds = {TV:'tv', OVA:'ova', ONA:'ona', MOVIE:'movie', SPECIAL:'special'}
 const statuses = {FINISHED:'released', ONGOING:'ongoing', UPCOMING:'anons'}
 
@@ -81,7 +79,7 @@ function areaRefusal(row, record, owners, inputs) {
     if (record.integrity !== 'valid' || record.issues.length) return 'record_integrity_issues'
     if (!digest(row.afpSourceSha256) || sourceLock.files[record.numbering.file] !== row.afpSourceSha256) return 'afp_source_unverified'
     if (record.numbering.min !== 1 || !bound(record.numbering.max)) return 'afp_scope_incompatible'
-    if (shikimori.kind !== 'tv' || !['released','ongoing'].includes(shikimori.status)) return 'catalog_format_or_status_unsupported'
+    if (shikimori.kind !== 'tv' || shikimori.status !== 'released') return 'catalog_format_or_status_unsupported'
     return ''
 }
 
@@ -105,7 +103,7 @@ function build(inputs) {
     }
     assert.equal(records.size, dataset.counts.works)
     assert.equal(classified, dataset.counts.episodes)
-    const facts = {}, ongoing = {}, excluded = {}
+    const facts = {}, excluded = {}
     const seenMal = new Set(), seenRecords = new Set()
     for (const row of catalogue.areas) {
         const {mal, anilist, shikimori} = row
@@ -115,10 +113,6 @@ function build(inputs) {
         const record = records.get(row.record)
         const refusal = areaRefusal(row, record, owners, inputs)
         if (refusal) { excluded[mal] = refusal; continue }
-        if (shikimori.status === 'ongoing') {
-            ongoing[mal] = {record:record.id, anilist:String(anilist), alternateNumbering:Boolean(row.alternateNumberingSource), proofs:[]}
-            continue
-        }
         const total = shikimori.episodes
         const end = record.numbering.max
         const explicitPrefix = row.afpPrefix?.length === 2 && row.afpPrefix[0] === 1 && row.afpPrefix[1] === end
@@ -147,21 +141,7 @@ function build(inputs) {
     }
     assert.equal(Object.keys(lock.legacyTupleSource).length, historical.facts.length)
     assert.deepEqual(Object.keys(facts).filter(key => facts[key][2]), ['269','1735'])
-    for (const item of catalogue.prefixEvidence) {
-        const target = ongoing[item.mal]
-        assert.ok(target && item.record === target.record && item.scheme === 'afp-local-tv' &&
-            item.method === 'independent-episode-crosswalk-v1' && item.first === 1 && bound(item.through) &&
-            /^serial-[1-9][0-9]{0,24}$/.test(item.material) && canonicalId(item.translation) &&
-            canonicalId(item.season) && digest(item.captureSha256) && digest(item.crosswalkSha256) &&
-            digest(item.orderedLinksSha256), 'Invalid prefix evidence')
-        assert.ok(!target.proofs.some(p => p.material === item.material && p.translation === item.translation &&
-            p.season === item.season), 'Ambiguous prefix evidence')
-        target.proofs.push({material:item.material, translation:item.translation, season:item.season,
-            through:item.through, sha256:item.orderedLinksSha256})
-    }
-    for (const {proofs} of Object.values(ongoing)) proofs.sort((a,b) =>
-        compareText(a.material, b.material) || Number(a.translation) - Number(b.translation) || Number(a.season) - Number(b.season))
-    return {facts, ongoing, excluded}
+    return {facts, excluded}
 }
 
 function parseTuple(source) { return JSON.parse(source.replaceAll("'", '"')) }
@@ -172,15 +152,13 @@ function formatTuple(tuple) {
     return `[${total}, ${record === null ? 'null' : "'" + record + "'"}, ${sparse}]`
 }
 
-function render(lock, {facts, ongoing}) {
+function render(lock, {facts}) {
     const sortedEntries = object => Object.entries(object).sort(([a],[b]) => Number(a) - Number(b))
     const factsLines = sortedEntries(facts).map(([mal, tuple]) => `        '${mal}': ${formatTuple(tuple)}`)
-    const ongoingLines = sortedEntries(ongoing).map(([mal, row]) => `        '${mal}': ${JSON.stringify(row)}`)
     return [BEGIN, `    var MAPPER_AUDIT = '${lock.auditRevision}'`,
         `    var MAPPER_DATA_VERSION = '${lock.datasetVersion}'`,
         '    // [Independent total, exact AFP record or null, legacy sparse permission]',
-        '    var MAPPER_FACTS = {', factsLines.join(',\n'), '    }',
-        '    var MAPPER_ONGOING = {', ongoingLines.join(',\n'), '    }', END].join('\n')
+        '    var MAPPER_FACTS = {', factsLines.join(',\n'), '    }', END].join('\n')
 }
 
 function updateBlock(source, block) {

@@ -7,7 +7,7 @@
     "data/dataset.14885244fe8c06b2957092e194d4f4e56dd366db9e1c7b3084430efffaf552cf.json": "14885244fe8c06b2957092e194d4f4e56dd366db9e1c7b3084430efffaf552cf",
     "data/inputs.lock.json": "8539dfa376b2261df23f2b974783ba5c53ce8afd306ce9e9d0c859d3f5a65e83",
     "test/fixtures/stage-3c-catalog-audit.json": "bb96d9b6c7f850aef362035d2c13b514bfde9d8c5f3d25a6abc4d6c3835fe608",
-    "tools/mapper-facts/catalog.json": "4c4f770eaf113959511dab8ae4d0eb2d4efbe2b7cddfff69b03fd1ac3539f5dc"
+    "tools/mapper-facts/catalog.json": "f2afff05c9ccb3e30850bd692ab3ca9208d33e2db8403e49f006463ca1c47e40"
   },
   "provenance": {
     "stage4aMatrixSha256": "fe7680a462461294c4a0ba0d1afb945dbf91b06f0eadd7498ff34859a945c886",
